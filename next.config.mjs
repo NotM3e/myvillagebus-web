@@ -29,8 +29,8 @@ const nextConfig = {
   
   turbopack: {},  // Pusty config wycisza warning
 
-  basePath: '/myvillagebus-web',
-  assetPrefix: '/myvillagebus-web',
+  basePath: process.env.NODE_ENV === 'production' ? '/myvillagebus-web' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/myvillagebus-web' : '',
 };
 
 export default pwaConfig(nextConfig);

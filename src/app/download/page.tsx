@@ -6,6 +6,11 @@ import HomeIcon from '@mui/icons-material/Home';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 export default function DownloadPage() {
+  const APP_VERSION = "0.3";
+  const APK_SIZE = "42 MB";
+
+  const APK_URL = `/apk/myvillagebus-v${APP_VERSION}.apk`;
+
   return (
     <main className="min-h-screen p-6 md:p-8">
       <div className="max-w-3xl mx-auto pt-12">
@@ -35,16 +40,16 @@ export default function DownloadPage() {
           </div>
           
           <h2 className="md-headline-medium mb-4">
-            Mój Wsiobus v0.3.0
+            Mój Wsiobus v{APP_VERSION}
           </h2>
           
           <a
-            href="/apk/myvillagebus-v0.3.apk"
-            download
+            href={APK_URL}
+            download={`myvillagebus-v${APP_VERSION}.apk`}
             className="md-filled-button inline-flex items-center gap-2 md-elevation-1 mb-4"
           >
             <DownloadIcon />
-            Pobierz APK (20 MB)
+            Pobierz APK ({APK_SIZE})
           </a>
           
           <p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
