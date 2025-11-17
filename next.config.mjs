@@ -27,11 +27,10 @@ const nextConfig = {
     unoptimized: true,
   },
   
-  // 🔥 DODAJ TO:
   turbopack: {},  // Pusty config wycisza warning
-  
-  // Opcjonalnie - basePath jeśli nie masz custom domain
-  // basePath: '/myvillagebus-web',
+
+  basePath: '/myvillagebus-web',
+  assetPrefix: '/myvillagebus-web',
 };
 
 export default pwaConfig(nextConfig);
