@@ -39,7 +39,7 @@ export default function DownloadPage() {
           </h2>
           
           <a
-            href="/apk/myvillagebus-v1.0.apk"
+            href="/apk/myvillagebus-v0.3.apk"
             download
             className="md-filled-button inline-flex items-center gap-2 md-elevation-1 mb-4"
           >
