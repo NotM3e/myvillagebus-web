@@ -13,8 +13,6 @@ const withPWA = withPWAInit({
   },
 });
 
-const isGitHubPages = process.env.GITHUB_PAGES === 'true';
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
@@ -22,9 +20,8 @@ const nextConfig = {
     unoptimized: true,
   },
   
-  // basePath TYLKO dla GitHub Pages deploy
-  basePath: isGitHubPages ? '/myvillagebus-web' : '',
-  assetPrefix: isGitHubPages ? '/myvillagebus-web' : '',
+  basePath: '/myvillagebus-web',
+  assetPrefix: '/myvillagebus-web',
 };
 
 export default withPWA(nextConfig);
