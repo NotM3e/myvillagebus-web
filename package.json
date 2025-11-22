@@ -4,13 +4,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
-    "build": "next build",
+    "build": "next build --webpack",
+    "build:github": "cross-env GITHUB_PAGES=true next build --webpack",
     "start": "next start",
+    "preview": "npm run build && npx serve@latest out -p 3000",
     "lint": "next lint",
-    "predeploy": "npm run build && node scripts/create-nojekyll.js",
+    "predeploy": "npm run build:github && node scripts/create-nojekyll.js",
     "deploy": "gh-pages -d out --dotfiles"
   },
   "dependencies": {
+    "@ducanh2912/next-pwa": "^10.2.9",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.5",
@@ -18,7 +21,6 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "next": "16.0.3",
-    "next-pwa": "^5.6.0",
     "react": "19.2.0",
     "react-dom": "19.2.0"
   },
@@ -27,6 +29,7 @@
     "@types/node": "^20.19.25",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "16.0.3",
     "gh-pages": "^6.3.0",

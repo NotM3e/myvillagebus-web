@@ -1,24 +1,19 @@
-import withPWA from 'next-pwa';
+import withPWAInit from '@ducanh2912/next-pwa';
 
-const pwaConfig = withPWA({
+const withPWA = withPWAInit({
   dest: 'public',
+  disable: process.env.NODE_ENV === 'development',
   register: true,
   skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development',
-  runtimeCaching: [
-    {
-      urlPattern: /^https:\/\/sheets\.googleapis\.com.*$/,
-      handler: 'NetworkFirst',
-      options: {
-        cacheName: 'google-sheets-cache',
-        expiration: {
-          maxEntries: 10,
-          maxAgeSeconds: 24 * 60 * 60,
-        },
-      },
-    },
-  ],
+  cacheOnFrontEndNav: true,
+  aggressiveFrontEndNavCaching: true,
+  reloadOnOnline: true,
+  workboxOptions: {
+    disableDevLogs: true,
+  },
 });
+
+const isGitHubPages = process.env.GITHUB_PAGES === 'true';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -27,10 +22,9 @@ const nextConfig = {
     unoptimized: true,
   },
   
-  turbopack: {},  // Pusty config wycisza warning
-
-  basePath: process.env.NODE_ENV === 'production' ? '/myvillagebus-web' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/myvillagebus-web' : '',
+  // basePath TYLKO dla GitHub Pages deploy
+  basePath: isGitHubPages ? '/myvillagebus-web' : '',
+  assetPrefix: isGitHubPages ? '/myvillagebus-web' : '',
 };
 
-export default pwaConfig(nextConfig);
+export default withPWA(nextConfig);
