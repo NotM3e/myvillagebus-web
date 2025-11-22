@@ -1,4 +1,3 @@
-// src/app/download/page.tsx
 import Link from 'next/link';
 import DownloadIcon from '@mui/icons-material/Download';
 import AndroidIcon from '@mui/icons-material/Android';

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
+    "prebuild": "node scripts/generate-manifest.js",
     "build": "next build --webpack",
     "start": "next start",
     "preview": "npm run build && node scripts/prepare-preview.js && npx serve@latest out -p 3000",
