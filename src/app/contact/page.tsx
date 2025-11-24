@@ -60,7 +60,7 @@ export default function ContactPage() {
             <input 
               type="hidden" 
               name="access_key" 
-              value="YOUR_WEB3FORMS_ACCESS_KEY" 
+              value="b32c3e2c-1326-49c6-b6fe-a6f960867882" 
             />
 
             {/* Name Field */}
