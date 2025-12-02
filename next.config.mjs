@@ -20,8 +20,15 @@ const nextConfig = {
     unoptimized: true,
   },
   
+  // Github pages path:
+  /*
   basePath: '/myvillagebus-web',
   assetPrefix: '/myvillagebus-web',
+  */
+ 
+  // Cloudflare pages path:
+  basePath: '',
+  assetPrefix: '',
 };
 
 export default withPWA(nextConfig);
