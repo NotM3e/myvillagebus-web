@@ -1,27 +1,34 @@
 const fs = require('fs');
 const path = require('path');
 
-const BASE_PATH = '/myvillagebus-web';
+// Wykryj środowisko
+const isCloudflarePages = process.env.CF_PAGES === '1';
+const isGitHubActions = process.env.GITHUB_ACTIONS === 'true';
+const isProduction = process.env.NODE_ENV === 'production';
 
-// Wczytaj szablon
+// Określ basePath
+const BASE_PATH = (isProduction && isGitHubActions && !isCloudflarePages) 
+  ? '/myvillagebus-web' 
+  : '';
+
 const templatePath = path.join(__dirname, '../public/manifest.template.json');
 const outputPath = path.join(__dirname, '../public/manifest.json');
 
 console.log('📝 Generowanie manifest.json...');
+console.log('   Środowisko:', {
+  CF_PAGES: isCloudflarePages,
+  GITHUB_ACTIONS: isGitHubActions,
+  NODE_ENV: process.env.NODE_ENV,
+  BASE_PATH: BASE_PATH || '(brak)'
+});
 
-// Sprawdź czy szablon istnieje
 if (!fs.existsSync(templatePath)) {
   console.error('❌ Nie znaleziono public/manifest.template.json');
   process.exit(1);
 }
 
-// Wczytaj szablon
 let template = fs.readFileSync(templatePath, 'utf-8');
-
-// Zamień placeholder na basePath
 const manifest = template.replace(/\{\{BASE_PATH\}\}/g, BASE_PATH);
 
-// Zapisz
 fs.writeFileSync(outputPath, manifest, 'utf-8');
-
-console.log('✅ Wygenerowano public/manifest.json z basePath:', BASE_PATH);
+console.log('✅ Wygenerowano manifest.json z basePath:', BASE_PATH || '(brak)');
