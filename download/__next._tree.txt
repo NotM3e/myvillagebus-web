@@ -1,4 +1,4 @@
-:HL["/myvillagebus-web/_next/static/css/67bde76af01fffff.css","style"]
+:HL["/_next/static/css/67bde76af01fffff.css","style"]
 :HL["https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap","style"]
 :HL["https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0","style"]
-0:{"buildId":"3YPC5ErSbVpo1HGWPqcvi","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"download","paramType":null,"paramKey":"download","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
+0:{"buildId":"CYes0LTNoUfnALAAtOIIu","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"download","paramType":null,"paramKey":"download","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
