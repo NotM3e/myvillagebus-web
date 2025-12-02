@@ -50,3 +50,4 @@ next-env.d.ts
 
 # manifest will auto generate
 public/manifest.json
+public/swe-worker-5c72df51bb1f6ee0.js
