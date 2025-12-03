@@ -4,7 +4,7 @@ Strona internetowa dla aplikacji Mój Wsiobus - rozkłady autobusów dla małych
 
 ## 🚀 Deployment
 
-Strona jest dostępna pod adresem: https://notm3e.github.io/myvillagebus-web/
+Strona jest dostępna pod adresem: https://wsiobus.pl/
 
 ## 🛠️ Tech Stack
 
