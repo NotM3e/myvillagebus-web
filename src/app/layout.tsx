@@ -1,50 +1,9 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import "./globals.css";
 
-const BASE_PATH = '/myvillagebus-web';
-
 export const metadata: Metadata = {
-  title: "Mój Wsiobus - Rozkłady Autobusów",
-  description: "Rozkłady autobusów zawsze pod ręką dla nie wielkich przewoźników",
-  applicationName: 'Mój Wsiobus',
-  
-  manifest: `${BASE_PATH}/manifest.json`,
-  
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "black-translucent",
-    title: "Mój Wsiobus",
-  },
-  
-  icons: {
-    icon: [
-      { 
-        url: `${BASE_PATH}/icons/icon-192x192.png`, 
-        sizes: '192x192', 
-        type: 'image/png' 
-      },
-      { 
-        url: `${BASE_PATH}/icons/icon-512x512.png`, 
-        sizes: '512x512', 
-        type: 'image/png' 
-      },
-    ],
-    apple: [
-      { 
-        url: `${BASE_PATH}/icons/icon-192x192.png`, 
-        sizes: '192x192', 
-        type: 'image/png' 
-      },
-    ],
-  },
-};
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 5,
-  userScalable: true,
-  themeColor: "#121212",
+  title: "Mój Wsiobus - Rozkłady autobusów",
+  description: "Rozkłady autobusów zawsze pod ręką",
 };
 
 export default function RootLayout({
@@ -53,27 +12,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pl-PL">
+    <html lang="pl">
       <head>
-        <meta name="application-name" content="Mój Wsiobus" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="Mój Wsiobus" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link 
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" 
           rel="stylesheet" 
         />
-        <link 
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" 
-          rel="stylesheet" 
-        />
       </head>
-      <body className="antialiased">
+      <body>
         {children}
       </body>
     </html>

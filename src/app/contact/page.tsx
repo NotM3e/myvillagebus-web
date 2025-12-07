@@ -35,8 +35,8 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="min-h-screen p-6 md:p-8">
-      <div className="max-w-2xl mx-auto pt-12">
+    <main className="min-h-screen flex items-center justify-center p-6">
+      <div className="max-w-6xl mx-auto w-full">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center w-24 h-24 mb-6 rounded-full bg-[var(--md-sys-color-secondary-container)]">

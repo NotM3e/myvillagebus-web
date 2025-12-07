@@ -10,8 +10,8 @@ import SaveIcon from '@mui/icons-material/Save';
 
 export default function Home() {
   return (
-    <main className="min-h-screen p-6 md:p-8">
-      <div className="max-w-6xl mx-auto">
+    <main className="min-h-screen flex items-center justify-center p-6">
+      <div className="max-w-6xl mx-auto w-full">
         {/* Hero Section */}
         <div className="text-center mb-16 pt-12">
           <div className="inline-flex items-center justify-center w-24 h-24 mb-6 rounded-full bg-[var(--md-sys-color-primary-container)]">
