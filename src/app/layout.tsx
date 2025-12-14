@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Mój Wsiobus - Rozkłady autobusów",
-  description: "Rozkłady autobusów zawsze pod ręką",
+  title: "Wsiobus - Rozkłady autobusów",
+  description: "Rozkłady autobusowe tworzone przez użytkowników, dla użytkowników",
 };
 
 export default function RootLayout({
