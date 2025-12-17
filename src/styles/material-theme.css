@@ -1,0 +1,273 @@
+/* ========== TYPOGRAPHY ========== */
+
+.md-display-large {
+  font-size: 57px;
+  line-height: 64px;
+  font-weight: 400;
+  letter-spacing: -0.25px;
+}
+
+.md-display-medium {
+  font-size: 45px;
+  line-height: 52px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.md-display-small {
+  font-size: 36px;
+  line-height: 44px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.md-headline-large {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.md-headline-medium {
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.md-headline-small {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.md-title-large {
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.md-title-medium {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  letter-spacing: 0.15px;
+}
+
+.md-title-small {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+}
+
+.md-body-large {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.md-body-medium {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0.25px;
+}
+
+.md-body-small {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+
+.md-label-large {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+}
+
+.md-label-medium {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.md-label-small {
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* ========== BUTTONS ========== */
+
+.md-filled-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 24px;
+  border-radius: 20px;
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  line-height: 20px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+  text-decoration: none;
+  user-select: none;
+  min-height: 40px;
+}
+
+.md-filled-button:hover {
+  box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.15);
+}
+
+.md-filled-button:active {
+  transform: scale(0.98);
+}
+
+.md-filled-button:disabled {
+  background: rgba(28, 27, 31, 0.12);
+  color: rgba(28, 27, 31, 0.38);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.md-outlined-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 24px;
+  border-radius: 20px;
+  background: transparent;
+  color: var(--md-sys-color-primary);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  line-height: 20px;
+  border: 1px solid var(--md-sys-color-outline);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+  text-decoration: none;
+  user-select: none;
+  min-height: 40px;
+}
+
+.md-outlined-button:hover {
+  background: rgba(103, 80, 164, 0.08);
+}
+
+.md-outlined-button:active {
+  transform: scale(0.98);
+}
+
+.md-text-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 20px;
+  background: transparent;
+  color: var(--md-sys-color-primary);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  line-height: 20px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+  text-decoration: none;
+  user-select: none;
+  min-height: 40px;
+}
+
+.md-text-button:hover {
+  background: rgba(103, 80, 164, 0.08);
+}
+
+/* ========== CARDS ========== */
+
+.md-card {
+  background: var(--md-sys-color-surface);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.md-filled-card {
+  background: var(--md-sys-color-surface-variant);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+/* ========== ELEVATION ========== */
+
+.md-elevation-0 {
+  box-shadow: none;
+}
+
+.md-elevation-1 {
+  box-shadow: 
+    0px 1px 2px 0px rgba(0, 0, 0, 0.3),
+    0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+}
+
+.md-elevation-2 {
+  box-shadow: 
+    0px 1px 2px 0px rgba(0, 0, 0, 0.3),
+    0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+}
+
+.md-elevation-3 {
+  box-shadow: 
+    0px 4px 8px 3px rgba(0, 0, 0, 0.15),
+    0px 1px 3px 0px rgba(0, 0, 0, 0.3);
+}
+
+.md-elevation-4 {
+  box-shadow: 
+    0px 6px 10px 4px rgba(0, 0, 0, 0.15),
+    0px 2px 3px 0px rgba(0, 0, 0, 0.3);
+}
+
+.md-elevation-5 {
+  box-shadow: 
+    0px 8px 12px 6px rgba(0, 0, 0, 0.15),
+    0px 4px 4px 0px rgba(0, 0, 0, 0.3);
+}
+
+/* ========== LISTS ========== */
+
+.md-list {
+  list-style-position: inside;
+  padding-left: 0;
+}
+
+.md-list-disc {
+  list-style-type: disc;
+}
+
+.md-list-circle {
+  list-style-type: circle;
+}
+
+.md-list-decimal {
+  list-style-type: decimal;
+}
+
+/* Custom bullet color */
+.md-list li::marker {
+  color: var(--md-sys-color-primary);
+}
