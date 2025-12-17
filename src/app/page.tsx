@@ -23,8 +23,9 @@ export default function Home() {
           Mój Wsiobus
         </h1>
 
-        <p className="md-body-large text-[var(--md-sys-color-on-surface-variant)] mb-8">
-          Rozkłady autobusów zawsze pod ręką tworzone przez użytkowników, dla użytkowników
+        <p className="md-body-large text-[var(--md-sys-color-on-surface-variant)] max-w-2xl mx-auto mb-8">
+          Rozkłady małych przewoźników w jednym miejscu.<br/>
+          Bez szukania zdjęć w galerii, bez pytania znajomych - po prostu otwierasz i jedziesz.
         </p>
         
         {/* CTA Buttons */}
@@ -51,10 +52,13 @@ export default function Home() {
       <div className="md-card md-elevation-3 max-w-3xl mx-auto mb-8">
         <div className="p-8">
           <h2 className="md-headline-medium mb-4 text-center">
-            Społeczność jest fundamentem
+            Rozkłady tworzy społeczność
           </h2>
           <p className="md-body-large text-[var(--md-sys-color-on-surface-variant)] text-center">
-            Rozkłady tworzą użytkownicy, dla innych użytkowników. Wszystko nadzorowane przez moderację, aby nie dochodziło do sytuacji błędnych rozkładów itp.
+            Nie musisz czekać aż przewoźnik zrobi aplikację.<br/>
+            Ktoś dodaje rozkład, inni sprawdzają czy się zgadza, wszyscy korzystają.<br/>
+            To jak Wikipedia dla autobusów - każdy może pomóc,
+            a system reputacji dba o jakość.
           </p>
         </div>
       </div>
@@ -68,9 +72,10 @@ export default function Home() {
                 sx={{ fontSize: 32, color: 'var(--md-sys-color-on-primary-container)' }} 
               />
             </div>
-            <h3 className="md-title-large mb-2">Szybkie</h3>
+            <h3 className="md-title-large mb-2">Zawsze offline</h3>
             <p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
-              Natychmiastowy dostęp do rozkładów bez czekania
+              Pobierz rozkład raz - działa bez internetu.<br/>
+              Nie musisz mieć zasięgu na przystanku.
             </p>
           </div>
           
@@ -80,9 +85,11 @@ export default function Home() {
                 sx={{ fontSize: 32, color: 'var(--md-sys-color-on-secondary-container)' }} 
               />
             </div>
-            <h3 className="md-title-large mb-2">Offline</h3>
+            <h3 className="md-title-large mb-2">Tworzysz co potrzebujesz</h3>
             <p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
-              Działa bez internetu - dane zapisane lokalnie
+              Nie ma Twojego rozkładu? Dodaj go.
+              Zmienił się na wakacje? Popraw.
+              Masz kontrolę.
             </p>
           </div>
           
@@ -92,9 +99,11 @@ export default function Home() {
                 sx={{ fontSize: 32, color: 'var(--md-sys-color-on-tertiary-container)' }} 
               />
             </div>
-            <h3 className="md-title-large mb-2">Filtorwanie</h3>
+            <h3 className="md-title-large mb-2">Społeczność pilnuje jakości</h3>
             <p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
-              Filtorwanie rozkładów wedle własnych preferencji
+              Głosuj za dobrymi rozkładami, zgłaszaj błędy.
+              Im więcej pomagasz, tym więcej możesz -
+              zaufani użytkownicy omijają moderację.
             </p>
           </div>
 
@@ -104,9 +113,11 @@ export default function Home() {
                 sx={{ fontSize: 32, color: 'var(--md-sys-color-on-tertiary-container)' }} 
               />
             </div>
-            <h3 className="md-title-large mb-2">Zapisywanie profii filtrów</h3>
+            <h3 className="md-title-large mb-2">Zapisuj ulubione trasy</h3>
             <p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
-              Używasz wielu rozkładów? Możesz je profilować aby łatwiej złapać się na autobus
+              Stwórz profil filtrów dla regularnych przejazdów.
+              "Dom-praca w dni powszednie" - jeden klik
+              i widzisz tylko to co Cię interesuje.
             </p>
           </div>
         </div>

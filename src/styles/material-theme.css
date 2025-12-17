@@ -247,3 +247,27 @@
     0px 8px 12px 6px rgba(0, 0, 0, 0.15),
     0px 4px 4px 0px rgba(0, 0, 0, 0.3);
 }
+
+/* ========== LISTS ========== */
+
+.md-list {
+  list-style-position: inside;
+  padding-left: 0;
+}
+
+.md-list-disc {
+  list-style-type: disc;
+}
+
+.md-list-circle {
+  list-style-type: circle;
+}
+
+.md-list-decimal {
+  list-style-type: decimal;
+}
+
+/* Custom bullet color */
+.md-list li::marker {
+  color: var(--md-sys-color-primary);
+}

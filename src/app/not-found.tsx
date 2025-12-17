@@ -5,10 +5,10 @@ import HomeIcon from '@mui/icons-material/Home';
 
 export default function NotFound() {
   return (
-    <PageWrapper maxWidth="max-w-2xl" className="flex items-center">
+    <PageWrapper maxWidth="max-w-2xl" className="flex items-center text-center">
       {/* Icon */}
       <div className="inline-flex items-center justify-center w-32 h-32 mb-6 rounded-full bg-[var(--md-sys-color-error-container)]">
-        <ErrorOutlineIcon 
+        <ErrorOutlineIcon
           sx={{ fontSize: 64, color: 'var(--md-sys-color-on-error-container)' }} 
         />
       </div>
@@ -33,7 +33,7 @@ export default function NotFound() {
         href="/"
         className="md-filled-button inline-flex items-center gap-2 md-elevation-1"
       >
-        <HomeIcon />
+        <HomeIcon/>
         Powrót do strony głównej
       </Link>
 
