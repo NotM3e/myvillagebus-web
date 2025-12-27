@@ -4,6 +4,24 @@ import DownloadIcon from '@mui/icons-material/Download';
 import AndroidIcon from '@mui/icons-material/Android';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Pobierz Wsiobus na Android | Aplikacja rozkładów autobusów",
+  description: "Pobierz darmową aplikację Wsiobus v0.3 (42 MB) na Androida. Rozkłady lokalnych autobusów offline. Wersja web PWA wkrótce także na iOS.",
+  openGraph: {
+    title: "Pobierz Wsiobus na Android",
+    description: "Darmowa aplikacja do rozkładów lokalnych przewoźników. Działa offline.",
+    url: "https://wsiobus.pl/download",
+    siteName: "Wsiobus",
+    locale: "pl_PL",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Pobierz Wsiobus na Android",
+  },
+};
 
 export default function DownloadPage() {
   const APP_VERSION = "0.3";

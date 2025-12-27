@@ -1,3 +1,25 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Wsiobus - Rozkłady małych przewoźników | Aplikacja PWA",
+  description: "Rozkłady lokalnych autobusów w jednym miejscu. Działa offline, tworzone przez społeczność. Dla Androida i iOS (PWA). Darmowa aplikacja bez reklam.",
+  keywords: "rozkład autobusów, przewoźnicy lokalni, aplikacja autobusowa, offline, PWA, rozkład jazdy",
+  authors: [{ name: "myVillageBus" }],
+  openGraph: {
+    title: "Wsiobus - Rozkłady małych przewoźników",
+    description: "Rozkłady lokalnych autobusów zawsze pod ręką. Offline, społecznościowe, darmowe.",
+    url: "https://wsiobus.pl",
+    siteName: "Wsiobus",
+    locale: "pl_PL",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Wsiobus - Rozkłady małych przewoźników",
+    description: "Rozkłady lokalnych autobusów zawsze pod ręką. Offline, społecznościowe, darmowe.",
+  },
+};
+
 import PageWrapper from '@/components/PageWrapper';
 import Link from 'next/link';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
