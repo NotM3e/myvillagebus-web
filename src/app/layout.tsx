@@ -11,6 +11,26 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // JSON-LD dla SEO
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'MobileApplication',
+    name: 'Wsiobus',
+    applicationCategory: 'TravelApplication',
+    operatingSystem: 'Android, iOS (PWA)',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'PLN',
+    },
+    description: 'Rozkłady lokalnych przewoźników autobusowych. Aplikacja offline, tworzona przez społeczność.',
+    url: 'https://wsiobus.pl',
+    author: {
+      '@type': 'Organization',
+      name: 'myVillageBus',
+    },
+  };
+
   return (
     <html lang="pl">
       <head>
@@ -20,7 +40,10 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" 
           rel="stylesheet" 
         />
-        <link rel="icon" href="icons/icon-32x32.png" sizes="any" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body>
         {children}
