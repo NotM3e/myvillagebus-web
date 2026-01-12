@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 };
 
 export default function DownloadPage() {
-  const APP_VERSION = "0.3";
+  const APP_VERSION = "0.4";
   const APK_SIZE = "42 MB";
 
   const APK_URL = `https://github.com/NotM3e/myVillageBus/releases/download/v${APP_VERSION}/myvillagebus-v${APP_VERSION}.apk`;
