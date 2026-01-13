@@ -175,7 +175,7 @@ export default function Home() {
           </Link>
         </div>
         <p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
-          © 2025 - Projekt niekomercyjny.
+          © 2026 - Projekt niekomercyjny.
         </p>
       </footer>
     </PageWrapper>
