@@ -32,27 +32,11 @@ const withPWA = withPWAInit({
   },
 });
 
-// Wykryj środowisko
-const isCloudflarePages = process.env.CF_PAGES === '1';
-const isGitHubActions = process.env.GITHUB_ACTIONS === 'true';
-const isProduction = process.env.NODE_ENV === 'production';
-
-// Określ czy potrzebny basePath
-const needsBasePath = isProduction && isGitHubActions && !isCloudflarePages;
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  
   images: {
     unoptimized: true,
   },
-  
-  // Warunkowy basePath
-  ...(needsBasePath && {
-    basePath: '/myvillagebus-web',
-    assetPrefix: '/myvillagebus-web',
-  }),
   
   // Kompresja
   compress: true,

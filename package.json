@@ -3,15 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --webpack",
-    "prebuild": "node scripts/generate-manifest.js",
-    "build": "next build --webpack",
-    "start": "next start",
-    "preview": "npm run build && node scripts/prepare-preview.js && npx serve@latest out -p 3000",
-    "lint": "next lint",
-    "predeploy": "npm run build && node scripts/create-nojekyll.js",
-    "deploy": "gh-pages -d out --dotfiles"
-  },
+  "dev": "next dev --webpack",
+  "prebuild": "node scripts/generate-manifest.js",
+  "build": "next build --webpack",
+  "start": "next start",
+  "lint": "next lint"
+},
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",
     "@emotion/react": "^11.14.0",
