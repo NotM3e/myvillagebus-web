@@ -3,18 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-  "dev": "next dev --webpack",
-  "prebuild": "node scripts/generate-manifest.js",
-  "build": "next build --webpack",
-  "start": "next start",
-  "lint": "next lint"
-},
+    "dev": "next dev --webpack",
+    "prebuild": "node scripts/generate-manifest.js",
+    "build": "next build --webpack",
+    "start": "next start",
+    "lint": "next lint"
+  },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.5",
     "@mui/material": "^7.3.5",
+    "@supabase/ssr": "^0.8.0",
+    "@supabase/supabase-js": "^2.91.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "material-symbols": "^0.40.1",
