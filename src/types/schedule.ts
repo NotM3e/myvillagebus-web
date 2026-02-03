@@ -1,3 +1,6 @@
+// Ten plik jest deprecated - używaj @/types/database
+// Zachowany dla kompatybilności wstecznej z dummy data
+
 export interface Stop {
   name: string;
   time: string;
