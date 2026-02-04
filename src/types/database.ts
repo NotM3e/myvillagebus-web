@@ -174,6 +174,7 @@ export interface ActiveScheduleView extends Schedule {
   carrier_logo: string | null;
   carrier_verified: boolean;
   net_score: number;
+  first_departure: string | null;
 }
 
 export interface VerificationStatsView {

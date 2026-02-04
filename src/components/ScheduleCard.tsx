@@ -1,13 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import type { ActiveScheduleView } from '@/types/database';
-import { voteOnSchedule } from '@/lib/supabase/queries';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
-import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VerifiedIcon from '@mui/icons-material/Verified';
 
 interface ScheduleCardProps {
@@ -15,46 +10,16 @@ interface ScheduleCardProps {
 }
 
 export default function ScheduleCard({ schedule }: ScheduleCardProps) {
-  const [userVote, setUserVote] = useState<'positive' | 'negative' | null>(null);
-  const [score, setScore] = useState(schedule.net_score);
-  const [voting, setVoting] = useState(false);
-
-  const handleVote = async (voteType: 'positive' | 'negative') => {
-    if (voting) return;
-    setVoting(true);
-
-    // Optimistic update
-    const previousVote = userVote;
-    const previousScore = score;
-
-    if (userVote === voteType) {
-      // Remove vote
-      setUserVote(null);
-      setScore(score + (voteType === 'positive' ? -1 : 1));
-    } else {
-      // Change or add vote
-      setUserVote(voteType);
-      const scoreDelta = voteType === 'positive' ? 1 : -1;
-      const previousDelta = previousVote === 'positive' ? -1 : previousVote === 'negative' ? 1 : 0;
-      setScore(score + scoreDelta + previousDelta);
-    }
-
-    const result = await voteOnSchedule(schedule.id, voteType);
-    
-    if (!result.success) {
-      // Rollback on error
-      setUserVote(previousVote);
-      setScore(previousScore);
-      // TODO: show toast with error
-    }
-
-    setVoting(false);
+  // Format time HH:MM from HH:MM:SS
+  const formatTime = (time: string | null) => {
+    if (!time) return '--:--';
+    return time.slice(0, 5);
   };
 
   return (
     <div className="md-card md-elevation-1 p-4 mb-4">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-3">
+      <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-[var(--md-sys-color-primary-container)] flex items-center justify-center">
           <DirectionsBusIcon 
             sx={{ fontSize: 24, color: 'var(--md-sys-color-on-primary-container)' }} 
@@ -73,13 +38,23 @@ export default function ScheduleCard({ schedule }: ScheduleCardProps) {
             Linia {schedule.line_number}
           </p>
         </div>
+        
+        {/* Departure time */}
+        <div className="flex items-center gap-1 px-3 py-2 rounded-lg bg-[var(--md-sys-color-primary-container)]">
+          <AccessTimeIcon 
+            sx={{ fontSize: 18, color: 'var(--md-sys-color-on-primary-container)' }} 
+          />
+          <span className="md-title-medium text-[var(--md-sys-color-on-primary-container)]">
+            {formatTime(schedule.first_departure)}
+          </span>
+        </div>
       </div>
 
       {/* Direction */}
-      <p className="md-body-large mb-2">{schedule.direction}</p>
+      <p className="md-body-large mt-3 mb-2">{schedule.direction}</p>
 
       {/* Days */}
-      <div className="flex flex-wrap gap-1 mb-4">
+      <div className="flex flex-wrap gap-1">
         {schedule.days.map((day) => (
           <span 
             key={day}
@@ -93,54 +68,6 @@ export default function ScheduleCard({ schedule }: ScheduleCardProps) {
             bez świąt
           </span>
         )}
-      </div>
-
-      {/* Status badges */}
-      <div className="flex gap-2 mb-4">
-        {schedule.is_verified && (
-          <span className="px-2 py-1 text-xs rounded-full bg-[var(--md-sys-color-tertiary-container)] text-[var(--md-sys-color-on-tertiary-container)]">
-            Zweryfikowany
-          </span>
-        )}
-        {schedule.is_incomplete && (
-          <span className="px-2 py-1 text-xs rounded-full bg-[var(--md-sys-color-error-container)] text-[var(--md-sys-color-on-error-container)]">
-            Niekompletny
-          </span>
-        )}
-      </div>
-
-      {/* Actions */}
-      <div className="flex items-center gap-2 pt-3 border-t border-[var(--md-sys-color-outline-variant)]">
-        <button 
-          onClick={() => handleVote('positive')}
-          disabled={voting}
-          className="md-text-button flex items-center gap-1"
-        >
-          {userVote === 'positive' ? (
-            <ThumbUpIcon sx={{ fontSize: 18, color: 'var(--md-sys-color-primary)' }} />
-          ) : (
-            <ThumbUpOutlinedIcon sx={{ fontSize: 18 }} />
-          )}
-        </button>
-        
-        <span className={`md-body-medium min-w-[2rem] text-center ${
-          score > 0 ? 'text-[var(--md-sys-color-primary)]' : 
-          score < 0 ? 'text-[var(--md-sys-color-error)]' : ''
-        }`}>
-          {score > 0 ? `+${score}` : score}
-        </span>
-        
-        <button 
-          onClick={() => handleVote('negative')}
-          disabled={voting}
-          className="md-text-button flex items-center gap-1"
-        >
-          {userVote === 'negative' ? (
-            <ThumbDownIcon sx={{ fontSize: 18, color: 'var(--md-sys-color-error)' }} />
-          ) : (
-            <ThumbDownOutlinedIcon sx={{ fontSize: 18 }} />
-          )}
-        </button>
       </div>
     </div>
   );
