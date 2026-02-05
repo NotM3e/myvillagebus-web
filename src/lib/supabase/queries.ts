@@ -184,3 +184,183 @@ export async function toggleFavorite(scheduleId: string): Promise<{ isFavorite: 
     return { isFavorite: true };
   }
 }
+
+// ============================================================
+// LINES (dla offline sync)
+// ============================================================
+
+export interface LineFullData {
+  line: {
+    id: string;
+    number: string;
+    description: string | null;
+    operation_note: string | null;
+    carrier: {
+      id: string;
+      name: string;
+      logo_url: string | null;
+      is_verified: boolean;
+    };
+  };
+  schedules: {
+    id: string;
+    direction: string;
+    version: number;
+    status: string;
+    is_incomplete: boolean;
+    is_verified: boolean;
+    days: string[];
+    excludes_holidays: boolean;
+    created_at: string;
+    last_modified_at: string;
+    net_score: number;
+    first_departure: string | null;
+  }[];
+  routeStops: {
+    id: string;
+    schedule_id: string;
+    stop_id: string;
+    order_index: number;
+    offset_minutes: number;
+  }[];
+  stops: {
+    id: string;
+    city: string;
+    name: string;
+    is_verified: boolean;
+  }[];
+  courses: {
+    id: string;
+    schedule_id: string;
+    departure_time: string;
+    use_offsets: boolean;
+  }[];
+  courseTimes: {
+    id: string;
+    course_id: string;
+    stop_id: string;
+    arrival_time: string | null;
+    order_index: number;
+  }[];
+}
+
+export async function getLineFullData(lineId: string): Promise<LineFullData | null> {
+  const supabase = createClient();
+
+  // 1. Pobierz linię z przewoźnikiem
+  const { data: line, error: lineError } = await supabase
+    .from('lines')
+    .select(`
+      id,
+      number,
+      description,
+      operation_note,
+      carrier:carriers(id, name, logo_url, is_verified)
+    `)
+    .eq('id', lineId)
+    .single();
+
+  if (lineError || !line) {
+    console.error('Error fetching line:', lineError?.message);
+    return null;
+  }
+
+  // 2. Pobierz rozkłady tej linii (z widoku dla net_score i first_departure)
+  const { data: schedules } = await supabase
+    .from('active_schedules_view')
+    .select('id, direction, version, status, is_incomplete, is_verified, days, excludes_holidays, created_at, last_modified_at, net_score, first_departure')
+    .eq('line_id', lineId);
+
+  const scheduleIds = schedules?.map(s => s.id) ?? [];
+
+  if (scheduleIds.length === 0) {
+    // Linia bez rozkładów - nadal zwracamy
+    const carrier = Array.isArray(line.carrier) ? line.carrier[0] : line.carrier;
+    return {
+      line: {
+        id: line.id,
+        number: line.number,
+        description: line.description,
+        operation_note: line.operation_note,
+        carrier,
+      },
+      schedules: [],
+      routeStops: [],
+      stops: [],
+      courses: [],
+      courseTimes: [],
+    };
+
+  }
+
+  // 3. Pobierz route_stops dla wszystkich schedules
+  const { data: routeStops } = await supabase
+    .from('route_stops')
+    .select('id, schedule_id, stop_id, order_index, offset_minutes')
+    .in('schedule_id', scheduleIds);
+
+  // 4. Pobierz unikalne stops
+  const stopIds = [...new Set(routeStops?.map(rs => rs.stop_id) ?? [])];
+  
+  const { data: stops } = stopIds.length > 0
+    ? await supabase
+        .from('stops')
+        .select('id, city, name, is_verified')
+        .in('id', stopIds)
+    : { data: [] };
+
+  // 5. Pobierz courses
+  const { data: courses } = await supabase
+    .from('courses')
+    .select('id, schedule_id, departure_time, use_offsets')
+    .in('schedule_id', scheduleIds);
+
+  // 6. Pobierz course_times (tylko dla use_offsets=false)
+  const manualCourseIds = courses?.filter(c => !c.use_offsets).map(c => c.id) ?? [];
+  
+  const { data: courseTimes } = manualCourseIds.length > 0
+    ? await supabase
+        .from('course_times')
+        .select('id, course_id, stop_id, arrival_time, order_index')
+        .in('course_id', manualCourseIds)
+    : { data: [] };
+
+  const carrier = Array.isArray(line.carrier) ? line.carrier[0] : line.carrier;
+
+  return {
+    line: {
+      id: line.id,
+      number: line.number,
+      description: line.description,
+      operation_note: line.operation_note,
+      carrier,
+    },
+    schedules: schedules ?? [],
+    routeStops: routeStops ?? [],
+    stops: stops ?? [],
+    courses: courses ?? [],
+    courseTimes: courseTimes ?? [],
+  };
+}
+
+// Pobierz listę wszystkich linii (do przeglądarki "Do pobrania")
+export async function getAllLinesBasic() {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('lines')
+    .select(`
+      id,
+      number,
+      description,
+      carrier:carriers(id, name, is_verified)
+    `)
+    .order('number', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching lines:', error.message);
+    return [];
+  }
+
+  return data ?? [];
+}
