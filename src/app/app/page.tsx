@@ -1,35 +1,28 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import PageWrapper from '@/components/PageWrapper';
-import ScheduleCard from '@/components/ScheduleCard';
+import OfflineScheduleCard from '@/components/OfflineScheduleCard';
 import AuthButton from '@/components/AuthButton';
-import { getActiveSchedules } from '@/lib/supabase/queries';
-import type { ActiveScheduleView } from '@/types/database';
+import { useOfflineSchedules, useSettings } from '@/lib/db/hooks';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import Link from 'next/link';
 
 export default function AppPage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [schedules, setSchedules] = useState<ActiveScheduleView[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchSchedules() {
-      const data = await getActiveSchedules();
-      setSchedules(data);
-      setLoading(false);
-    }
-    fetchSchedules();
-  }, []);
-
-  const filteredSchedules = schedules.filter(
-    (schedule) =>
-      schedule.carrier_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      schedule.direction.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      schedule.line_number.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const { settings } = useSettings();
+  
+  const { 
+    schedules, 
+    loading, 
+    isEmpty 
+  } = useOfflineSchedules({ 
+    searchQuery,
+    showPending: settings?.showPending ?? false,
+  });
 
   return (
     <PageWrapper maxWidth="max-w-2xl">
@@ -70,34 +63,41 @@ export default function AppPage() {
         </div>
       )}
 
-      {/* Empty state - no schedules in database */}
-      {!loading && schedules.length === 0 && (
+      {/* Empty state - no downloaded lines */}
+      {!loading && isEmpty && (
         <div className="text-center py-12">
           <div className="w-20 h-20 rounded-full bg-[var(--md-sys-color-surface-variant)] flex items-center justify-center mx-auto mb-6">
-            <DirectionsBusIcon 
+            <CloudDownloadIcon 
               sx={{ fontSize: 40, color: 'var(--md-sys-color-on-surface-variant)' }} 
             />
           </div>
-          <h2 className="md-title-large mb-2">Brak rozkładów</h2>
+          <h2 className="md-title-large mb-2">Brak pobranych linii</h2>
           <p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)] mb-6">
-            Bądź pierwszy! Dodaj rozkład swojego lokalnego przewoźnika.
+            Pobierz linie autobusowe, aby przeglądać rozkłady offline.
           </p>
+          <Link 
+            href="/app/browse"
+            className="md-filled-button inline-flex items-center gap-2"
+          >
+            <CloudDownloadIcon sx={{ fontSize: 20 }} />
+            Przeglądaj dostępne linie
+          </Link>
         </div>
       )}
 
       {/* Results */}
-      {!loading && schedules.length > 0 && (
+      {!loading && !isEmpty && (
         <>
           <p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-4">
-            Znaleziono: {filteredSchedules.length} rozkładów
+            Znaleziono: {schedules.length} rozkładów
           </p>
 
           <div className="mb-20">
-            {filteredSchedules.map((schedule) => (
-              <ScheduleCard key={schedule.id} schedule={schedule} />
+            {schedules.map((schedule) => (
+              <OfflineScheduleCard key={schedule.id} schedule={schedule} />
             ))}
 
-            {filteredSchedules.length === 0 && searchQuery && (
+            {schedules.length === 0 && searchQuery && (
               <div className="text-center py-12">
                 <p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
                   Brak wyników dla "{searchQuery}"
