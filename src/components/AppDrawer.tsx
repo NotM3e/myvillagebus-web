@@ -138,14 +138,22 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
               ) : (
                 <div className="space-y-1">
                   {filters.map((filter) => (
-                    <button
+                    <Link
                       key={filter.id}
+                      href={`/app?filterId=${filter.id}`}
                       onClick={handleLinkClick}
                       className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[var(--md-sys-color-surface-variant)] transition-colors text-left"
                     >
                       <RouteIcon sx={{ fontSize: 20, color: 'var(--md-sys-color-primary)' }} />
-                      <span className="md-body-medium truncate">{filter.name}</span>
-                    </button>
+                      <div className="flex-1 min-w-0">
+                        <span className="md-body-medium truncate block">{filter.name}</span>
+                        {(filter.fromStop || filter.toStop) && (
+                          <span className="md-body-small text-[var(--md-sys-color-on-surface-variant)] truncate block">
+                            {filter.fromStop ?? '?'} → {filter.toStop ?? '?'}
+                          </span>
+                        )}
+                      </div>
+                    </Link>
                   ))}
                 </div>
               )}

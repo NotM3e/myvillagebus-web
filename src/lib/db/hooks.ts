@@ -363,3 +363,25 @@ export function useStopsAutocomplete() {
 
   return { allStops, loading };
 }
+
+// ============================================================
+// FUNKCJE: Saved Filters CRUD
+// ============================================================
+
+export async function saveFilter(filter: Omit<SavedFilter, 'id' | 'createdAt'>): Promise<number> {
+  const newFilter: SavedFilter = {
+    ...filter,
+    createdAt: new Date().toISOString(),
+  };
+  
+  const id = await db.savedFilters.add(newFilter);
+  return id as number;
+}
+
+export async function deleteFilter(filterId: number): Promise<void> {
+  await db.savedFilters.delete(filterId);
+}
+
+export async function getFilterById(filterId: number): Promise<SavedFilter | undefined> {
+  return db.savedFilters.get(filterId);
+}

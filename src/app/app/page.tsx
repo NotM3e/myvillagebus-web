@@ -5,8 +5,9 @@ import PageWrapper from '@/components/PageWrapper';
 import ActionStrip from '@/components/ActionStrip';
 import OfflineScheduleCard from '@/components/OfflineScheduleCard';
 import StopSearch from '@/components/StopSearch';
+import SaveFilterDialog from '@/components/SaveFilterDialog';
 import type { OfflineStop } from '@/types/offline';
-import { useOfflineSchedules } from '@/lib/db/hooks';
+import { useOfflineSchedules, saveFilter } from '@/lib/db/hooks';
 import AddIcon from '@mui/icons-material/Add';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import Link from 'next/link';
@@ -18,6 +19,7 @@ export default function AppPage() {
   const [timeFilter, setTimeFilter] = useState<'all' | 'now' | 'custom'>('all');
   const [fromStop, setFromStop] = useState<OfflineStop | null>(null);
   const [toStop, setToStop] = useState<OfflineStop | null>(null);
+  const [showSaveDialog, setShowSaveDialog] = useState(false);
 
   const { 
     schedules: allSchedules, 
@@ -67,6 +69,20 @@ export default function AppPage() {
 
     return result;
   }, [allSchedules, selectedDays, timeFilter, fromStop, toStop]);
+
+  
+  const handleSaveFilter = async (name: string) => {
+    await saveFilter({
+      name,
+      fromStop: fromStop?.city ?? null,
+      toStop: toStop?.city ?? null,
+      days: selectedDays.length < 7 ? selectedDays : null,
+      carrierId: null, // TODO: dodać filtr przewoźnika
+    });
+    setShowSaveDialog(false);
+  };
+
+  const canSaveFilter = fromStop || toStop || selectedDays.length < 7;
 
   return (
     <PageWrapper maxWidth="max-w-2xl">
@@ -148,10 +164,23 @@ export default function AppPage() {
         </>
       )}
 
-      {/* FAB - Add schedule */}
-      <button className="fixed bottom-6 right-6 w-14 h-14 rounded-2xl bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)] shadow-lg flex items-center justify-center hover:shadow-xl transition-shadow">
+      {/* FAB - Save filter */}
+      <button 
+        onClick={() => setShowSaveDialog(true)}
+        disabled={!canSaveFilter}
+        className="fixed bottom-6 right-6 w-14 h-14 rounded-2xl bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)] shadow-lg flex items-center justify-center hover:shadow-xl transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
+        title={canSaveFilter ? 'Zapisz trasę' : 'Ustaw filtry aby zapisać'}
+      >
         <AddIcon sx={{ fontSize: 28 }} />
       </button>
+
+      {/* Save Filter Dialog */}
+      <SaveFilterDialog
+        isOpen={showSaveDialog}
+        onClose={() => setShowSaveDialog(false)}
+        onSave={handleSaveFilter}
+        defaultName={fromStop && toStop ? `${fromStop.city} → ${toStop.city}` : ''}
+      />
     </PageWrapper>
   );
 }
