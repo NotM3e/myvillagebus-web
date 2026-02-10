@@ -1,3 +1,5 @@
+'use client';
+
 import PageWrapper from '@/components/PageWrapper';
 import Link from 'next/link';
 import WifiOffIcon from '@mui/icons-material/WifiOff';

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { Suspense, useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import PageWrapper from '@/components/PageWrapper';
 import ActionStrip from '@/components/ActionStrip';
@@ -15,7 +15,7 @@ import Link from 'next/link';
 
 const ALL_DAYS = ['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Nd'];
 
-export default function AppPage() {
+function AppContent() {
   const searchParams = useSearchParams();
   const filterId = searchParams.get('filterId');
 
@@ -62,7 +62,7 @@ export default function AppPage() {
     
     loadFilter();
   }, [filterId]);
-
+  
   const { 
     schedules: allSchedules, 
     loading, 
@@ -105,7 +105,6 @@ export default function AppPage() {
 
     return result;
   }, [allSchedules, selectedDays, selectedTime, fromStop, toStop]);
-
 
   // Zapisywanie filtrów
   const canSaveFilter = fromStop || toStop || selectedDays.length < 7 || selectedTime || showPending;
@@ -220,5 +219,27 @@ export default function AppPage() {
         defaultName={fromStop && toStop ? `${fromStop.city} → ${toStop.city}` : ''}
       />
     </PageWrapper>
+  );
+}
+
+// Loading fallback
+function AppLoading() {
+  return (
+    <PageWrapper maxWidth="max-w-2xl">
+      <div className="text-center py-12 mt-4">
+        <div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+        <p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+          Ładowanie...
+        </p>
+      </div>
+    </PageWrapper>
+  );
+}
+
+export default function AppPage() {
+  return (
+    <Suspense fallback={<AppLoading />}>
+      <AppContent />
+    </Suspense>
   );
 }
