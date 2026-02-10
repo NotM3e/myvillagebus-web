@@ -73,6 +73,7 @@ export interface SavedFilter {
   fromStop: { id: string; city: string; name: string } | null;
   toStop: { id: string; city: string; name: string } | null;
   days: string[] | null;
+  timeFrom: string | null;
   showPending: boolean;
   carrierId: string | null;
   createdAt: string;

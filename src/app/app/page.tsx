@@ -24,45 +24,45 @@ export default function AppPage() {
   const [selectedDays, setSelectedDays] = useState<string[]>(ALL_DAYS);
   const [showPending, setShowPending] = useState(false);
   const [timeFilter, setTimeFilter] = useState<'all' | 'now' | 'custom'>('all');
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
-  const [filterLoaded, setFilterLoaded] = useState(false);
 
   // Load filter from URL
   useEffect(() => {
-    if (filterId && !filterLoaded) {
-      const loadFilter = async () => {
-        // Reset all filters first
-        setFromStop(null);
-        setToStop(null);
-        setSelectedDays(ALL_DAYS);
-        setShowPending(false);
-        setTimeFilter('all');
+    if (!filterId) return;
 
-        // Then apply saved filter
-        const filter = await getFilterById(Number(filterId));
-        if (filter) {
-          if (filter.fromStop) {
-            setFromStop(filter.fromStop as OfflineStop);
-          }
-          if (filter.toStop) {
-            setToStop(filter.toStop as OfflineStop);
-          }
-          if (filter.days && filter.days.length > 0) {
-            setSelectedDays(filter.days);
-          }
-          setShowPending(filter.showPending ?? false);
+    const loadFilter = async () => {
+      // Reset all filters first
+      setFromStop(null);
+      setToStop(null);
+      setSelectedDays(ALL_DAYS);
+      setSelectedTime(null);
+      setShowPending(false);
+      setTimeFilter('all');
+
+      // Then apply saved filter
+      const filter = await getFilterById(Number(filterId));
+      if (filter) {
+        if (filter.fromStop) {
+          setFromStop(filter.fromStop as OfflineStop);
         }
-        setFilterLoaded(true);
-      };
-      loadFilter();
-    }
-  }, [filterId, filterLoaded]);
-
-  // Reset filterLoaded when URL changes
-  useEffect(() => {
-    setFilterLoaded(false);
+        if (filter.toStop) {
+          setToStop(filter.toStop as OfflineStop);
+        }
+        if (filter.days && filter.days.length > 0) {
+          setSelectedDays(filter.days);
+        }
+        if (filter.timeFrom) {
+          setSelectedTime(filter.timeFrom);
+          setTimeFilter('custom');
+        }
+        setShowPending(filter.showPending ?? false);
+      }
+    };
+    
+    loadFilter();
   }, [filterId]);
-  
+
   const { 
     schedules: allSchedules, 
     loading, 
@@ -83,16 +83,12 @@ export default function AppPage() {
       );
     }
 
-    // Filtr "Teraz" - pokaż tylko kursy z najbliższą godziną
-    if (timeFilter === 'now') {
-      const now = new Date();
-      const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-      
+    // Filtr czasu
+    if (selectedTime) {
       result = result.filter(schedule => {
         if (!schedule.firstDeparture) return false;
         const departure = schedule.firstDeparture.slice(0, 5);
-        return departure >= currentTime || 
-               (currentTime <= '23:59' && departure >= '00:00' && departure <= '04:00');
+        return departure >= selectedTime;
       });
 
       result.sort((a, b) => {
@@ -108,10 +104,11 @@ export default function AppPage() {
     }
 
     return result;
-  }, [allSchedules, selectedDays, timeFilter, fromStop, toStop]);
+  }, [allSchedules, selectedDays, selectedTime, fromStop, toStop]);
+
 
   // Zapisywanie filtrów
-  const canSaveFilter = fromStop || toStop || selectedDays.length < 7 || showPending;
+  const canSaveFilter = fromStop || toStop || selectedDays.length < 7 || selectedTime || showPending;
 
   const handleSaveFilter = async (name: string) => {
     await saveFilter({
@@ -119,6 +116,7 @@ export default function AppPage() {
       fromStop: fromStop ? { id: fromStop.id, city: fromStop.city, name: fromStop.name } : null,
       toStop: toStop ? { id: toStop.id, city: toStop.city, name: toStop.name } : null,
       days: selectedDays.length < 7 ? selectedDays : null,
+      timeFrom: selectedTime,
       showPending,
       carrierId: null,
     });
@@ -145,6 +143,8 @@ export default function AppPage() {
         onShowPendingChange={setShowPending}
         timeFilter={timeFilter}
         onTimeFilterChange={setTimeFilter}
+        selectedTime={selectedTime}
+        onSelectedTimeChange={setSelectedTime}
       />
 
       {/* Loading state */}
