@@ -31,6 +31,14 @@ export default function AppPage() {
   useEffect(() => {
     if (filterId && !filterLoaded) {
       const loadFilter = async () => {
+        // Reset all filters first
+        setFromStop(null);
+        setToStop(null);
+        setSelectedDays(ALL_DAYS);
+        setShowPending(false);
+        setTimeFilter('all');
+
+        // Then apply saved filter
         const filter = await getFilterById(Number(filterId));
         if (filter) {
           if (filter.fromStop) {
@@ -43,7 +51,6 @@ export default function AppPage() {
             setSelectedDays(filter.days);
           }
           setShowPending(filter.showPending ?? false);
-          setTimeFilter('all');
         }
         setFilterLoaded(true);
       };
