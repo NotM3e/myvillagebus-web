@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { db, initializeSettings } from './index';
 import { downloadLine, deleteLine, isLineDownloaded } from './sync';
-import type { AppSettings, OfflineSchedule, OfflineLine, OfflineStop, OfflineRouteStop } from '@/types/offline';
+import type { AppSettings, OfflineSchedule, OfflineLine, OfflineStop, OfflineRouteStop, SavedFilter } from '@/types/offline';
 
 // ============================================================
 // HOOK: useSettings
@@ -59,7 +59,7 @@ export function useDownloadedLines() {
 // ============================================================
 
 export function useSavedFilters() {
-  const [filters, setFilters] = useState<Awaited<ReturnType<typeof db.savedFilters.toArray>>>([]);
+  const [filters, setFilters] = useState<SavedFilter[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

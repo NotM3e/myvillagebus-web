@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import PageWrapper from '@/components/PageWrapper';
 import OfflineScheduleCard from '@/components/OfflineScheduleCard';
-import AuthButton from '@/components/AuthButton';
 import { useOfflineSchedules, useSettings } from '@/lib/db/hooks';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
@@ -24,13 +23,8 @@ export default function AppPage() {
     showPending: settings?.showPending ?? false,
   });
 
-  return (
+   return (
     <PageWrapper maxWidth="max-w-2xl">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="md-headline-medium">Rozkłady</h1>
-        <AuthButton />
-      </div>
 
       {/* Search */}
       <div className="relative mb-6">

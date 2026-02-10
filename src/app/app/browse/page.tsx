@@ -115,7 +115,7 @@ export default function BrowsePage() {
 
   return (
     <PageWrapper maxWidth="max-w-2xl">
-      {/* Header */}
+      {/* Page title */}
       <div className="flex items-center gap-4 mb-6">
         <Link 
           href="/app"
@@ -123,7 +123,7 @@ export default function BrowsePage() {
         >
           <ArrowBackIcon sx={{ color: 'var(--md-sys-color-on-surface)' }} />
         </Link>
-        <h1 className="md-headline-medium">Zarządzaj liniami</h1>
+        <h1 className="md-title-large">Zarządzaj liniami</h1>
       </div>
 
       {/* Tabs */}

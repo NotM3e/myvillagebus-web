@@ -1,22 +1,23 @@
-import type { Metadata } from "next";
+'use client';
 
-export const metadata: Metadata = {
-  title: "Aplikacja Web - Wsiobus | Rozkłady autobusów online",
-  description: "Aplikacja webowa Wsiobus - przeglądaj rozkłady autobusów w przeglądarce. Wersja PWA dla iOS i Android. Już wkrótce pełna funkcjonalność!",
-  openGraph: {
-    title: "Aplikacja Web - Wsiobus",
-    description: "Rozkłady autobusów w przeglądarce. PWA dla wszystkich urządzeń.",
-    url: "https://wsiobus.pl/app",
-    siteName: "Wsiobus",
-    locale: "pl_PL",
-    type: "website",
-  },
-};
+import { useState } from 'react';
+import AppHeader from '@/components/AppHeader';
+import AppDrawer from '@/components/AppDrawer';
 
 export default function AppLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  return (
+    <div className="min-h-screen bg-[var(--md-sys-color-background)]">
+      <AppHeader onMenuClick={() => setIsDrawerOpen(true)} />
+      <AppDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
+      <main>
+        {children}
+      </main>
+    </div>
+  );
 }
