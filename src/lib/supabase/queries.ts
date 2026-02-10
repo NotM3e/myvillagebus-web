@@ -265,13 +265,14 @@ export async function getLineFullData(lineId: string): Promise<LineFullData | nu
     return null;
   }
 
-  // 2. Pobierz rozkłady tej linii (z widoku dla net_score i first_departure)
-  const { data: schedules } = await supabase
-    .from('active_schedules_view')
-    .select('id, direction, version, status, is_incomplete, is_verified, days, excludes_holidays, created_at, last_modified_at, net_score, first_departure')
-    .eq('line_id', lineId);
+  // 2. Pobierz rozkłady tej linii (active + pending)
+  const { data: schedulesRaw } = await supabase
+    .from('schedules')
+    .select('id, direction, version, status, is_incomplete, is_verified, days, excludes_holidays, created_at, last_modified_at')
+    .eq('line_id', lineId)
+    .in('status', ['active', 'pending']);
 
-  const scheduleIds = schedules?.map(s => s.id) ?? [];
+  const scheduleIds = schedulesRaw?.map(s => s.id) ?? [];
 
   if (scheduleIds.length === 0) {
     // Linia bez rozkładów - nadal zwracamy
@@ -290,16 +291,51 @@ export async function getLineFullData(lineId: string): Promise<LineFullData | nu
       courses: [],
       courseTimes: [],
     };
-
   }
 
-  // 3. Pobierz route_stops dla wszystkich schedules
+  // 3. Pobierz net_score z verification_stats_view
+  let verificationStats: Record<string, number> = {};
+  const { data: stats } = await supabase
+    .from('verification_stats_view')
+    .select('schedule_id, net_score')
+    .in('schedule_id', scheduleIds);
+  
+  if (stats) {
+    verificationStats = Object.fromEntries(
+      stats.map(s => [s.schedule_id, s.net_score])
+    );
+  }
+
+  // 4. Pobierz first_departure z courses
+  const { data: allCourses } = await supabase
+    .from('courses')
+    .select('id, schedule_id, departure_time, use_offsets')
+    .in('schedule_id', scheduleIds)
+    .order('departure_time', { ascending: true });
+
+  let firstDepartures: Record<string, string | null> = {};
+  if (allCourses) {
+    for (const course of allCourses) {
+      if (!firstDepartures[course.schedule_id]) {
+        firstDepartures[course.schedule_id] = course.departure_time;
+      }
+    }
+  }
+
+  // Połącz dane rozkładów
+  const schedules = schedulesRaw?.map(s => ({
+    ...s,
+    net_score: verificationStats[s.id] ?? 0,
+    first_departure: firstDepartures[s.id] ?? null,
+  })) ?? [];
+
+  // 5. Pobierz route_stops dla wszystkich schedules
   const { data: routeStops } = await supabase
     .from('route_stops')
     .select('id, schedule_id, stop_id, order_index, offset_minutes')
     .in('schedule_id', scheduleIds);
 
-  // 4. Pobierz unikalne stops
+  // 6. Pobierz unikalne stops
   const stopIds = [...new Set(routeStops?.map(rs => rs.stop_id) ?? [])];
   
   const { data: stops } = stopIds.length > 0
@@ -309,14 +345,8 @@ export async function getLineFullData(lineId: string): Promise<LineFullData | nu
         .in('id', stopIds)
     : { data: [] };
 
-  // 5. Pobierz courses
-  const { data: courses } = await supabase
-    .from('courses')
-    .select('id, schedule_id, departure_time, use_offsets')
-    .in('schedule_id', scheduleIds);
-
-  // 6. Pobierz course_times (tylko dla use_offsets=false)
-  const manualCourseIds = courses?.filter(c => !c.use_offsets).map(c => c.id) ?? [];
+  // 7. Pobierz course_times (tylko dla use_offsets=false)
+  const manualCourseIds = allCourses?.filter(c => !c.use_offsets).map(c => c.id) ?? [];
   
   const { data: courseTimes } = manualCourseIds.length > 0
     ? await supabase
@@ -338,7 +368,7 @@ export async function getLineFullData(lineId: string): Promise<LineFullData | nu
     schedules: schedules ?? [],
     routeStops: routeStops ?? [],
     stops: stops ?? [],
-    courses: courses ?? [],
+    courses: allCourses ?? [],
     courseTimes: courseTimes ?? [],
   };
 }
