@@ -149,7 +149,7 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
                         <span className="md-body-medium truncate block">{filter.name}</span>
                         {(filter.fromStop || filter.toStop) && (
                           <span className="md-body-small text-[var(--md-sys-color-on-surface-variant)] truncate block">
-                            {filter.fromStop ?? '?'} → {filter.toStop ?? '?'}
+                            {filter.fromStop?.city ?? '?'} → {filter.toStop?.city ?? '?'}
                           </span>
                         )}
                       </div>

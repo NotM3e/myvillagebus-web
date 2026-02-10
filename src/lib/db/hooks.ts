@@ -63,17 +63,23 @@ export function useSavedFilters() {
   const [filters, setFilters] = useState<SavedFilter[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    db.savedFilters.toArray().then((data) => {
-      setFilters(data);
-      setLoading(false);
-    });
-  }, []);
-
   const refresh = async () => {
     const data = await db.savedFilters.toArray();
     setFilters(data);
+    setLoading(false);
   };
+
+  useEffect(() => {
+    refresh();
+
+    // Listen for filter changes
+    const handleFilterChange = () => refresh();
+    window.addEventListener('filters-updated', handleFilterChange);
+    
+    return () => {
+      window.removeEventListener('filters-updated', handleFilterChange);
+    };
+  }, []);
 
   return { filters, loading, refresh };
 }
@@ -375,11 +381,18 @@ export async function saveFilter(filter: Omit<SavedFilter, 'id' | 'createdAt'>):
   };
   
   const id = await db.savedFilters.add(newFilter);
+  
+  // Notify listeners
+  window.dispatchEvent(new Event('filters-updated'));
+  
   return id as number;
 }
 
 export async function deleteFilter(filterId: number): Promise<void> {
   await db.savedFilters.delete(filterId);
+  
+  // Notify listeners
+  window.dispatchEvent(new Event('filters-updated'));
 }
 
 export async function getFilterById(filterId: number): Promise<SavedFilter | undefined> {

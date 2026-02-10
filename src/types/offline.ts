@@ -70,9 +70,10 @@ export interface OfflineCourseTime {
 export interface SavedFilter {
   id?: number; // auto-increment
   name: string;
-  fromStop: string | null;
-  toStop: string | null;
+  fromStop: { id: string; city: string; name: string } | null;
+  toStop: { id: string; city: string; name: string } | null;
   days: string[] | null;
+  showPending: boolean;
   carrierId: string | null;
   createdAt: string;
 }

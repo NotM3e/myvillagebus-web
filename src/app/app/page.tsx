@@ -1,32 +1,67 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import PageWrapper from '@/components/PageWrapper';
 import ActionStrip from '@/components/ActionStrip';
-import OfflineScheduleCard from '@/components/OfflineScheduleCard';
 import StopSearch from '@/components/StopSearch';
+import OfflineScheduleCard from '@/components/OfflineScheduleCard';
 import SaveFilterDialog from '@/components/SaveFilterDialog';
+import { useOfflineSchedules, saveFilter, getFilterById } from '@/lib/db/hooks';
 import type { OfflineStop } from '@/types/offline';
-import { useOfflineSchedules, saveFilter } from '@/lib/db/hooks';
 import AddIcon from '@mui/icons-material/Add';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import Link from 'next/link';
 
+const ALL_DAYS = ['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Nd'];
+
 export default function AppPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedDays, setSelectedDays] = useState<string[]>(['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Nd']);
-  const [showPending, setShowPending] = useState(false);
-  const [timeFilter, setTimeFilter] = useState<'all' | 'now' | 'custom'>('all');
+  const searchParams = useSearchParams();
+  const filterId = searchParams.get('filterId');
+
   const [fromStop, setFromStop] = useState<OfflineStop | null>(null);
   const [toStop, setToStop] = useState<OfflineStop | null>(null);
+  const [selectedDays, setSelectedDays] = useState<string[]>(ALL_DAYS);
+  const [showPending, setShowPending] = useState(false);
+  const [timeFilter, setTimeFilter] = useState<'all' | 'now' | 'custom'>('all');
   const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const [filterLoaded, setFilterLoaded] = useState(false);
 
+  // Load filter from URL
+  useEffect(() => {
+    if (filterId && !filterLoaded) {
+      const loadFilter = async () => {
+        const filter = await getFilterById(Number(filterId));
+        if (filter) {
+          if (filter.fromStop) {
+            setFromStop(filter.fromStop as OfflineStop);
+          }
+          if (filter.toStop) {
+            setToStop(filter.toStop as OfflineStop);
+          }
+          if (filter.days && filter.days.length > 0) {
+            setSelectedDays(filter.days);
+          }
+          setShowPending(filter.showPending ?? false);
+          setTimeFilter('all');
+        }
+        setFilterLoaded(true);
+      };
+      loadFilter();
+    }
+  }, [filterId, filterLoaded]);
+
+  // Reset filterLoaded when URL changes
+  useEffect(() => {
+    setFilterLoaded(false);
+  }, [filterId]);
+  
   const { 
     schedules: allSchedules, 
     loading, 
     isEmpty 
   } = useOfflineSchedules({ 
-    searchQuery,
+    searchQuery: '',
     showPending,
   });
 
@@ -61,8 +96,6 @@ export default function AppPage() {
     }
 
     // TODO: Filtr po przystankach (fromStop, toStop)
-    // Wymaga sprawdzenia route_stops dla każdego schedule
-    // Na razie tylko logujemy że filtry są ustawione
     if (fromStop || toStop) {
       console.log('Stop filters:', { from: fromStop?.city, to: toStop?.city });
     }
@@ -70,19 +103,20 @@ export default function AppPage() {
     return result;
   }, [allSchedules, selectedDays, timeFilter, fromStop, toStop]);
 
-  
+  // Zapisywanie filtrów
+  const canSaveFilter = fromStop || toStop || selectedDays.length < 7 || showPending;
+
   const handleSaveFilter = async (name: string) => {
     await saveFilter({
       name,
-      fromStop: fromStop?.city ?? null,
-      toStop: toStop?.city ?? null,
+      fromStop: fromStop ? { id: fromStop.id, city: fromStop.city, name: fromStop.name } : null,
+      toStop: toStop ? { id: toStop.id, city: toStop.city, name: toStop.name } : null,
       days: selectedDays.length < 7 ? selectedDays : null,
-      carrierId: null, // TODO: dodać filtr przewoźnika
+      showPending,
+      carrierId: null,
     });
     setShowSaveDialog(false);
   };
-
-  const canSaveFilter = fromStop || toStop || selectedDays.length < 7;
 
   return (
     <PageWrapper maxWidth="max-w-2xl">
@@ -95,7 +129,7 @@ export default function AppPage() {
           onToChange={setToStop}
         />
       </div>
-      
+
       {/* Action Strip */}
       <ActionStrip
         selectedDays={selectedDays}
@@ -153,10 +187,7 @@ export default function AppPage() {
             {filteredSchedules.length === 0 && (
               <div className="text-center py-12">
                 <p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
-                  {searchQuery 
-                    ? `Brak wyników dla "${searchQuery}"`
-                    : 'Brak rozkładów dla wybranych filtrów'
-                  }
+                  Brak rozkładów dla wybranych filtrów
                 </p>
               </div>
             )}

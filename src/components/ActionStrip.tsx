@@ -37,10 +37,16 @@ export default function ActionStrip({
   };
 
   const handleNowClick = () => {
-    // Ustaw "Teraz" - aktualny dzień + filtr czasowy
-    const today = getCurrentDayName();
-    onDaysChange([today]);
-    onTimeFilterChange('now');
+    if (timeFilter === 'now') {
+      // Toggle off - reset to all days
+      onDaysChange([...DAYS_OF_WEEK]);
+      onTimeFilterChange('all');
+    } else {
+      // Toggle on - set current day + now filter
+      const today = getCurrentDayName();
+      onDaysChange([today]);
+      onTimeFilterChange('now');
+    }
     setShowDayPicker(false);
   };
 
