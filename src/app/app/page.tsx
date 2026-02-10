@@ -1,33 +1,69 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import PageWrapper from '@/components/PageWrapper';
+import ActionStrip from '@/components/ActionStrip';
 import OfflineScheduleCard from '@/components/OfflineScheduleCard';
-import { useOfflineSchedules, useSettings } from '@/lib/db/hooks';
+import { useOfflineSchedules } from '@/lib/db/hooks';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
-import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import Link from 'next/link';
 
 export default function AppPage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const { settings } = useSettings();
+  const [selectedDays, setSelectedDays] = useState<string[]>(['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Nd']);
+  const [showPending, setShowPending] = useState(false);
+  const [timeFilter, setTimeFilter] = useState<'all' | 'now' | 'custom'>('all');
   
   const { 
-    schedules, 
+    schedules: allSchedules, 
     loading, 
     isEmpty 
   } = useOfflineSchedules({ 
     searchQuery,
-    showPending: settings?.showPending ?? false,
+    showPending,
   });
 
-   return (
-    <PageWrapper maxWidth="max-w-2xl">
+  // Filtrowanie po dniach
+  const filteredSchedules = useMemo(() => {
+    let result = allSchedules;
 
+    // Filtr dni
+    if (selectedDays.length < 7) {
+      result = result.filter(schedule => 
+        schedule.days.some(day => selectedDays.includes(day))
+      );
+    }
+
+    // Filtr "Teraz" - pokaż tylko kursy z najbliższą godziną
+    if (timeFilter === 'now') {
+      const now = new Date();
+      const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+      
+      result = result.filter(schedule => {
+        if (!schedule.firstDeparture) return false;
+        // Pokaż kursy które jeszcze nie odjechały (lub odjechały max 5 min temu)
+        const departure = schedule.firstDeparture.slice(0, 5);
+        return departure >= currentTime || 
+               (currentTime <= '23:59' && departure >= '00:00' && departure <= '04:00'); // Nocne
+      });
+
+      // Sortuj po godzinie odjazdu
+      result.sort((a, b) => {
+        if (!a.firstDeparture) return 1;
+        if (!b.firstDeparture) return -1;
+        return a.firstDeparture.localeCompare(b.firstDeparture);
+      });
+    }
+
+    return result;
+  }, [allSchedules, selectedDays, timeFilter]);
+
+  return (
+    <PageWrapper maxWidth="max-w-2xl">
       {/* Search */}
-      <div className="relative mb-6">
+      <div className="relative mb-4 mt-4">
         <SearchIcon 
           sx={{ 
             position: 'absolute', 
@@ -46,6 +82,16 @@ export default function AppPage() {
           className="w-full pl-10 pr-4 py-3 rounded-full bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] placeholder:text-[var(--md-sys-color-on-surface-variant)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
         />
       </div>
+
+      {/* Action Strip */}
+      <ActionStrip
+        selectedDays={selectedDays}
+        onDaysChange={setSelectedDays}
+        showPending={showPending}
+        onShowPendingChange={setShowPending}
+        timeFilter={timeFilter}
+        onTimeFilterChange={setTimeFilter}
+      />
 
       {/* Loading state */}
       {loading && (
@@ -83,18 +129,21 @@ export default function AppPage() {
       {!loading && !isEmpty && (
         <>
           <p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-4">
-            Znaleziono: {schedules.length} rozkładów
+            Znaleziono: {filteredSchedules.length} rozkładów
           </p>
 
           <div className="mb-20">
-            {schedules.map((schedule) => (
+            {filteredSchedules.map((schedule) => (
               <OfflineScheduleCard key={schedule.id} schedule={schedule} />
             ))}
 
-            {schedules.length === 0 && searchQuery && (
+            {filteredSchedules.length === 0 && (
               <div className="text-center py-12">
                 <p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
-                  Brak wyników dla "{searchQuery}"
+                  {searchQuery 
+                    ? `Brak wyników dla "${searchQuery}"`
+                    : 'Brak rozkładów dla wybranych filtrów'
+                  }
                 </p>
               </div>
             )}
