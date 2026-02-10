@@ -5,6 +5,7 @@ import { db, initializeSettings } from './index';
 import { downloadLine, deleteLine, isLineDownloaded } from './sync';
 import type { AppSettings, OfflineSchedule, OfflineLine, OfflineStop, OfflineRouteStop, SavedFilter } from '@/types/offline';
 
+
 // ============================================================
 // HOOK: useSettings
 // ============================================================
@@ -338,4 +339,27 @@ export function useScheduleStops(scheduleId: string | null) {
   }, [scheduleId]);
 
   return { stops, loading };
+}
+
+// ============================================================
+// HOOK: useStopsAutocomplete
+// ============================================================
+
+export function useStopsAutocomplete() {
+  const [allStops, setAllStops] = useState<OfflineStop[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    db.stops.toArray().then((stops) => {
+      stops.sort((a, b) => {
+        const cityCompare = a.city.localeCompare(b.city, 'pl');
+        if (cityCompare !== 0) return cityCompare;
+        return a.name.localeCompare(b.name, 'pl');
+      });
+      setAllStops(stops);
+      setLoading(false);
+    });
+  }, []);
+
+  return { allStops, loading };
 }

@@ -4,8 +4,9 @@ import { useState, useMemo } from 'react';
 import PageWrapper from '@/components/PageWrapper';
 import ActionStrip from '@/components/ActionStrip';
 import OfflineScheduleCard from '@/components/OfflineScheduleCard';
+import StopSearch from '@/components/StopSearch';
+import type { OfflineStop } from '@/types/offline';
 import { useOfflineSchedules } from '@/lib/db/hooks';
-import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import Link from 'next/link';
@@ -15,7 +16,9 @@ export default function AppPage() {
   const [selectedDays, setSelectedDays] = useState<string[]>(['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Nd']);
   const [showPending, setShowPending] = useState(false);
   const [timeFilter, setTimeFilter] = useState<'all' | 'now' | 'custom'>('all');
-  
+  const [fromStop, setFromStop] = useState<OfflineStop | null>(null);
+  const [toStop, setToStop] = useState<OfflineStop | null>(null);
+
   const { 
     schedules: allSchedules, 
     loading, 
@@ -25,7 +28,7 @@ export default function AppPage() {
     showPending,
   });
 
-  // Filtrowanie po dniach
+  // Filtrowanie
   const filteredSchedules = useMemo(() => {
     let result = allSchedules;
 
@@ -43,13 +46,11 @@ export default function AppPage() {
       
       result = result.filter(schedule => {
         if (!schedule.firstDeparture) return false;
-        // Pokaż kursy które jeszcze nie odjechały (lub odjechały max 5 min temu)
         const departure = schedule.firstDeparture.slice(0, 5);
         return departure >= currentTime || 
-               (currentTime <= '23:59' && departure >= '00:00' && departure <= '04:00'); // Nocne
+               (currentTime <= '23:59' && departure >= '00:00' && departure <= '04:00');
       });
 
-      // Sortuj po godzinie odjazdu
       result.sort((a, b) => {
         if (!a.firstDeparture) return 1;
         if (!b.firstDeparture) return -1;
@@ -57,32 +58,28 @@ export default function AppPage() {
       });
     }
 
+    // TODO: Filtr po przystankach (fromStop, toStop)
+    // Wymaga sprawdzenia route_stops dla każdego schedule
+    // Na razie tylko logujemy że filtry są ustawione
+    if (fromStop || toStop) {
+      console.log('Stop filters:', { from: fromStop?.city, to: toStop?.city });
+    }
+
     return result;
-  }, [allSchedules, selectedDays, timeFilter]);
+  }, [allSchedules, selectedDays, timeFilter, fromStop, toStop]);
 
   return (
     <PageWrapper maxWidth="max-w-2xl">
-      {/* Search */}
-      <div className="relative mb-4 mt-4">
-        <SearchIcon 
-          sx={{ 
-            position: 'absolute', 
-            left: 12, 
-            top: '50%', 
-            transform: 'translateY(-50%)',
-            color: 'var(--md-sys-color-on-surface-variant)',
-            fontSize: 20
-          }} 
-        />
-        <input
-          type="text"
-          placeholder="Szukaj przewoźnika, linii lub trasy..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-10 pr-4 py-3 rounded-full bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] placeholder:text-[var(--md-sys-color-on-surface-variant)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+      {/* Stop Search */}
+      <div className="mt-4">
+        <StopSearch
+          fromStop={fromStop}
+          toStop={toStop}
+          onFromChange={setFromStop}
+          onToChange={setToStop}
         />
       </div>
-
+      
       {/* Action Strip */}
       <ActionStrip
         selectedDays={selectedDays}
