@@ -394,3 +394,45 @@ export async function getAllLinesBasic() {
 
   return data ?? [];
 }
+
+// ============================================================
+// LINES (dla kreatora)
+// ============================================================
+
+export async function getLinesByCarrier(carrierId: string) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('lines')
+    .select('id, number, description, operation_note')
+    .eq('carrier_id', carrierId)
+    .order('number', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching lines:', error.message);
+    return [];
+  }
+
+  return data ?? [];
+}
+
+// ============================================================
+// STOPS (dla kreatora)
+// ============================================================
+
+export async function searchStops(query: string, limit: number = 10) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('stops')
+    .select('id, city, name, is_verified')
+    .or(`city.ilike.%${query}%,name.ilike.%${query}%`)
+    .limit(limit);
+
+  if (error) {
+    console.error('Error searching stops:', error.message);
+    return [];
+  }
+
+  return data ?? [];
+}
