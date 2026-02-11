@@ -179,20 +179,20 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
                   </div>
                 </Link>
 
-                <button
+                <Link
+                  href="/app/create"
                   onClick={handleLinkClick}
                   className="w-full flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[var(--md-sys-color-surface-variant)] transition-colors text-left"
-                  disabled
                 >
                   <AddCircleOutlineIcon sx={{ fontSize: 24, color: 'var(--md-sys-color-on-surface-variant)' }} />
                   <div>
-                    <p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">Dodaj rozkład</p>
+                    <p className="md-body-large">Dodaj rozkład</p>
                     <p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
-                      Wkrótce
+                      Utwórz nowy rozkład
                     </p>
                   </div>
-                </button>
-
+                </Link>
+                
                 <Link
                   href="/app/settings"
                   onClick={handleLinkClick}
