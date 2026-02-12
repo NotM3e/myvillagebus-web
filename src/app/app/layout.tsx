@@ -15,7 +15,7 @@ export default function AppLayout({
     <div className="min-h-screen bg-[var(--md-sys-color-background)]">
       <AppHeader onMenuClick={() => setIsDrawerOpen(true)} />
       <AppDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
-      <main>
+      <main className="pt-16">
         {children}
       </main>
     </div>

@@ -29,7 +29,7 @@ export default function AppHeader({ onMenuClick }: AppHeaderProps) {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 bg-[var(--md-sys-color-surface)] border-b border-[var(--md-sys-color-outline-variant)]">
+    <header className="fixed top-0 left-0 right-0 z-40 bg-[var(--md-sys-color-surface)] border-b border-[var(--md-sys-color-outline-variant)]">
       <div className="flex items-center justify-between h-16 px-4">
         {/* Left: Hamburger */}
         <button
