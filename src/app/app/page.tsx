@@ -11,6 +11,7 @@ import { useOfflineSchedules, saveFilter, getFilterById } from '@/lib/db/hooks';
 import type { OfflineStop } from '@/types/offline';
 import AddIcon from '@mui/icons-material/Add';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Link from 'next/link';
 
 const ALL_DAYS = ['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Nd'];
@@ -18,7 +19,9 @@ const ALL_DAYS = ['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Nd'];
 function AppContent() {
   const searchParams = useSearchParams();
   const filterId = searchParams.get('filterId');
-
+  const submitted = searchParams.get('submitted');
+  
+  const [showSuccess, setShowSuccess] = useState(!!submitted);
   const [fromStop, setFromStop] = useState<OfflineStop | null>(null);
   const [toStop, setToStop] = useState<OfflineStop | null>(null);
   const [selectedDays, setSelectedDays] = useState<string[]>(ALL_DAYS);
@@ -62,6 +65,14 @@ function AppContent() {
     
     loadFilter();
   }, [filterId]);
+
+  // Hide success message after 5 seconds
+  useEffect(() => {
+    if (showSuccess) {
+      const timeout = setTimeout(() => setShowSuccess(false), 5000);
+      return () => clearTimeout(timeout);
+    }
+  }, [showSuccess]);
   
   const { 
     schedules: allSchedules, 
@@ -134,6 +145,24 @@ function AppContent() {
         />
       </div>
 
+      {/* Success message */}
+      {showSuccess && (
+        <div className="mb-4 p-4 rounded-xl bg-(--md-sys-color-primary-container) flex items-center gap-3">
+          <CheckCircleIcon sx={{ color: 'var(--md-sys-color-on-primary-container)' }} />
+          <div className="flex-1">
+            <p className="md-body-medium text-(--md-sys-color-on-primary-container)">
+              Rozkład został dodany! Oczekuje na weryfikację.
+            </p>
+          </div>
+          <button 
+            onClick={() => setShowSuccess(false)}
+            className="md-text-button text-sm"
+          >
+            OK
+          </button>
+        </div>
+      )}
+
       {/* Action Strip */}
       <ActionStrip
         selectedDays={selectedDays}
@@ -149,8 +178,8 @@ function AppContent() {
       {/* Loading state */}
       {loading && (
         <div className="text-center py-12">
-          <div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+          <div className="w-8 h-8 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="md-body-medium text-(--md-sys-color-on-surface-variant)">
             Ładowanie rozkładów...
           </p>
         </div>

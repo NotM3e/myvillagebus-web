@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { submitSchedule } from '@/lib/supabase/mutations';
 import { User } from '@supabase/supabase-js';
 import StepCarrier from './StepCarrier';
 import StepLine from './StepLine';
@@ -55,6 +57,9 @@ export default function ScheduleCreator({ user }: ScheduleCreatorProps) {
     excludesHolidays: true,
     departures: '',
   });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const router = useRouter();
 
     const canGoNext = () => {
     switch (currentStep) {
@@ -86,9 +91,18 @@ export default function ScheduleCreator({ user }: ScheduleCreatorProps) {
   };
 
   const handleSubmit = async () => {
-    // TODO: Zapis do Supabase
-    console.log('Submit:', data);
-    alert('Funkcja zapisu wkrótce!');
+    setSubmitting(true);
+    setSubmitError(null);
+
+    const result = await submitSchedule(data, user.id);
+
+    if (result.success) {
+      // Sukces - przekieruj do strony głównej
+      router.push('/app?submitted=true');
+    } else {
+      setSubmitError(result.error ?? 'Wystąpił błąd podczas zapisywania');
+      setSubmitting(false);
+    }
   };
 
   const updateData = (updates: Partial<CreatorData>) => {
@@ -154,11 +168,18 @@ export default function ScheduleCreator({ user }: ScheduleCreatorProps) {
         )}
       </div>
 
+      {/* Error message */}
+      {submitError && (
+        <div className="mb-4 p-4 rounded-xl bg-[var(--md-sys-color-error-container)] text-[var(--md-sys-color-on-error-container)]">
+          <p className="md-body-medium">{submitError}</p>
+        </div>
+      )}
+
       {/* Navigation */}
       <div className="flex justify-between">
         <button
           onClick={handleBack}
-          disabled={currentStep === 0}
+          disabled={currentStep === 0 || submitting}
           className="md-text-button disabled:opacity-50"
         >
           Wstecz
@@ -175,10 +196,17 @@ export default function ScheduleCreator({ user }: ScheduleCreatorProps) {
         ) : (
           <button
             onClick={handleSubmit}
-            disabled={!canGoNext()}
-            className="md-filled-button disabled:opacity-50"
+            disabled={!canGoNext() || submitting}
+            className="md-filled-button disabled:opacity-50 flex items-center gap-2"
           >
-            Wyślij rozkład
+            {submitting ? (
+              <>
+                <div className="w-4 h-4 border-2 border-[var(--md-sys-color-on-primary)] border-t-transparent rounded-full animate-spin" />
+                Wysyłanie...
+              </>
+            ) : (
+              'Wyślij rozkład'
+            )}
           </button>
         )}
       </div>
