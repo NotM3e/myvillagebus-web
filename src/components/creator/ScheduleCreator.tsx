@@ -56,14 +56,18 @@ export default function ScheduleCreator({ user }: ScheduleCreatorProps) {
     departures: '',
   });
 
-  const canGoNext = () => {
+    const canGoNext = () => {
     switch (currentStep) {
       case 0:
         return data.carrier !== null && data.carrier.name.trim() !== '';
       case 1:
         return data.line !== null && data.stops.length >= 2 && data.direction.trim() !== '';
       case 2:
-        return data.days.length > 0 && data.departures.trim() !== '';
+        // Parse departures and check if at least one valid
+        const lines = data.departures.split('\n').map(l => l.trim()).filter(l => l);
+        const timeRegex = /([0-1]?[0-9]|2[0-3]):([0-5][0-9])/;
+        const validCount = lines.filter(line => timeRegex.test(line)).length;
+        return data.days.length > 0 && validCount > 0;
       default:
         return false;
     }
