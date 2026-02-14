@@ -449,16 +449,24 @@ export function useAllSyncMeta() {
 // FUNKCJA: getSchedulesByStops
 // ============================================================
 
+export interface ScheduleStopMatch {
+  scheduleId: string;
+  fromArrivalTime: string | null; // godzina przyjazdu na fromStop
+  toArrivalTime: string | null;   // godzina przyjazdu na toStop
+}
+
 export async function getSchedulesByStops(
   fromStopId: string | null,
   toStopId: string | null
-): Promise<string[]> {
+): Promise<ScheduleStopMatch[]> {
   if (!fromStopId && !toStopId) {
     return [];
   }
 
-  // Pobierz wszystkie route_stops
+  // Pobierz wszystkie potrzebne dane
   const allRouteStops = await db.routeStops.toArray();
+  const allCourses = await db.courses.toArray();
+  const allCourseTimes = await db.courseTimes.toArray();
 
   // Grupuj route_stops po schedule_id
   const routeStopsBySchedule = allRouteStops.reduce((acc, rs) => {
@@ -469,37 +477,105 @@ export async function getSchedulesByStops(
     return acc;
   }, {} as Record<string, typeof allRouteStops>);
 
-  const matchingScheduleIds: string[] = [];
+  // Grupuj courses po schedule_id
+  const coursesBySchedule = allCourses.reduce((acc, c) => {
+    if (!acc[c.scheduleId]) {
+      acc[c.scheduleId] = [];
+    }
+    acc[c.scheduleId].push(c);
+    return acc;
+  }, {} as Record<string, typeof allCourses>);
+
+  // Grupuj course_times po course_id
+  const courseTimesByCourse = allCourseTimes.reduce((acc, ct) => {
+    if (!acc[ct.courseId]) {
+      acc[ct.courseId] = [];
+    }
+    acc[ct.courseId].push(ct);
+    return acc;
+  }, {} as Record<string, typeof allCourseTimes>);
+
+  const matches: ScheduleStopMatch[] = [];
 
   for (const [scheduleId, routeStops] of Object.entries(routeStopsBySchedule)) {
     // Sortuj po orderIndex
     routeStops.sort((a, b) => a.orderIndex - b.orderIndex);
 
-    const stopIds = routeStops.map(rs => rs.stopId);
+    // Znajdź fromStop i toStop
+    const fromRouteStop = fromStopId 
+      ? routeStops.find(rs => rs.stopId === fromStopId)
+      : null;
+    
+    const toRouteStop = toStopId
+      ? routeStops.find(rs => rs.stopId === toStopId)
+      : null;
 
-    // Sprawdź fromStop
-    const fromIndex = fromStopId ? stopIds.indexOf(fromStopId) : -1;
-    const hasFrom = fromStopId ? fromIndex !== -1 : true;
+    const hasFrom = fromStopId ? !!fromRouteStop : true;
+    const hasTo = toStopId ? !!toRouteStop : true;
 
-    // Sprawdź toStop
-    const toIndex = toStopId ? stopIds.indexOf(toStopId) : -1;
-    const hasTo = toStopId ? toIndex !== -1 : true;
-
-    // Jeśli oba są wybrane, fromStop musi być PRZED toStop
+    // Sprawdź kolejność
+    let isValid = false;
     if (fromStopId && toStopId) {
-      if (hasFrom && hasTo && fromIndex < toIndex) {
-        matchingScheduleIds.push(scheduleId);
-      }
+      isValid = hasFrom && hasTo && fromRouteStop!.orderIndex < toRouteStop!.orderIndex;
     } else if (fromStopId) {
-      if (hasFrom) {
-        matchingScheduleIds.push(scheduleId);
-      }
+      isValid = hasFrom;
     } else if (toStopId) {
-      if (hasTo) {
-        matchingScheduleIds.push(scheduleId);
+      isValid = hasTo;
+    }
+
+    if (!isValid) continue;
+
+    // Pobierz pierwszy kurs (1 schedule = 1 course w naszym modelu)
+    const courses = coursesBySchedule[scheduleId] || [];
+    const firstCourse = courses[0];
+
+    let fromArrivalTime: string | null = null;
+    let toArrivalTime: string | null = null;
+
+    if (firstCourse) {
+      if (firstCourse.useOffsets) {
+        // Oblicz z offsetów
+        const [hours, minutes] = firstCourse.departureTime.split(':').map(Number);
+        
+        if (fromRouteStop) {
+          const totalMinutes = hours * 60 + minutes + fromRouteStop.offsetMinutes;
+          const newHours = Math.floor(totalMinutes / 60) % 24;
+          const newMinutes = totalMinutes % 60;
+          fromArrivalTime = `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
+        }
+        
+        if (toRouteStop) {
+          const totalMinutes = hours * 60 + minutes + toRouteStop.offsetMinutes;
+          const newHours = Math.floor(totalMinutes / 60) % 24;
+          const newMinutes = totalMinutes % 60;
+          toArrivalTime = `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
+        }
+      } else {
+        // Pobierz z course_times
+        const courseTimes = courseTimesByCourse[firstCourse.id] || [];
+        
+        if (fromRouteStop) {
+          const ct = courseTimes.find(ct => ct.stopId === fromStopId);
+          if (ct && ct.arrivalTime) {
+            fromArrivalTime = ct.arrivalTime.slice(0, 5);
+          }
+        }
+        
+        if (toRouteStop) {
+          const ct = courseTimes.find(ct => ct.stopId === toStopId);
+          if (ct && ct.arrivalTime) {
+            toArrivalTime = ct.arrivalTime.slice(0, 5);
+          }
+        }
       }
     }
+
+    matches.push({
+      scheduleId,
+      fromArrivalTime,
+      toArrivalTime,
+    });
   }
 
-  return matchingScheduleIds;
+  return matches;
 }

@@ -7,7 +7,7 @@ import ActionStrip from '@/components/ActionStrip';
 import StopSearch from '@/components/StopSearch';
 import OfflineScheduleCard from '@/components/OfflineScheduleCard';
 import SaveFilterDialog from '@/components/SaveFilterDialog';
-import { useOfflineSchedules, saveFilter, getFilterById, getSchedulesByStops } from '@/lib/db/hooks';
+import { useOfflineSchedules, saveFilter, getFilterById, getSchedulesByStops, type ScheduleStopMatch } from '@/lib/db/hooks';
 import type { OfflineStop } from '@/types/offline';
 import AddIcon from '@mui/icons-material/Add';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
@@ -29,6 +29,8 @@ function AppContent() {
   const [timeFilter, setTimeFilter] = useState<'all' | 'now' | 'custom'>('all');
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const [stopMatches, setStopMatches] = useState<ScheduleStopMatch[]>([]);
+  const [filteringByStops, setFilteringByStops] = useState(false);
 
   // Load filter from URL
   useEffect(() => {
@@ -84,29 +86,43 @@ function AppContent() {
   });
 
   // Filtrowanie po przystankach (async)
-  const [stopFilteredIds, setStopFilteredIds] = useState<string[] | null>(null);
-  const [filteringByStops, setFilteringByStops] = useState(false);
-
   useEffect(() => {
     if (!fromStop && !toStop) {
-      setStopFilteredIds(null);
+      setStopMatches([]);
       return;
     }
 
     setFilteringByStops(true);
-    getSchedulesByStops(fromStop?.id ?? null, toStop?.id ?? null).then((ids) => {
-      setStopFilteredIds(ids);
+    getSchedulesByStops(fromStop?.id ?? null, toStop?.id ?? null).then((matches) => {
+      setStopMatches(matches);
       setFilteringByStops(false);
     });
   }, [fromStop, toStop]);
 
   // Filtrowanie
   const filteredSchedules = useMemo(() => {
+    // Helper: pobierz czas na wybranym przystanku
+    const calcDisplayTime = (scheduleId: string, firstDeparture: string | null): string | null => {
+      if (!firstDeparture) return null;
+      
+      if (!fromStop) {
+        return firstDeparture.slice(0, 5);
+      }
+
+      const match = stopMatches.find(m => m.scheduleId === scheduleId);
+      if (!match || !match.fromArrivalTime) {
+        return firstDeparture.slice(0, 5);
+      }
+
+      return match.fromArrivalTime;
+    };
+
     let result = allSchedules;
 
     // Filtr po przystankach
-    if (stopFilteredIds !== null) {
-      result = result.filter(schedule => stopFilteredIds.includes(schedule.id));
+    if (fromStop || toStop) {
+      const matchingIds = stopMatches.map(m => m.scheduleId);
+      result = result.filter(schedule => matchingIds.includes(schedule.id));
     }
 
     // Filtr dni
@@ -116,24 +132,43 @@ function AppContent() {
       );
     }
 
-    // Filtr czasu
+    // Filtr czasu - używamy czasu na wybranym przystanku
     if (selectedTime) {
       result = result.filter(schedule => {
-        if (!schedule.firstDeparture) return false;
-        const departure = schedule.firstDeparture.slice(0, 5);
-        return departure >= selectedTime;
-      });
-
-      result.sort((a, b) => {
-        if (!a.firstDeparture) return 1;
-        if (!b.firstDeparture) return -1;
-        return a.firstDeparture.localeCompare(b.firstDeparture);
+        const time = calcDisplayTime(schedule.id, schedule.firstDeparture);
+        if (!time) return false;
+        return time >= selectedTime;
       });
     }
 
-    return result;
-  }, [allSchedules, selectedDays, selectedTime, stopFilteredIds]);
+    // Sortuj po czasie na przystanku
+    result.sort((a, b) => {
+      const timeA = calcDisplayTime(a.id, a.firstDeparture);
+      const timeB = calcDisplayTime(b.id, b.firstDeparture);
+      if (!timeA) return 1;
+      if (!timeB) return -1;
+      return timeA.localeCompare(timeB);
+    });
 
+    return result;
+  }, [allSchedules, selectedDays, selectedTime, stopMatches, fromStop, toStop]);
+
+  // Helper dla komponentu karty
+  const getDisplayTime = (scheduleId: string, firstDeparture: string | null): string | null => {
+    if (!firstDeparture) return null;
+    
+    if (!fromStop) {
+      return firstDeparture.slice(0, 5);
+    }
+
+    const match = stopMatches.find(m => m.scheduleId === scheduleId);
+    if (!match || !match.fromArrivalTime) {
+      return firstDeparture.slice(0, 5);
+    }
+
+    return match.fromArrivalTime;
+  };
+  
   // Zapisywanie filtrów
   const canSaveFilter = fromStop || toStop || selectedDays.length < 7 || selectedTime || showPending;
 
@@ -242,7 +277,11 @@ function AppContent() {
 
           <div className="mb-20">
             {filteredSchedules.map((schedule) => (
-              <OfflineScheduleCard key={schedule.id} schedule={schedule} />
+              <OfflineScheduleCard 
+                key={schedule.id} 
+                schedule={schedule}
+                displayTime={getDisplayTime(schedule.id, schedule.firstDeparture)}
+              />
             ))}
 
             {filteredSchedules.length === 0 && (

@@ -20,11 +20,12 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 
 interface OfflineScheduleCardProps {
   schedule: OfflineScheduleWithDetails;
+  displayTime?: string | null;
 }
 
 type VoteState = 'none' | 'up' | 'down';
 
-export default function OfflineScheduleCard({ schedule }: OfflineScheduleCardProps) {
+export default function OfflineScheduleCard({ schedule, displayTime }: OfflineScheduleCardProps) {
   const [user, setUser] = useState<User | null>(null);
   const [voteState, setVoteState] = useState<VoteState>('none');
   const [localScore, setLocalScore] = useState(schedule.netScore);
@@ -142,7 +143,7 @@ export default function OfflineScheduleCard({ schedule }: OfflineScheduleCardPro
             sx={{ fontSize: 18, color: 'var(--md-sys-color-on-primary-container)' }} 
           />
           <span className="md-title-medium text-[var(--md-sys-color-on-primary-container)]">
-            {formatTime(schedule.firstDeparture)}
+            {displayTime ?? formatTime(schedule.firstDeparture)}
           </span>
         </div>
       </div>
