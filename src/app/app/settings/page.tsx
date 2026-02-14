@@ -259,7 +259,7 @@ export default function SettingsPage() {
 
             <div className="p-4 flex items-center justify-between">
               <p className="md-body-large">Wersja aplikacji</p>
-              <p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">0.1.0 (PWA)</p>
+              <p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">0.1.0 BETA</p>
             </div>
           </div>
         </section>
