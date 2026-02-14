@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import PageWrapper from '@/components/PageWrapper';
-import { useDownloadedLines } from '@/lib/db/hooks';
+import { useDownloadedLines, useAllSyncMeta } from '@/lib/db/hooks';
 import { downloadLine, deleteLine } from '@/lib/db/sync';
 import { getAllLinesBasic } from '@/lib/supabase/queries';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -11,6 +11,8 @@ import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import VerifiedIcon from '@mui/icons-material/Verified';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import Link from 'next/link';
 
 interface CloudLine {
@@ -24,6 +26,23 @@ interface CloudLine {
   };
 }
 
+function formatRelativeTime(dateString: string): string {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  if (diffMins < 1) return 'przed chwila';
+  if (diffMins < 60) return `${diffMins} min temu`;
+  if (diffHours < 24) return `${diffHours} godz. temu`;
+  if (diffDays === 1) return 'wczoraj';
+  if (diffDays < 7) return `${diffDays} dni temu`;
+  
+  return date.toLocaleDateString('pl-PL', { day: 'numeric', month: 'short' });
+}
+
 export default function BrowsePage() {
   const [activeTab, setActiveTab] = useState<'downloaded' | 'available'>('available');
   const [searchQuery, setSearchQuery] = useState('');
@@ -32,11 +51,11 @@ export default function BrowsePage() {
   const [syncingLineId, setSyncingLineId] = useState<string | null>(null);
 
   const { lines: downloadedLines, loading: loadingDownloaded, refresh } = useDownloadedLines();
+  const { syncMetas } = useAllSyncMeta();
 
-  // Pobierz listę linii z chmury
+  // Pobierz liste linii z chmury
   useEffect(() => {
     getAllLinesBasic().then((data) => {
-      // Supabase zwraca carrier jako tablicę
       const normalized = data.map((line: any) => ({
         ...line,
         carrier: Array.isArray(line.carrier) ? line.carrier[0] : line.carrier,
@@ -67,7 +86,7 @@ export default function BrowsePage() {
     );
   });
 
-  // Grupuj po przewoźniku
+  // Grupuj po przewozniku
   const groupedCloudLines = filteredCloudLines.reduce((acc, line) => {
     const carrierName = line.carrier.name;
     if (!acc[carrierName]) {
@@ -92,30 +111,46 @@ export default function BrowsePage() {
     return acc;
   }, {} as Record<string, { carrierVerified: boolean; lines: typeof downloadedLines }>);
 
-  // Sprawdź czy linia jest pobrana
+  // Sprawdz czy linia jest pobrana
   const isDownloaded = (lineId: string) => {
     return downloadedLines.some((l) => l.id === lineId);
   };
 
-  // Pobierz linię
+  // Pobierz sync meta dla linii
+  const getSyncMeta = (lineId: string) => {
+    return syncMetas.find((m) => m.lineId === lineId);
+  };
+
+  // Pobierz linie
   const handleDownload = async (lineId: string) => {
     setSyncingLineId(lineId);
     await downloadLine(lineId);
     await refresh();
+    window.dispatchEvent(new Event('lines-updated'));
     setSyncingLineId(null);
   };
 
-  // Usuń linię
+  // Odswiez linie
+  const handleRefresh = async (lineId: string) => {
+    setSyncingLineId(lineId);
+    await downloadLine(lineId); // downloadLine nadpisuje istniejace dane
+    await refresh();
+    window.dispatchEvent(new Event('lines-updated'));
+    setSyncingLineId(null);
+  };
+
+  // Usun linie
   const handleDelete = async (lineId: string) => {
     setSyncingLineId(lineId);
     await deleteLine(lineId);
     await refresh();
+    window.dispatchEvent(new Event('lines-updated'));
     setSyncingLineId(null);
   };
 
   return (
     <PageWrapper maxWidth="max-w-2xl">
-      {/* Page title */}
+      {/* Header */}
       <div className="flex items-center gap-4 mb-6">
         <Link 
           href="/app"
@@ -123,7 +158,7 @@ export default function BrowsePage() {
         >
           <ArrowBackIcon sx={{ color: 'var(--md-sys-color-on-surface)' }} />
         </Link>
-        <h1 className="md-title-large">Zarządzaj liniami</h1>
+        <h1 className="md-title-large">Zarzadzaj liniami</h1>
       </div>
 
       {/* Tabs */}
@@ -164,7 +199,7 @@ export default function BrowsePage() {
         />
         <input
           type="text"
-          placeholder="Szukaj przewoźnika lub linii..."
+          placeholder="Szukaj przewoznika lub linii..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full pl-10 pr-4 py-3 rounded-full bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] placeholder:text-[var(--md-sys-color-on-surface-variant)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
@@ -178,13 +213,13 @@ export default function BrowsePage() {
             <div className="text-center py-12">
               <div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
               <p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
-                Ładowanie linii...
+                Ladowanie linii...
               </p>
             </div>
           ) : Object.keys(groupedCloudLines).length === 0 ? (
             <div className="text-center py-12">
               <p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
-                {searchQuery ? `Brak wyników dla "${searchQuery}"` : 'Brak dostępnych linii'}
+                {searchQuery ? `Brak wynikow dla "${searchQuery}"` : 'Brak dostepnych linii'}
               </p>
             </div>
           ) : (
@@ -259,14 +294,14 @@ export default function BrowsePage() {
           ) : Object.keys(groupedDownloadedLines).length === 0 ? (
             <div className="text-center py-12">
               <p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
-                {searchQuery ? `Brak wyników dla "${searchQuery}"` : 'Brak pobranych linii'}
+                {searchQuery ? `Brak wynikow dla "${searchQuery}"` : 'Brak pobranych linii'}
               </p>
               {!searchQuery && (
                 <button
                   onClick={() => setActiveTab('available')}
                   className="md-text-button mt-4"
                 >
-                  Przejdź do dostępnych linii
+                  Przejdz do dostepnych linii
                 </button>
               )}
             </div>
@@ -286,33 +321,64 @@ export default function BrowsePage() {
                   <div className="space-y-2">
                     {lines.map((line) => {
                       const syncing = syncingLineId === line.id;
+                      const meta = getSyncMeta(line.id);
                       
                       return (
                         <div 
                           key={line.id}
-                          className="md-card md-elevation-1 p-4 flex items-center justify-between"
+                          className="md-card md-elevation-1 p-4"
                         >
-                          <div>
-                            <p className="md-title-small">Linia {line.number}</p>
-                            {line.description && (
-                              <p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
-                                {line.description}
-                              </p>
-                            )}
+                          <div className="flex items-center justify-between mb-2">
+                            <div>
+                              <p className="md-title-small">Linia {line.number}</p>
+                              {line.description && (
+                                <p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+                                  {line.description}
+                                </p>
+                              )}
+                            </div>
                           </div>
                           
-                          <button
-                            onClick={() => handleDelete(line.id)}
-                            disabled={syncing}
-                            className="md-text-button flex items-center gap-1 text-[var(--md-sys-color-error)]"
-                          >
-                            {syncing ? (
-                              <div className="w-5 h-5 border-2 border-[var(--md-sys-color-error)] border-t-transparent rounded-full animate-spin" />
-                            ) : (
-                              <DeleteOutlineIcon sx={{ fontSize: 20 }} />
+                          {/* Sync info + actions */}
+                          <div className="flex items-center justify-between pt-2 border-t border-[var(--md-sys-color-outline-variant)]">
+                            {/* Last sync */}
+                            {meta && (
+                              <div className="flex items-center gap-1 text-[var(--md-sys-color-on-surface-variant)]">
+                                <AccessTimeIcon sx={{ fontSize: 14 }} />
+                                <span className="md-body-small">
+                                  {formatRelativeTime(meta.lastSyncAt)}
+                                </span>
+                              </div>
                             )}
-                            Usuń
-                          </button>
+                            
+                            {!meta && <div />}
+                            
+                            {/* Actions */}
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => handleRefresh(line.id)}
+                                disabled={syncing}
+                                className="md-text-button flex items-center gap-1 text-sm"
+                                title="Odswiez dane"
+                              >
+                                {syncing ? (
+                                  <div className="w-4 h-4 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
+                                ) : (
+                                  <RefreshIcon sx={{ fontSize: 18 }} />
+                                )}
+                                Odswiez
+                              </button>
+                              
+                              <button
+                                onClick={() => handleDelete(line.id)}
+                                disabled={syncing}
+                                className="md-text-button flex items-center gap-1 text-sm text-[var(--md-sys-color-error)]"
+                              >
+                                <DeleteOutlineIcon sx={{ fontSize: 18 }} />
+                                Usun
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       );
                     })}

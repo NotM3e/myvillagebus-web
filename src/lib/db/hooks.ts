@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { db, initializeSettings } from './index';
-import { downloadLine, deleteLine, isLineDownloaded } from './sync';
-import type { AppSettings, OfflineSchedule, OfflineLine, OfflineStop, OfflineRouteStop, SavedFilter } from '@/types/offline';
+import { downloadLine, deleteLine, isLineDownloaded } from './sync'; '@/types/offline';
+import type { AppSettings, OfflineSchedule, OfflineLine, OfflineStop, OfflineRouteStop, SavedFilter, SyncMeta } from '@/types/offline';
 
 
 // ============================================================
@@ -397,4 +397,50 @@ export async function deleteFilter(filterId: number): Promise<void> {
 
 export async function getFilterById(filterId: number): Promise<SavedFilter | undefined> {
   return db.savedFilters.get(filterId);
+}
+
+// ============================================================
+// HOOK: useLineSyncMeta
+// ============================================================
+
+export function useLineSyncMeta(lineId: string) {
+  const [syncMeta, setSyncMeta] = useState<SyncMeta | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    db.syncMeta.get(lineId).then((meta) => {
+      setSyncMeta(meta ?? null);
+      setLoading(false);
+    });
+  }, [lineId]);
+
+  return { syncMeta, loading };
+}
+
+// ============================================================
+// HOOK: useAllSyncMeta
+// ============================================================
+
+export function useAllSyncMeta() {
+  const [syncMetas, setSyncMetas] = useState<SyncMeta[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const refresh = async () => {
+    const metas = await db.syncMeta.toArray();
+    setSyncMetas(metas);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    refresh();
+
+    const handleUpdate = () => refresh();
+    window.addEventListener('lines-updated', handleUpdate);
+    
+    return () => {
+      window.removeEventListener('lines-updated', handleUpdate);
+    };
+  }, []);
+
+  return { syncMetas, loading, refresh };
 }
