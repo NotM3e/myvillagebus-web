@@ -22,8 +22,22 @@ interface AppDrawerProps {
 
 export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
   const [user, setUser] = useState<User | null>(null);
-  const { filters } = useSavedFilters();
-  const { lines } = useDownloadedLines();
+  const { filters, refresh: refreshFilters } = useSavedFilters();
+  const { lines, refresh: refreshLines } = useDownloadedLines();
+
+  // Listen for updates
+  useEffect(() => {
+    const handleFiltersUpdate = () => refreshFilters();
+    const handleLinesUpdate = () => refreshLines();
+    
+    window.addEventListener('filters-updated', handleFiltersUpdate);
+    window.addEventListener('lines-updated', handleLinesUpdate);
+    
+    return () => {
+      window.removeEventListener('filters-updated', handleFiltersUpdate);
+      window.removeEventListener('lines-updated', handleLinesUpdate);
+    };
+  }, [refreshFilters, refreshLines]);
 
   useEffect(() => {
     const supabase = createClient();

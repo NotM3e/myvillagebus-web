@@ -83,10 +83,6 @@ export async function initializeSettings(): Promise<AppSettings> {
     defaultFilterId: null,
     syncOnlyWifi: true,
     syncCooldownMinutes: 60,
-    cardShowCarrier: true,
-    cardShowLine: true,
-    cardShowNotes: true,
-    cardShowScore: true,
   };
 
   await db.settings.add(defaultSettings);

@@ -28,7 +28,7 @@ export default function OfflineScheduleCard({ schedule }: OfflineScheduleCardPro
   const [user, setUser] = useState<User | null>(null);
   const [voteState, setVoteState] = useState<VoteState>('none');
   const [localScore, setLocalScore] = useState(schedule.netScore);
-
+  
   // Check auth status
   useEffect(() => {
     const supabase = createClient();

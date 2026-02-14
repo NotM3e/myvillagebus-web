@@ -86,11 +86,6 @@ export interface AppSettings {
   defaultFilterId: number | null;
   syncOnlyWifi: boolean;
   syncCooldownMinutes: number;
-  // Personalizacja karty
-  cardShowCarrier: boolean;
-  cardShowLine: boolean;
-  cardShowNotes: boolean;
-  cardShowScore: boolean;
 }
 
 // Metadane synchronizacji per linia
