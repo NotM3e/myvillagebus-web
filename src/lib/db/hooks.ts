@@ -444,3 +444,62 @@ export function useAllSyncMeta() {
 
   return { syncMetas, loading, refresh };
 }
+
+// ============================================================
+// FUNKCJA: getSchedulesByStops
+// ============================================================
+
+export async function getSchedulesByStops(
+  fromStopId: string | null,
+  toStopId: string | null
+): Promise<string[]> {
+  if (!fromStopId && !toStopId) {
+    return [];
+  }
+
+  // Pobierz wszystkie route_stops
+  const allRouteStops = await db.routeStops.toArray();
+
+  // Grupuj route_stops po schedule_id
+  const routeStopsBySchedule = allRouteStops.reduce((acc, rs) => {
+    if (!acc[rs.scheduleId]) {
+      acc[rs.scheduleId] = [];
+    }
+    acc[rs.scheduleId].push(rs);
+    return acc;
+  }, {} as Record<string, typeof allRouteStops>);
+
+  const matchingScheduleIds: string[] = [];
+
+  for (const [scheduleId, routeStops] of Object.entries(routeStopsBySchedule)) {
+    // Sortuj po orderIndex
+    routeStops.sort((a, b) => a.orderIndex - b.orderIndex);
+
+    const stopIds = routeStops.map(rs => rs.stopId);
+
+    // Sprawdź fromStop
+    const fromIndex = fromStopId ? stopIds.indexOf(fromStopId) : -1;
+    const hasFrom = fromStopId ? fromIndex !== -1 : true;
+
+    // Sprawdź toStop
+    const toIndex = toStopId ? stopIds.indexOf(toStopId) : -1;
+    const hasTo = toStopId ? toIndex !== -1 : true;
+
+    // Jeśli oba są wybrane, fromStop musi być PRZED toStop
+    if (fromStopId && toStopId) {
+      if (hasFrom && hasTo && fromIndex < toIndex) {
+        matchingScheduleIds.push(scheduleId);
+      }
+    } else if (fromStopId) {
+      if (hasFrom) {
+        matchingScheduleIds.push(scheduleId);
+      }
+    } else if (toStopId) {
+      if (hasTo) {
+        matchingScheduleIds.push(scheduleId);
+      }
+    }
+  }
+
+  return matchingScheduleIds;
+}

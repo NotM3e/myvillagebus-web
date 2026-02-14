@@ -7,7 +7,7 @@ import ActionStrip from '@/components/ActionStrip';
 import StopSearch from '@/components/StopSearch';
 import OfflineScheduleCard from '@/components/OfflineScheduleCard';
 import SaveFilterDialog from '@/components/SaveFilterDialog';
-import { useOfflineSchedules, saveFilter, getFilterById } from '@/lib/db/hooks';
+import { useOfflineSchedules, saveFilter, getFilterById, getSchedulesByStops } from '@/lib/db/hooks';
 import type { OfflineStop } from '@/types/offline';
 import AddIcon from '@mui/icons-material/Add';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
@@ -83,9 +83,31 @@ function AppContent() {
     showPending,
   });
 
+  // Filtrowanie po przystankach (async)
+  const [stopFilteredIds, setStopFilteredIds] = useState<string[] | null>(null);
+  const [filteringByStops, setFilteringByStops] = useState(false);
+
+  useEffect(() => {
+    if (!fromStop && !toStop) {
+      setStopFilteredIds(null);
+      return;
+    }
+
+    setFilteringByStops(true);
+    getSchedulesByStops(fromStop?.id ?? null, toStop?.id ?? null).then((ids) => {
+      setStopFilteredIds(ids);
+      setFilteringByStops(false);
+    });
+  }, [fromStop, toStop]);
+
   // Filtrowanie
   const filteredSchedules = useMemo(() => {
     let result = allSchedules;
+
+    // Filtr po przystankach
+    if (stopFilteredIds !== null) {
+      result = result.filter(schedule => stopFilteredIds.includes(schedule.id));
+    }
 
     // Filtr dni
     if (selectedDays.length < 7) {
@@ -109,13 +131,8 @@ function AppContent() {
       });
     }
 
-    // TODO: Filtr po przystankach (fromStop, toStop)
-    if (fromStop || toStop) {
-      console.log('Stop filters:', { from: fromStop?.city, to: toStop?.city });
-    }
-
     return result;
-  }, [allSchedules, selectedDays, selectedTime, fromStop, toStop]);
+  }, [allSchedules, selectedDays, selectedTime, stopFilteredIds]);
 
   // Zapisywanie filtrów
   const canSaveFilter = fromStop || toStop || selectedDays.length < 7 || selectedTime || showPending;
@@ -210,6 +227,15 @@ function AppContent() {
       {/* Results */}
       {!loading && !isEmpty && (
         <>
+          {filteringByStops && (
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-4 h-4 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
+              <span className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+                Filtrowanie...
+              </span>
+            </div>
+          )}
+
           <p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-4">
             Znaleziono: {filteredSchedules.length} rozkładów
           </p>
