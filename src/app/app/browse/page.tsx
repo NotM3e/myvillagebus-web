@@ -48,7 +48,19 @@ export default function BrowsePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [cloudLines, setCloudLines] = useState<CloudLine[]>([]);
   const [loadingCloud, setLoadingCloud] = useState(true);
-  const [syncingLineId, setSyncingLineId] = useState<string | null>(null);
+  const [syncingLineIds, setSyncingLineIds] = useState<Set<string>>(new Set());
+
+  const addSyncing = (lineId: string) => {
+    setSyncingLineIds(prev => new Set(prev).add(lineId));
+  };
+
+  const removeSyncing = (lineId: string) => {
+    setSyncingLineIds(prev => {
+      const next = new Set(prev);
+      next.delete(lineId);
+      return next;
+    });
+  };
 
   const { lines: downloadedLines, loading: loadingDownloaded, refresh } = useDownloadedLines();
   const { syncMetas } = useAllSyncMeta();
@@ -123,29 +135,29 @@ export default function BrowsePage() {
 
   // Pobierz linie
   const handleDownload = async (lineId: string) => {
-    setSyncingLineId(lineId);
+    addSyncing(lineId);
     await downloadLine(lineId);
     await refresh();
     window.dispatchEvent(new Event('lines-updated'));
-    setSyncingLineId(null);
+    removeSyncing(lineId);
   };
 
   // Odswiez linie
   const handleRefresh = async (lineId: string) => {
-    setSyncingLineId(lineId);
-    await downloadLine(lineId); // downloadLine nadpisuje istniejace dane
+    addSyncing(lineId);
+    await downloadLine(lineId);
     await refresh();
     window.dispatchEvent(new Event('lines-updated'));
-    setSyncingLineId(null);
+    removeSyncing(lineId);
   };
 
   // Usun linie
   const handleDelete = async (lineId: string) => {
-    setSyncingLineId(lineId);
+    addSyncing(lineId);
     await deleteLine(lineId);
     await refresh();
     window.dispatchEvent(new Event('lines-updated'));
-    setSyncingLineId(null);
+    removeSyncing(lineId);
   };
 
   return (
@@ -238,7 +250,7 @@ export default function BrowsePage() {
                   <div className="space-y-2">
                     {lines.map((line) => {
                       const downloaded = isDownloaded(line.id);
-                      const syncing = syncingLineId === line.id;
+                      const syncing = syncingLineIds.has(line.id);
                       
                       return (
                         <div 
@@ -320,7 +332,7 @@ export default function BrowsePage() {
                   {/* Lines */}
                   <div className="space-y-2">
                     {lines.map((line) => {
-                      const syncing = syncingLineId === line.id;
+                      const syncing = syncingLineIds.has(line.id);
                       const meta = getSyncMeta(line.id);
                       
                       return (
