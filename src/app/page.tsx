@@ -1,25 +1,7 @@
-import type { Metadata } from "next";
+'use client';
 
-export const metadata: Metadata = {
-  title: "Wsiobus - Rozkłady małych przewoźników | Aplikacja PWA",
-  description: "Rozkłady lokalnych autobusów w jednym miejscu. Działa offline, tworzone przez społeczność. Dla Androida i iOS (PWA). Darmowa aplikacja bez reklam.",
-  keywords: "rozkład autobusów, przewoźnicy lokalni, aplikacja autobusowa, offline, PWA, rozkład jazdy",
-  authors: [{ name: "myVillageBus" }],
-  openGraph: {
-    title: "Wsiobus - Rozkłady małych przewoźników",
-    description: "Rozkłady lokalnych autobusów zawsze pod ręką. Offline, społecznościowe, darmowe.",
-    url: "https://wsiobus.pl",
-    siteName: "Wsiobus",
-    locale: "pl_PL",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Wsiobus - Rozkłady małych przewoźników",
-    description: "Rozkłady lokalnych autobusów zawsze pod ręką. Offline, społecznościowe, darmowe.",
-  },
-};
-
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import PageWrapper from '@/components/PageWrapper';
 import Link from 'next/link';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
@@ -31,6 +13,34 @@ import SortIcon from '@mui/icons-material/Sort';
 import SaveIcon from '@mui/icons-material/Save';
 
 export default function Home() {
+  const router = useRouter();
+  const [isStandalone, setIsStandalone] = useState(false);
+
+  useEffect(() => {
+    // Sprawdź czy PWA (standalone mode)
+    const standalone = window.matchMedia('(display-mode: standalone)').matches 
+      || (window.navigator as any).standalone === true;
+    
+    if (standalone) {
+      setIsStandalone(true);
+      router.replace('/app');
+    }
+  }, [router]);
+
+  // Pokaż loading gdy redirect
+  if (isStandalone) {
+    return (
+      <PageWrapper>
+        <div className="text-center py-12">
+          <div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+            Ładowanie aplikacji...
+          </p>
+        </div>
+      </PageWrapper>
+    );
+  }
+
   return (
     <PageWrapper>
       {/* Hero Section */}
@@ -70,7 +80,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Comunity section */}
+      {/* Community section */}
       <div className="md-card md-elevation-3 max-w-3xl mx-auto mb-8">
         <div className="p-8">
           <h2 className="md-headline-medium mb-4 text-center">

@@ -32,14 +32,15 @@ export default function CreateSchedulePage() {
 
   const handleLogin = async () => {
     const supabase = createClient();
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=/app/create`,
+        redirectTo: `${appUrl}/auth/callback?next=/app/create`,
       },
     });
   };
-
+  
   if (loading) {
     return (
       <PageWrapper maxWidth="max-w-2xl">

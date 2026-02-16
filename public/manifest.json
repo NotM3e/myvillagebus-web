@@ -2,7 +2,7 @@
   "name": "Mój Wsiobus - Rozkłady Autobusów",
   "short_name": "Mój Wsiobus",
   "description": "Rozkłady autobusów zawsze pod ręką dla nie wielkich przewoźników",
-  "start_url": "/",
+  "start_url": "/app",
   "scope": "/",
   "display": "standalone",
   "background_color": "#FFFBFE",
@@ -70,7 +70,10 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["travel", "transportation"],
+  "categories": [
+    "travel",
+    "transportation"
+  ],
   "lang": "pl",
   "dir": "ltr"
 }

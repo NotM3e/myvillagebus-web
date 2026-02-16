@@ -55,14 +55,15 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
 
   const handleLogin = async () => {
     const supabase = createClient();
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${appUrl}/auth/callback`,
       },
     });
   };
-
+  
   const handleLogout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
