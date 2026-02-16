@@ -5,6 +5,7 @@ import Link from 'next/link';
 import PageWrapper from '@/components/PageWrapper';
 import { useSettings, useDownloadedLines, useSavedFilters } from '@/lib/db/hooks';
 import { db } from '@/lib/db';
+import { useInstallPrompt } from '@/hooks/useInstallPrompt';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import StorageIcon from '@mui/icons-material/Storage';
@@ -13,6 +14,9 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import InstallMobileIcon from '@mui/icons-material/InstallMobile';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import IosShareIcon from '@mui/icons-material/IosShare';
 
 export default function SettingsPage() {
   const { settings, loading: settingsLoading, updateSettings } = useSettings();
@@ -21,6 +25,9 @@ export default function SettingsPage() {
   
   const [clearing, setClearing] = useState<'lines' | 'filters' | null>(null);
   const [showConfirm, setShowConfirm] = useState<'lines' | 'filters' | null>(null);
+
+  const { canInstall, isInstalled, isIOS, promptInstall } = useInstallPrompt();
+  const [showIOSInstructions, setShowIOSInstructions] = useState(false);
 
   const handleClearLines = async () => {
     setClearing('lines');
@@ -229,6 +236,83 @@ export default function SettingsPage() {
           </div>
         </section>
 
+        {/* Section: Install */}
+        <section>
+          <h2 className="md-title-medium text-[var(--md-sys-color-primary)] mb-3 flex items-center gap-2">
+            <InstallMobileIcon sx={{ fontSize: 20 }} />
+            Instalacja
+          </h2>
+          
+          <div className="md-card md-elevation-1 divide-y divide-[var(--md-sys-color-outline-variant)]">
+            {isInstalled ? (
+              <div className="p-4 flex items-center gap-3">
+                <CheckCircleIcon sx={{ fontSize: 24, color: 'var(--md-sys-color-primary)' }} />
+                <div>
+                  <p className="md-body-large">Aplikacja zainstalowana</p>
+                  <p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+                    Wsiobus jest na Twoim ekranie glownym
+                  </p>
+                </div>
+              </div>
+            ) : canInstall ? (
+              <button 
+                onClick={promptInstall}
+                className="w-full p-4 flex items-center justify-between text-left"
+              >
+                <div>
+                  <p className="md-body-large">Zainstaluj aplikacje</p>
+                  <p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+                    Dodaj Wsiobus do ekranu glownego
+                  </p>
+                </div>
+                <InstallMobileIcon sx={{ fontSize: 24, color: 'var(--md-sys-color-primary)' }} />
+              </button>
+            ) : isIOS ? (
+              <>
+                <button 
+                  onClick={() => setShowIOSInstructions(!showIOSInstructions)}
+                  className="w-full p-4 flex items-center justify-between text-left"
+                >
+                  <div>
+                    <p className="md-body-large">Zainstaluj aplikacje</p>
+                    <p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+                      Instrukcja dla iOS
+                    </p>
+                  </div>
+                  <IosShareIcon sx={{ fontSize: 24, color: 'var(--md-sys-color-primary)' }} />
+                </button>
+                
+                {showIOSInstructions && (
+                  <div className="p-4 bg-[var(--md-sys-color-surface-variant)]">
+                    <p className="md-body-medium mb-3">Jak zainstalowac na iOS:</p>
+                    <ol className="space-y-2 md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+                      <li className="flex gap-2">
+                        <span>1.</span>
+                        <span>Kliknij ikone <strong>Udostepnij</strong> (kwadrat ze strzalka) na dole ekranu</span>
+                      </li>
+                      <li className="flex gap-2">
+                        <span>2.</span>
+                        <span>Przewin w dol i wybierz <strong>Dodaj do ekranu poczatkowego</strong></span>
+                      </li>
+                      <li className="flex gap-2">
+                        <span>3.</span>
+                        <span>Kliknij <strong>Dodaj</strong> w prawym gornym rogu</span>
+                      </li>
+                    </ol>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="p-4">
+                <p className="md-body-large mb-2">Zainstaluj aplikacje</p>
+                <p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+                  Uzyj menu przegladarki (trzy kropki) i wybierz "Zainstaluj aplikacje" lub "Dodaj do ekranu glownego".
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
+        
         {/* Section: Info */}
         <section>
           <h2 className="md-title-medium text-[var(--md-sys-color-primary)] mb-3 flex items-center gap-2">
