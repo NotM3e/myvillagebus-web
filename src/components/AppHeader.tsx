@@ -5,6 +5,7 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import CloudDoneOutlinedIcon from '@mui/icons-material/CloudDoneOutlined';
 import CloudOffOutlinedIcon from '@mui/icons-material/CloudOffOutlined';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 interface AppHeaderProps {
   onMenuClick: () => void;
@@ -63,13 +64,14 @@ export default function AppHeader({ onMenuClick }: AppHeaderProps) {
             )}
           </div>
 
-          {/* Settings - placeholder for now */}
-          <button
+          {/* Settings */}
+          <Link
+            href="/app/settings"
             className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
             aria-label="Ustawienia"
           >
             <SettingsOutlinedIcon sx={{ color: 'var(--md-sys-color-on-surface-variant)' }} />
-          </button>
+          </Link>
         </div>
       </div>
     </header>
