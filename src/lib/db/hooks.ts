@@ -579,3 +579,127 @@ export async function getSchedulesByStops(
 
   return matches;
 }
+
+// ============================================================
+// HOOK: useScheduleDetails (dla strony szczegółów)
+// ============================================================
+
+export interface StopWithArrival {
+  id: string;
+  city: string;
+  name: string;
+  orderIndex: number;
+  arrivalTime: string | null;
+}
+
+export interface ScheduleDetailsData {
+  schedule: OfflineSchedule | null;
+  line: OfflineLine | null;
+  stops: StopWithArrival[];
+  loading: boolean;
+  error: string | null;
+}
+
+export function useScheduleDetails(scheduleId: string): ScheduleDetailsData {
+  const [schedule, setSchedule] = useState<OfflineSchedule | null>(null);
+  const [line, setLine] = useState<OfflineLine | null>(null);
+  const [stops, setStops] = useState<StopWithArrival[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchDetails() {
+      setLoading(true);
+      setError(null);
+
+      try {
+        // 1. Pobierz schedule
+        const scheduleData = await db.schedules.get(scheduleId);
+        if (!scheduleData) {
+          setError('Nie znaleziono rozkładu');
+          setLoading(false);
+          return;
+        }
+        setSchedule(scheduleData);
+
+        // 2. Pobierz linię
+        const lineData = await db.lines.get(scheduleData.lineId);
+        setLine(lineData ?? null);
+
+        // 3. Pobierz route_stops
+        const routeStops = await db.routeStops
+          .where('scheduleId')
+          .equals(scheduleId)
+          .toArray();
+        
+        routeStops.sort((a, b) => a.orderIndex - b.orderIndex);
+
+        // 4. Pobierz course (1 schedule = 1 course)
+        const courses = await db.courses
+          .where('scheduleId')
+          .equals(scheduleId)
+          .toArray();
+        
+        const course = courses[0] ?? null;
+
+        // 5. Pobierz dane przystanków
+        const stopIds = routeStops.map(rs => rs.stopId);
+        const stopsData = await db.stops.bulkGet(stopIds);
+
+        // 6. Jeśli use_offsets=false, pobierz course_times
+        let courseTimesMap: Record<string, string | null> = {};
+        if (course && !course.useOffsets) {
+          const courseTimes = await db.courseTimes
+            .where('courseId')
+            .equals(course.id)
+            .toArray();
+          
+          for (const ct of courseTimes) {
+            courseTimesMap[ct.stopId] = ct.arrivalTime?.slice(0, 5) ?? null;
+          }
+        }
+
+        // 7. Oblicz godziny przyjazdu
+        const stopsWithArrival: StopWithArrival[] = routeStops.map(rs => {
+          const stop = stopsData.find(s => s?.id === rs.stopId);
+          
+          let arrivalTime: string | null = null;
+
+          if (course) {
+            if (course.useOffsets) {
+              // Oblicz z offsetów
+              const [hours, minutes] = course.departureTime.split(':').map(Number);
+              const totalMinutes = hours * 60 + minutes + rs.offsetMinutes;
+              const newHours = Math.floor(totalMinutes / 60) % 24;
+              const newMinutes = totalMinutes % 60;
+              arrivalTime = `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
+            } else {
+              // Pobierz z course_times
+              arrivalTime = courseTimesMap[rs.stopId] ?? null;
+            }
+          }
+
+          return {
+            id: stop?.id ?? rs.stopId,
+            city: stop?.city ?? 'Nieznany',
+            name: stop?.name ?? '',
+            orderIndex: rs.orderIndex,
+            arrivalTime,
+          };
+        });
+
+        setStops(stopsWithArrival);
+        setLoading(false);
+
+      } catch (err) {
+        console.error('Error fetching schedule details:', err);
+        setError('Błąd ładowania danych');
+        setLoading(false);
+      }
+    }
+
+    fetchDetails();
+  }, [scheduleId]);
+
+  return { schedule, line, stops, loading, error };
+}

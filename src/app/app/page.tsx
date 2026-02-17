@@ -281,6 +281,7 @@ function AppContent() {
                 key={schedule.id} 
                 schedule={schedule}
                 displayTime={getDisplayTime(schedule.id, schedule.firstDeparture)}
+                fromStopId={fromStop?.id ?? null}
               />
             ))}
 
