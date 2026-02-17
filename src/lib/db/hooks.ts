@@ -1,35 +1,43 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useMemo } from 'react';
-import { db, initializeSettings } from './index';
-import { downloadLine, deleteLine, isLineDownloaded } from './sync'; '@/types/offline';
-import type { AppSettings, OfflineSchedule, OfflineLine, OfflineStop, OfflineRouteStop, SavedFilter, SyncMeta } from '@/types/offline';
-
+import { useState, useEffect, useMemo } from "react";
+import { db, initializeSettings } from "./index";
+import { downloadLine, deleteLine, isLineDownloaded } from "./sync";
+("@/types/offline");
+import type {
+	AppSettings,
+	OfflineSchedule,
+	OfflineLine,
+	OfflineStop,
+	OfflineRouteStop,
+	SavedFilter,
+	SyncMeta,
+} from "@/types/offline";
 
 // ============================================================
 // HOOK: useSettings
 // ============================================================
 
 export function useSettings() {
-  const [settings, setSettings] = useState<AppSettings | null>(null);
-  const [loading, setLoading] = useState(true);
+	const [settings, setSettings] = useState<AppSettings | null>(null);
+	const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    initializeSettings().then((s) => {
-      setSettings(s);
-      setLoading(false);
-    });
-  }, []);
+	useEffect(() => {
+		initializeSettings().then((s) => {
+			setSettings(s);
+			setLoading(false);
+		});
+	}, []);
 
-  const updateSettings = async (updates: Partial<Omit<AppSettings, 'id'>>) => {
-    if (!settings) return;
-    
-    const newSettings = { ...settings, ...updates };
-    await db.settings.put(newSettings);
-    setSettings(newSettings);
-  };
+	const updateSettings = async (updates: Partial<Omit<AppSettings, "id">>) => {
+		if (!settings) return;
 
-  return { settings, loading, updateSettings };
+		const newSettings = { ...settings, ...updates };
+		await db.settings.put(newSettings);
+		setSettings(newSettings);
+	};
+
+	return { settings, loading, updateSettings };
 }
 
 // ============================================================
@@ -37,22 +45,22 @@ export function useSettings() {
 // ============================================================
 
 export function useDownloadedLines() {
-  const [lines, setLines] = useState<OfflineLine[]>([]);
-  const [loading, setLoading] = useState(true);
+	const [lines, setLines] = useState<OfflineLine[]>([]);
+	const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    db.lines.toArray().then((data) => {
-      setLines(data);
-      setLoading(false);
-    });
-  }, []);
+	useEffect(() => {
+		db.lines.toArray().then((data) => {
+			setLines(data);
+			setLoading(false);
+		});
+	}, []);
 
-  const refresh = async () => {
-    const data = await db.lines.toArray();
-    setLines(data);
-  };
+	const refresh = async () => {
+		const data = await db.lines.toArray();
+		setLines(data);
+	};
 
-  return { lines, loading, refresh };
+	return { lines, loading, refresh };
 }
 
 // ============================================================
@@ -60,28 +68,28 @@ export function useDownloadedLines() {
 // ============================================================
 
 export function useSavedFilters() {
-  const [filters, setFilters] = useState<SavedFilter[]>([]);
-  const [loading, setLoading] = useState(true);
+	const [filters, setFilters] = useState<SavedFilter[]>([]);
+	const [loading, setLoading] = useState(true);
 
-  const refresh = async () => {
-    const data = await db.savedFilters.toArray();
-    setFilters(data);
-    setLoading(false);
-  };
+	const refresh = async () => {
+		const data = await db.savedFilters.toArray();
+		setFilters(data);
+		setLoading(false);
+	};
 
-  useEffect(() => {
-    refresh();
+	useEffect(() => {
+		refresh();
 
-    // Listen for filter changes
-    const handleFilterChange = () => refresh();
-    window.addEventListener('filters-updated', handleFilterChange);
-    
-    return () => {
-      window.removeEventListener('filters-updated', handleFilterChange);
-    };
-  }, []);
+		// Listen for filter changes
+		const handleFilterChange = () => refresh();
+		window.addEventListener("filters-updated", handleFilterChange);
 
-  return { filters, loading, refresh };
+		return () => {
+			window.removeEventListener("filters-updated", handleFilterChange);
+		};
+	}, []);
+
+	return { filters, loading, refresh };
 }
 
 // ============================================================
@@ -89,38 +97,38 @@ export function useSavedFilters() {
 // ============================================================
 
 export function useLineDownload(lineId: string) {
-  const [isDownloaded, setIsDownloaded] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [syncing, setSyncing] = useState(false);
+	const [isDownloaded, setIsDownloaded] = useState(false);
+	const [loading, setLoading] = useState(true);
+	const [syncing, setSyncing] = useState(false);
 
-  useEffect(() => {
-    isLineDownloaded(lineId).then((result) => {
-      setIsDownloaded(result);
-      setLoading(false);
-    });
-  }, [lineId]);
+	useEffect(() => {
+		isLineDownloaded(lineId).then((result) => {
+			setIsDownloaded(result);
+			setLoading(false);
+		});
+	}, [lineId]);
 
-  const download = async () => {
-    setSyncing(true);
-    const result = await downloadLine(lineId);
-    if (result.success) {
-      setIsDownloaded(true);
-    }
-    setSyncing(false);
-    return result;
-  };
+	const download = async () => {
+		setSyncing(true);
+		const result = await downloadLine(lineId);
+		if (result.success) {
+			setIsDownloaded(true);
+		}
+		setSyncing(false);
+		return result;
+	};
 
-  const remove = async () => {
-    setSyncing(true);
-    const result = await deleteLine(lineId);
-    if (result.success) {
-      setIsDownloaded(false);
-    }
-    setSyncing(false);
-    return result;
-  };
+	const remove = async () => {
+		setSyncing(true);
+		const result = await deleteLine(lineId);
+		if (result.success) {
+			setIsDownloaded(false);
+		}
+		setSyncing(false);
+		return result;
+	};
 
-  return { isDownloaded, loading, syncing, download, remove };
+	return { isDownloaded, loading, syncing, download, remove };
 }
 
 // ============================================================
@@ -128,12 +136,12 @@ export function useLineDownload(lineId: string) {
 // ============================================================
 
 export interface OfflineScheduleWithDetails extends OfflineSchedule {
-  lineNumber: string;
-  lineDescription: string | null;
-  lineOperationNote: string | null;
-  carrierName: string;
-  carrierLogo: string | null;
-  carrierVerified: boolean;
+	lineNumber: string;
+	lineDescription: string | null;
+	lineOperationNote: string | null;
+	carrierName: string;
+	carrierLogo: string | null;
+	carrierVerified: boolean;
 }
 
 // ============================================================
@@ -141,141 +149,144 @@ export interface OfflineScheduleWithDetails extends OfflineSchedule {
 // ============================================================
 
 interface UseOfflineSchedulesOptions {
-  searchQuery?: string;
-  showPending?: boolean;
+	searchQuery?: string;
+	showPending?: boolean;
 }
 
 export function useOfflineSchedules(options: UseOfflineSchedulesOptions = {}) {
-  const { searchQuery = '', showPending = false } = options;
-  
-  const [schedules, setSchedules] = useState<OfflineScheduleWithDetails[]>([]);
-  const [lines, setLines] = useState<OfflineLine[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [isEmpty, setIsEmpty] = useState(false);
+	const { searchQuery = "", showPending = false } = options;
 
-  // Pobierz dane z IndexedDB
-  useEffect(() => {
-    async function fetchData() {
-      setLoading(true);
-      
-      const linesData = await db.lines.toArray();
-      setLines(linesData);
-      
-      if (linesData.length === 0) {
-        setSchedules([]);
-        setIsEmpty(true);
-        setLoading(false);
-        return;
-      }
+	const [schedules, setSchedules] = useState<OfflineScheduleWithDetails[]>([]);
+	const [lines, setLines] = useState<OfflineLine[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [isEmpty, setIsEmpty] = useState(false);
 
-      // Pobierz rozkłady
-      let schedulesData = await db.schedules.toArray();
-      
-      // Filtruj po statusie
-      if (!showPending) {
-        schedulesData = schedulesData.filter(s => s.status === 'active');
-      } else {
-        schedulesData = schedulesData.filter(s => s.status === 'active' || s.status === 'pending');
-      }
+	// Pobierz dane z IndexedDB
+	useEffect(() => {
+		async function fetchData() {
+			setLoading(true);
 
-      // Połącz z danymi linii
-      const schedulesWithDetails: OfflineScheduleWithDetails[] = schedulesData.map(schedule => {
-        const line = linesData.find(l => l.id === schedule.lineId);
-        return {
-          ...schedule,
-          lineNumber: line?.number ?? '',
-          lineDescription: line?.description ?? null,
-          lineOperationNote: line?.operationNote ?? null,
-          carrierName: line?.carrierName ?? '',
-          carrierLogo: line?.carrierLogo ?? null,
-          carrierVerified: line?.carrierVerified ?? false,
-        };
-      });
+			const linesData = await db.lines.toArray();
+			setLines(linesData);
 
-      // Sortuj po nazwie przewoźnika, potem po pierwszym odjeździe
-      schedulesWithDetails.sort((a, b) => {
-        const carrierCompare = a.carrierName.localeCompare(b.carrierName);
-        if (carrierCompare !== 0) return carrierCompare;
-        
-        if (!a.firstDeparture) return 1;
-        if (!b.firstDeparture) return -1;
-        return a.firstDeparture.localeCompare(b.firstDeparture);
-      });
+			if (linesData.length === 0) {
+				setSchedules([]);
+				setIsEmpty(true);
+				setLoading(false);
+				return;
+			}
 
-      setSchedules(schedulesWithDetails);
-      setIsEmpty(false);
-      setLoading(false);
-    }
+			// Pobierz rozkłady
+			let schedulesData = await db.schedules.toArray();
 
-    fetchData();
-  }, [showPending]);
+			// Filtruj po statusie
+			if (!showPending) {
+				schedulesData = schedulesData.filter((s) => s.status === "active");
+			} else {
+				schedulesData = schedulesData.filter(
+					(s) => s.status === "active" || s.status === "pending"
+				);
+			}
 
-  // Filtrowanie po searchQuery (memoized)
-  const filteredSchedules = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return schedules;
-    }
+			// Połącz z danymi linii
+			const schedulesWithDetails: OfflineScheduleWithDetails[] = schedulesData.map((schedule) => {
+				const line = linesData.find((l) => l.id === schedule.lineId);
+				return {
+					...schedule,
+					lineNumber: line?.number ?? "",
+					lineDescription: line?.description ?? null,
+					lineOperationNote: line?.operationNote ?? null,
+					carrierName: line?.carrierName ?? "",
+					carrierLogo: line?.carrierLogo ?? null,
+					carrierVerified: line?.carrierVerified ?? false,
+				};
+			});
 
-    const query = searchQuery.toLowerCase();
-    return schedules.filter(schedule => 
-      schedule.carrierName.toLowerCase().includes(query) ||
-      schedule.direction.toLowerCase().includes(query) ||
-      schedule.lineNumber.toLowerCase().includes(query)
-    );
-  }, [schedules, searchQuery]);
+			// Sortuj po nazwie przewoźnika, potem po pierwszym odjeździe
+			schedulesWithDetails.sort((a, b) => {
+				const carrierCompare = a.carrierName.localeCompare(b.carrierName);
+				if (carrierCompare !== 0) return carrierCompare;
 
-  const refresh = async () => {
-    setLoading(true);
-    const linesData = await db.lines.toArray();
-    setLines(linesData);
-    
-    if (linesData.length === 0) {
-      setSchedules([]);
-      setIsEmpty(true);
-      setLoading(false);
-      return;
-    }
+				if (!a.firstDeparture) return 1;
+				if (!b.firstDeparture) return -1;
+				return a.firstDeparture.localeCompare(b.firstDeparture);
+			});
 
-    let schedulesData = await db.schedules.toArray();
-    
-    if (!showPending) {
-      schedulesData = schedulesData.filter(s => s.status === 'active');
-    }
+			setSchedules(schedulesWithDetails);
+			setIsEmpty(false);
+			setLoading(false);
+		}
 
-    const schedulesWithDetails: OfflineScheduleWithDetails[] = schedulesData.map(schedule => {
-      const line = linesData.find(l => l.id === schedule.lineId);
-      return {
-        ...schedule,
-        lineNumber: line?.number ?? '',
-        lineDescription: line?.description ?? null,
-        lineOperationNote: line?.operationNote ?? null,
-        carrierName: line?.carrierName ?? '',
-        carrierLogo: line?.carrierLogo ?? null,
-        carrierVerified: line?.carrierVerified ?? false,
-      };
-    });
+		fetchData();
+	}, [showPending]);
 
-    schedulesWithDetails.sort((a, b) => {
-      const carrierCompare = a.carrierName.localeCompare(b.carrierName);
-      if (carrierCompare !== 0) return carrierCompare;
-      if (!a.firstDeparture) return 1;
-      if (!b.firstDeparture) return -1;
-      return a.firstDeparture.localeCompare(b.firstDeparture);
-    });
+	// Filtrowanie po searchQuery (memoized)
+	const filteredSchedules = useMemo(() => {
+		if (!searchQuery.trim()) {
+			return schedules;
+		}
 
-    setSchedules(schedulesWithDetails);
-    setIsEmpty(false);
-    setLoading(false);
-  };
+		const query = searchQuery.toLowerCase();
+		return schedules.filter(
+			(schedule) =>
+				schedule.carrierName.toLowerCase().includes(query) ||
+				schedule.direction.toLowerCase().includes(query) ||
+				schedule.lineNumber.toLowerCase().includes(query)
+		);
+	}, [schedules, searchQuery]);
 
-  return {
-    schedules: filteredSchedules,
-    allSchedules: schedules,
-    lines,
-    loading,
-    isEmpty, // true = brak pobranych linii
-    refresh,
-  };
+	const refresh = async () => {
+		setLoading(true);
+		const linesData = await db.lines.toArray();
+		setLines(linesData);
+
+		if (linesData.length === 0) {
+			setSchedules([]);
+			setIsEmpty(true);
+			setLoading(false);
+			return;
+		}
+
+		let schedulesData = await db.schedules.toArray();
+
+		if (!showPending) {
+			schedulesData = schedulesData.filter((s) => s.status === "active");
+		}
+
+		const schedulesWithDetails: OfflineScheduleWithDetails[] = schedulesData.map((schedule) => {
+			const line = linesData.find((l) => l.id === schedule.lineId);
+			return {
+				...schedule,
+				lineNumber: line?.number ?? "",
+				lineDescription: line?.description ?? null,
+				lineOperationNote: line?.operationNote ?? null,
+				carrierName: line?.carrierName ?? "",
+				carrierLogo: line?.carrierLogo ?? null,
+				carrierVerified: line?.carrierVerified ?? false,
+			};
+		});
+
+		schedulesWithDetails.sort((a, b) => {
+			const carrierCompare = a.carrierName.localeCompare(b.carrierName);
+			if (carrierCompare !== 0) return carrierCompare;
+			if (!a.firstDeparture) return 1;
+			if (!b.firstDeparture) return -1;
+			return a.firstDeparture.localeCompare(b.firstDeparture);
+		});
+
+		setSchedules(schedulesWithDetails);
+		setIsEmpty(false);
+		setLoading(false);
+	};
+
+	return {
+		schedules: filteredSchedules,
+		allSchedules: schedules,
+		lines,
+		loading,
+		isEmpty, // true = brak pobranych linii
+		refresh,
+	};
 }
 
 // ============================================================
@@ -283,68 +294,67 @@ export function useOfflineSchedules(options: UseOfflineSchedulesOptions = {}) {
 // ============================================================
 
 export interface StopWithOrder {
-  id: string;
-  city: string;
-  name: string;
-  orderIndex: number;
-  offsetMinutes: number;
+	id: string;
+	city: string;
+	name: string;
+	orderIndex: number;
+	offsetMinutes: number;
 }
 
 export function useScheduleStops(scheduleId: string | null) {
-  const [stops, setStops] = useState<StopWithOrder[]>([]);
-  const [loading, setLoading] = useState(true);
+	const [stops, setStops] = useState<StopWithOrder[]>([]);
+	const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!scheduleId) {
-      setStops([]);
-      setLoading(false);
-      return;
-    }
+	useEffect(() => {
+		if (!scheduleId) {
+			setStops([]);
+			setLoading(false);
+			return;
+		}
 
-    const id = scheduleId;
+		const id = scheduleId;
 
-    async function fetchStops() {
-      setLoading(true);
-      
-      // Pobierz route_stops dla tego schedule
-      const routeStops = await db.routeStops
-        .where('scheduleId')
-        .equals(id)
-        .toArray();
+		async function fetchStops() {
+			setLoading(true);
 
-      if (routeStops.length === 0) {
-        setStops([]);
-        setLoading(false);
-        return;
-      }
+			// Pobierz route_stops dla tego schedule
+			const routeStops = await db.routeStops.where("scheduleId").equals(id).toArray();
 
-      // Pobierz dane przystanków
-      const stopIds = routeStops.map(rs => rs.stopId);
-      const stopsData = await db.stops.bulkGet(stopIds);
+			if (routeStops.length === 0) {
+				setStops([]);
+				setLoading(false);
+				return;
+			}
 
-      // Połącz i posortuj
-      const stopsWithOrder: StopWithOrder[] = routeStops
-        .map(rs => {
-          const stop = stopsData.find(s => s?.id === rs.stopId);
-          return stop ? {
-            id: stop.id,
-            city: stop.city,
-            name: stop.name,
-            orderIndex: rs.orderIndex,
-            offsetMinutes: rs.offsetMinutes,
-          } : null;
-        })
-        .filter((s): s is StopWithOrder => s !== null)
-        .sort((a, b) => a.orderIndex - b.orderIndex);
+			// Pobierz dane przystanków
+			const stopIds = routeStops.map((rs) => rs.stopId);
+			const stopsData = await db.stops.bulkGet(stopIds);
 
-      setStops(stopsWithOrder);
-      setLoading(false);
-    }
+			// Połącz i posortuj
+			const stopsWithOrder: StopWithOrder[] = routeStops
+				.map((rs) => {
+					const stop = stopsData.find((s) => s?.id === rs.stopId);
+					return stop
+						? {
+								id: stop.id,
+								city: stop.city,
+								name: stop.name,
+								orderIndex: rs.orderIndex,
+								offsetMinutes: rs.offsetMinutes,
+							}
+						: null;
+				})
+				.filter((s): s is StopWithOrder => s !== null)
+				.sort((a, b) => a.orderIndex - b.orderIndex);
 
-    fetchStops();
-  }, [scheduleId]);
+			setStops(stopsWithOrder);
+			setLoading(false);
+		}
 
-  return { stops, loading };
+		fetchStops();
+	}, [scheduleId]);
+
+	return { stops, loading };
 }
 
 // ============================================================
@@ -352,51 +362,51 @@ export function useScheduleStops(scheduleId: string | null) {
 // ============================================================
 
 export function useStopsAutocomplete() {
-  const [allStops, setAllStops] = useState<OfflineStop[]>([]);
-  const [loading, setLoading] = useState(true);
+	const [allStops, setAllStops] = useState<OfflineStop[]>([]);
+	const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    db.stops.toArray().then((stops) => {
-      stops.sort((a, b) => {
-        const cityCompare = a.city.localeCompare(b.city, 'pl');
-        if (cityCompare !== 0) return cityCompare;
-        return a.name.localeCompare(b.name, 'pl');
-      });
-      setAllStops(stops);
-      setLoading(false);
-    });
-  }, []);
+	useEffect(() => {
+		db.stops.toArray().then((stops) => {
+			stops.sort((a, b) => {
+				const cityCompare = a.city.localeCompare(b.city, "pl");
+				if (cityCompare !== 0) return cityCompare;
+				return a.name.localeCompare(b.name, "pl");
+			});
+			setAllStops(stops);
+			setLoading(false);
+		});
+	}, []);
 
-  return { allStops, loading };
+	return { allStops, loading };
 }
 
 // ============================================================
 // FUNKCJE: Saved Filters CRUD
 // ============================================================
 
-export async function saveFilter(filter: Omit<SavedFilter, 'id' | 'createdAt'>): Promise<number> {
-  const newFilter: SavedFilter = {
-    ...filter,
-    createdAt: new Date().toISOString(),
-  };
-  
-  const id = await db.savedFilters.add(newFilter);
-  
-  // Notify listeners
-  window.dispatchEvent(new Event('filters-updated'));
-  
-  return id as number;
+export async function saveFilter(filter: Omit<SavedFilter, "id" | "createdAt">): Promise<number> {
+	const newFilter: SavedFilter = {
+		...filter,
+		createdAt: new Date().toISOString(),
+	};
+
+	const id = await db.savedFilters.add(newFilter);
+
+	// Notify listeners
+	window.dispatchEvent(new Event("filters-updated"));
+
+	return id as number;
 }
 
 export async function deleteFilter(filterId: number): Promise<void> {
-  await db.savedFilters.delete(filterId);
-  
-  // Notify listeners
-  window.dispatchEvent(new Event('filters-updated'));
+	await db.savedFilters.delete(filterId);
+
+	// Notify listeners
+	window.dispatchEvent(new Event("filters-updated"));
 }
 
 export async function getFilterById(filterId: number): Promise<SavedFilter | undefined> {
-  return db.savedFilters.get(filterId);
+	return db.savedFilters.get(filterId);
 }
 
 // ============================================================
@@ -404,17 +414,17 @@ export async function getFilterById(filterId: number): Promise<SavedFilter | und
 // ============================================================
 
 export function useLineSyncMeta(lineId: string) {
-  const [syncMeta, setSyncMeta] = useState<SyncMeta | null>(null);
-  const [loading, setLoading] = useState(true);
+	const [syncMeta, setSyncMeta] = useState<SyncMeta | null>(null);
+	const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    db.syncMeta.get(lineId).then((meta) => {
-      setSyncMeta(meta ?? null);
-      setLoading(false);
-    });
-  }, [lineId]);
+	useEffect(() => {
+		db.syncMeta.get(lineId).then((meta) => {
+			setSyncMeta(meta ?? null);
+			setLoading(false);
+		});
+	}, [lineId]);
 
-  return { syncMeta, loading };
+	return { syncMeta, loading };
 }
 
 // ============================================================
@@ -422,27 +432,27 @@ export function useLineSyncMeta(lineId: string) {
 // ============================================================
 
 export function useAllSyncMeta() {
-  const [syncMetas, setSyncMetas] = useState<SyncMeta[]>([]);
-  const [loading, setLoading] = useState(true);
+	const [syncMetas, setSyncMetas] = useState<SyncMeta[]>([]);
+	const [loading, setLoading] = useState(true);
 
-  const refresh = async () => {
-    const metas = await db.syncMeta.toArray();
-    setSyncMetas(metas);
-    setLoading(false);
-  };
+	const refresh = async () => {
+		const metas = await db.syncMeta.toArray();
+		setSyncMetas(metas);
+		setLoading(false);
+	};
 
-  useEffect(() => {
-    refresh();
+	useEffect(() => {
+		refresh();
 
-    const handleUpdate = () => refresh();
-    window.addEventListener('lines-updated', handleUpdate);
-    
-    return () => {
-      window.removeEventListener('lines-updated', handleUpdate);
-    };
-  }, []);
+		const handleUpdate = () => refresh();
+		window.addEventListener("lines-updated", handleUpdate);
 
-  return { syncMetas, loading, refresh };
+		return () => {
+			window.removeEventListener("lines-updated", handleUpdate);
+		};
+	}, []);
+
+	return { syncMetas, loading, refresh };
 }
 
 // ============================================================
@@ -450,134 +460,139 @@ export function useAllSyncMeta() {
 // ============================================================
 
 export interface ScheduleStopMatch {
-  scheduleId: string;
-  fromArrivalTime: string | null; // godzina przyjazdu na fromStop
-  toArrivalTime: string | null;   // godzina przyjazdu na toStop
+	scheduleId: string;
+	fromArrivalTime: string | null; // godzina przyjazdu na fromStop
+	toArrivalTime: string | null; // godzina przyjazdu na toStop
 }
 
 export async function getSchedulesByStops(
-  fromStopId: string | null,
-  toStopId: string | null
+	fromStopId: string | null,
+	toStopId: string | null
 ): Promise<ScheduleStopMatch[]> {
-  if (!fromStopId && !toStopId) {
-    return [];
-  }
+	if (!fromStopId && !toStopId) {
+		return [];
+	}
 
-  // Pobierz wszystkie potrzebne dane
-  const allRouteStops = await db.routeStops.toArray();
-  const allCourses = await db.courses.toArray();
-  const allCourseTimes = await db.courseTimes.toArray();
+	// Pobierz wszystkie potrzebne dane
+	const allRouteStops = await db.routeStops.toArray();
+	const allCourses = await db.courses.toArray();
+	const allCourseTimes = await db.courseTimes.toArray();
 
-  // Grupuj route_stops po schedule_id
-  const routeStopsBySchedule = allRouteStops.reduce((acc, rs) => {
-    if (!acc[rs.scheduleId]) {
-      acc[rs.scheduleId] = [];
-    }
-    acc[rs.scheduleId].push(rs);
-    return acc;
-  }, {} as Record<string, typeof allRouteStops>);
+	// Grupuj route_stops po schedule_id
+	const routeStopsBySchedule = allRouteStops.reduce(
+		(acc, rs) => {
+			if (!acc[rs.scheduleId]) {
+				acc[rs.scheduleId] = [];
+			}
+			acc[rs.scheduleId].push(rs);
+			return acc;
+		},
+		{} as Record<string, typeof allRouteStops>
+	);
 
-  // Grupuj courses po schedule_id
-  const coursesBySchedule = allCourses.reduce((acc, c) => {
-    if (!acc[c.scheduleId]) {
-      acc[c.scheduleId] = [];
-    }
-    acc[c.scheduleId].push(c);
-    return acc;
-  }, {} as Record<string, typeof allCourses>);
+	// Grupuj courses po schedule_id
+	const coursesBySchedule = allCourses.reduce(
+		(acc, c) => {
+			if (!acc[c.scheduleId]) {
+				acc[c.scheduleId] = [];
+			}
+			acc[c.scheduleId].push(c);
+			return acc;
+		},
+		{} as Record<string, typeof allCourses>
+	);
 
-  // Grupuj course_times po course_id
-  const courseTimesByCourse = allCourseTimes.reduce((acc, ct) => {
-    if (!acc[ct.courseId]) {
-      acc[ct.courseId] = [];
-    }
-    acc[ct.courseId].push(ct);
-    return acc;
-  }, {} as Record<string, typeof allCourseTimes>);
+	// Grupuj course_times po course_id
+	const courseTimesByCourse = allCourseTimes.reduce(
+		(acc, ct) => {
+			if (!acc[ct.courseId]) {
+				acc[ct.courseId] = [];
+			}
+			acc[ct.courseId].push(ct);
+			return acc;
+		},
+		{} as Record<string, typeof allCourseTimes>
+	);
 
-  const matches: ScheduleStopMatch[] = [];
+	const matches: ScheduleStopMatch[] = [];
 
-  for (const [scheduleId, routeStops] of Object.entries(routeStopsBySchedule)) {
-    // Sortuj po orderIndex
-    routeStops.sort((a, b) => a.orderIndex - b.orderIndex);
+	for (const [scheduleId, routeStops] of Object.entries(routeStopsBySchedule)) {
+		// Sortuj po orderIndex
+		routeStops.sort((a, b) => a.orderIndex - b.orderIndex);
 
-    // Znajdź fromStop i toStop
-    const fromRouteStop = fromStopId 
-      ? routeStops.find(rs => rs.stopId === fromStopId)
-      : null;
-    
-    const toRouteStop = toStopId
-      ? routeStops.find(rs => rs.stopId === toStopId)
-      : null;
+		// Znajdź fromStop i toStop
+		const fromRouteStop = fromStopId ? routeStops.find((rs) => rs.stopId === fromStopId) : null;
 
-    const hasFrom = fromStopId ? !!fromRouteStop : true;
-    const hasTo = toStopId ? !!toRouteStop : true;
+		const toRouteStop = toStopId ? routeStops.find((rs) => rs.stopId === toStopId) : null;
 
-    // Sprawdź kolejność
-    let isValid = false;
-    if (fromStopId && toStopId) {
-      isValid = hasFrom && hasTo && fromRouteStop!.orderIndex < toRouteStop!.orderIndex;
-    } else if (fromStopId) {
-      isValid = hasFrom;
-    } else if (toStopId) {
-      isValid = hasTo;
-    }
+		const hasFrom = fromStopId ? !!fromRouteStop : true;
+		const hasTo = toStopId ? !!toRouteStop : true;
 
-    if (!isValid) continue;
+		// Sprawdź kolejność
+		let isValid = false;
+		if (fromStopId && toStopId) {
+			isValid = hasFrom && hasTo && fromRouteStop!.orderIndex < toRouteStop!.orderIndex;
+		} else if (fromStopId) {
+			isValid = hasFrom;
+		} else if (toStopId) {
+			isValid = hasTo;
+		}
 
-    // Pobierz pierwszy kurs (1 schedule = 1 course w naszym modelu)
-    const courses = coursesBySchedule[scheduleId] || [];
-    const firstCourse = courses[0];
+		if (!isValid) continue;
 
-    let fromArrivalTime: string | null = null;
-    let toArrivalTime: string | null = null;
+		// Pobierz pierwszy kurs (1 schedule = 1 course w naszym modelu)
+		const courses = coursesBySchedule[scheduleId] || [];
+		const firstCourse = courses[0];
 
-    if (firstCourse) {
-      if (firstCourse.useOffsets) {
-        // Oblicz z offsetów
-        const [hours, minutes] = firstCourse.departureTime.split(':').map(Number);
-        
-        if (fromRouteStop) {
-          const totalMinutes = hours * 60 + minutes + fromRouteStop.offsetMinutes;
-          const newHours = Math.floor(totalMinutes / 60) % 24;
-          const newMinutes = totalMinutes % 60;
-          fromArrivalTime = `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
-        }
-        
-        if (toRouteStop) {
-          const totalMinutes = hours * 60 + minutes + toRouteStop.offsetMinutes;
-          const newHours = Math.floor(totalMinutes / 60) % 24;
-          const newMinutes = totalMinutes % 60;
-          toArrivalTime = `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
-        }
-      } else {
-        // Pobierz z course_times
-        const courseTimes = courseTimesByCourse[firstCourse.id] || [];
-        
-        if (fromRouteStop) {
-          const ct = courseTimes.find(ct => ct.stopId === fromStopId);
-          if (ct && ct.arrivalTime) {
-            fromArrivalTime = ct.arrivalTime.slice(0, 5);
-          }
-        }
-        
-        if (toRouteStop) {
-          const ct = courseTimes.find(ct => ct.stopId === toStopId);
-          if (ct && ct.arrivalTime) {
-            toArrivalTime = ct.arrivalTime.slice(0, 5);
-          }
-        }
-      }
-    }
+		let fromArrivalTime: string | null = null;
+		let toArrivalTime: string | null = null;
 
-    matches.push({
-      scheduleId,
-      fromArrivalTime,
-      toArrivalTime,
-    });
-  }
+		if (firstCourse) {
+			if (firstCourse.useOffsets) {
+				// Oblicz z offsetów
+				const [hours, minutes] = firstCourse.departureTime.split(":").map(Number);
 
-  return matches;
+				if (fromRouteStop) {
+					const totalMinutes = hours * 60 + minutes + fromRouteStop.offsetMinutes;
+					const newHours = Math.floor(totalMinutes / 60) % 24;
+					const newMinutes = totalMinutes % 60;
+					fromArrivalTime = `${newHours.toString().padStart(2, "0")}:${newMinutes.toString().padStart(2, "0")}`;
+				}
+
+				if (toRouteStop) {
+					const totalMinutes = hours * 60 + minutes + toRouteStop.offsetMinutes;
+					const newHours = Math.floor(totalMinutes / 60) % 24;
+					const newMinutes = totalMinutes % 60;
+					toArrivalTime = `${newHours.toString().padStart(2, "0")}:${newMinutes.toString().padStart(2, "0")}`;
+				}
+			} else {
+				// Pobierz z course_times
+				const courseTimes = courseTimesByCourse[firstCourse.id] || [];
+
+				if (fromRouteStop) {
+					const ct = courseTimes.find((ct) => ct.stopId === fromStopId);
+					if (ct && ct.arrivalTime) {
+						fromArrivalTime = ct.arrivalTime.slice(0, 5);
+					}
+				}
+
+				if (toRouteStop) {
+					const ct = courseTimes.find((ct) => ct.stopId === toStopId);
+					if (ct && ct.arrivalTime) {
+						toArrivalTime = ct.arrivalTime.slice(0, 5);
+					}
+				}
+			}
+		}
+
+		matches.push({
+			scheduleId,
+			fromArrivalTime,
+			toArrivalTime,
+		});
+	}
+
+	return matches;
 }
 
 // ============================================================
@@ -585,121 +600,111 @@ export async function getSchedulesByStops(
 // ============================================================
 
 export interface StopWithArrival {
-  id: string;
-  city: string;
-  name: string;
-  orderIndex: number;
-  arrivalTime: string | null;
+	id: string;
+	city: string;
+	name: string;
+	orderIndex: number;
+	arrivalTime: string | null;
 }
 
 export interface ScheduleDetailsData {
-  schedule: OfflineSchedule | null;
-  line: OfflineLine | null;
-  stops: StopWithArrival[];
-  loading: boolean;
-  error: string | null;
+	schedule: OfflineSchedule | null;
+	line: OfflineLine | null;
+	stops: StopWithArrival[];
+	loading: boolean;
+	error: string | null;
 }
 
 export function useScheduleDetails(scheduleId: string): ScheduleDetailsData {
-  const [schedule, setSchedule] = useState<OfflineSchedule | null>(null);
-  const [line, setLine] = useState<OfflineLine | null>(null);
-  const [stops, setStops] = useState<StopWithArrival[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+	const [schedule, setSchedule] = useState<OfflineSchedule | null>(null);
+	const [line, setLine] = useState<OfflineLine | null>(null);
+	const [stops, setStops] = useState<StopWithArrival[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function fetchDetails() {
-      setLoading(true);
-      setError(null);
+	useEffect(() => {
+		async function fetchDetails() {
+			setLoading(true);
+			setError(null);
 
-      try {
-        // 1. Pobierz schedule
-        const scheduleData = await db.schedules.get(scheduleId);
-        if (!scheduleData) {
-          setError('Nie znaleziono rozkładu');
-          setLoading(false);
-          return;
-        }
-        setSchedule(scheduleData);
+			try {
+				// 1. Pobierz schedule
+				const scheduleData = await db.schedules.get(scheduleId);
+				if (!scheduleData) {
+					setError("Nie znaleziono rozkładu");
+					setLoading(false);
+					return;
+				}
+				setSchedule(scheduleData);
 
-        // 2. Pobierz linię
-        const lineData = await db.lines.get(scheduleData.lineId);
-        setLine(lineData ?? null);
+				// 2. Pobierz linię
+				const lineData = await db.lines.get(scheduleData.lineId);
+				setLine(lineData ?? null);
 
-        // 3. Pobierz route_stops
-        const routeStops = await db.routeStops
-          .where('scheduleId')
-          .equals(scheduleId)
-          .toArray();
-        
-        routeStops.sort((a, b) => a.orderIndex - b.orderIndex);
+				// 3. Pobierz route_stops
+				const routeStops = await db.routeStops.where("scheduleId").equals(scheduleId).toArray();
 
-        // 4. Pobierz course (1 schedule = 1 course)
-        const courses = await db.courses
-          .where('scheduleId')
-          .equals(scheduleId)
-          .toArray();
-        
-        const course = courses[0] ?? null;
+				routeStops.sort((a, b) => a.orderIndex - b.orderIndex);
 
-        // 5. Pobierz dane przystanków
-        const stopIds = routeStops.map(rs => rs.stopId);
-        const stopsData = await db.stops.bulkGet(stopIds);
+				// 4. Pobierz course (1 schedule = 1 course)
+				const courses = await db.courses.where("scheduleId").equals(scheduleId).toArray();
 
-        // 6. Jeśli use_offsets=false, pobierz course_times
-        let courseTimesMap: Record<string, string | null> = {};
-        if (course && !course.useOffsets) {
-          const courseTimes = await db.courseTimes
-            .where('courseId')
-            .equals(course.id)
-            .toArray();
-          
-          for (const ct of courseTimes) {
-            courseTimesMap[ct.stopId] = ct.arrivalTime?.slice(0, 5) ?? null;
-          }
-        }
+				const course = courses[0] ?? null;
 
-        // 7. Oblicz godziny przyjazdu
-        const stopsWithArrival: StopWithArrival[] = routeStops.map(rs => {
-          const stop = stopsData.find(s => s?.id === rs.stopId);
-          
-          let arrivalTime: string | null = null;
+				// 5. Pobierz dane przystanków
+				const stopIds = routeStops.map((rs) => rs.stopId);
+				const stopsData = await db.stops.bulkGet(stopIds);
 
-          if (course) {
-            if (course.useOffsets) {
-              // Oblicz z offsetów
-              const [hours, minutes] = course.departureTime.split(':').map(Number);
-              const totalMinutes = hours * 60 + minutes + rs.offsetMinutes;
-              const newHours = Math.floor(totalMinutes / 60) % 24;
-              const newMinutes = totalMinutes % 60;
-              arrivalTime = `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
-            } else {
-              // Pobierz z course_times
-              arrivalTime = courseTimesMap[rs.stopId] ?? null;
-            }
-          }
+				// 6. Jeśli use_offsets=false, pobierz course_times
+				let courseTimesMap: Record<string, string | null> = {};
+				if (course && !course.useOffsets) {
+					const courseTimes = await db.courseTimes.where("courseId").equals(course.id).toArray();
 
-          return {
-            id: stop?.id ?? rs.stopId,
-            city: stop?.city ?? 'Nieznany',
-            name: stop?.name ?? '',
-            orderIndex: rs.orderIndex,
-            arrivalTime,
-          };
-        });
+					for (const ct of courseTimes) {
+						courseTimesMap[ct.stopId] = ct.arrivalTime?.slice(0, 5) ?? null;
+					}
+				}
 
-        setStops(stopsWithArrival);
-        setLoading(false);
+				// 7. Oblicz godziny przyjazdu
+				const stopsWithArrival: StopWithArrival[] = routeStops.map((rs) => {
+					const stop = stopsData.find((s) => s?.id === rs.stopId);
 
-      } catch (err) {
-        console.error('Error fetching schedule details:', err);
-        setError('Błąd ładowania danych');
-        setLoading(false);
-      }
-    }
+					let arrivalTime: string | null = null;
 
-    fetchDetails();
-  }, [scheduleId]);
+					if (course) {
+						if (course.useOffsets) {
+							// Oblicz z offsetów
+							const [hours, minutes] = course.departureTime.split(":").map(Number);
+							const totalMinutes = hours * 60 + minutes + rs.offsetMinutes;
+							const newHours = Math.floor(totalMinutes / 60) % 24;
+							const newMinutes = totalMinutes % 60;
+							arrivalTime = `${newHours.toString().padStart(2, "0")}:${newMinutes.toString().padStart(2, "0")}`;
+						} else {
+							// Pobierz z course_times
+							arrivalTime = courseTimesMap[rs.stopId] ?? null;
+						}
+					}
 
-  return { schedule, line, stops, loading, error };
+					return {
+						id: stop?.id ?? rs.stopId,
+						city: stop?.city ?? "Nieznany",
+						name: stop?.name ?? "",
+						orderIndex: rs.orderIndex,
+						arrivalTime,
+					};
+				});
+
+				setStops(stopsWithArrival);
+				setLoading(false);
+			} catch (err) {
+				console.error("Error fetching schedule details:", err);
+				setError("Błąd ładowania danych");
+				setLoading(false);
+			}
+		}
+
+		fetchDetails();
+	}, [scheduleId]);
+
+	return { schedule, line, stops, loading, error };
 }

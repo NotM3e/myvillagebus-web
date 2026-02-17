@@ -1,68 +1,70 @@
-import { createClient } from './client';
-import type { 
-  ActiveScheduleView, 
-  Carrier, 
-  Verification,
-  VoteType,
-  NegativeReason 
-} from '@/types/database';
+import { createClient } from "./client";
+import type {
+	ActiveScheduleView,
+	Carrier,
+	Verification,
+	VoteType,
+	NegativeReason,
+} from "@/types/database";
 
 // ============================================================
 // SCHEDULES
 // ============================================================
 
 export async function getActiveSchedules(): Promise<ActiveScheduleView[]> {
-  const supabase = createClient();
-  
-  const { data, error } = await supabase
-    .from('active_schedules_view')
-    .select('*')
-    .order('carrier_name', { ascending: true });
+	const supabase = createClient();
 
-  if (error) {
-    console.error('Error fetching schedules:', error.message);
-    return [];
-  }
+	const { data, error } = await supabase
+		.from("active_schedules_view")
+		.select("*")
+		.order("carrier_name", { ascending: true });
 
-  return data ?? [];
+	if (error) {
+		console.error("Error fetching schedules:", error.message);
+		return [];
+	}
+
+	return data ?? [];
 }
 
 export async function getScheduleWithStops(scheduleId: string) {
-  const supabase = createClient();
+	const supabase = createClient();
 
-  const { data, error } = await supabase
-    .from('active_schedules_view')
-    .select('*')
-    .eq('id', scheduleId)
-    .single();
+	const { data, error } = await supabase
+		.from("active_schedules_view")
+		.select("*")
+		.eq("id", scheduleId)
+		.single();
 
-  if (error) {
-    console.error('Error fetching schedule:', error.message);
-    return null;
-  }
+	if (error) {
+		console.error("Error fetching schedule:", error.message);
+		return null;
+	}
 
-  // Pobierz przystanki na trasie
-  const { data: routeStops } = await supabase
-    .from('route_stops')
-    .select(`
+	// Pobierz przystanki na trasie
+	const { data: routeStops } = await supabase
+		.from("route_stops")
+		.select(
+			`
       *,
       stop:stops(*)
-    `)
-    .eq('schedule_id', scheduleId)
-    .order('order_index', { ascending: true });
+    `
+		)
+		.eq("schedule_id", scheduleId)
+		.order("order_index", { ascending: true });
 
-  // Pobierz kursy
-  const { data: courses } = await supabase
-    .from('courses')
-    .select('*')
-    .eq('schedule_id', scheduleId)
-    .order('departure_time', { ascending: true });
+	// Pobierz kursy
+	const { data: courses } = await supabase
+		.from("courses")
+		.select("*")
+		.eq("schedule_id", scheduleId)
+		.order("departure_time", { ascending: true });
 
-  return {
-    ...data,
-    route_stops: routeStops ?? [],
-    courses: courses ?? [],
-  };
+	return {
+		...data,
+		route_stops: routeStops ?? [],
+		courses: courses ?? [],
+	};
 }
 
 // ============================================================
@@ -70,19 +72,19 @@ export async function getScheduleWithStops(scheduleId: string) {
 // ============================================================
 
 export async function getCarriers(): Promise<Carrier[]> {
-  const supabase = createClient();
+	const supabase = createClient();
 
-  const { data, error } = await supabase
-    .from('carriers')
-    .select('*')
-    .order('name', { ascending: true });
+	const { data, error } = await supabase
+		.from("carriers")
+		.select("*")
+		.order("name", { ascending: true });
 
-  if (error) {
-    console.error('Error fetching carriers:', error.message);
-    return [];
-  }
+	if (error) {
+		console.error("Error fetching carriers:", error.message);
+		return [];
+	}
 
-  return data ?? [];
+	return data ?? [];
 }
 
 // ============================================================
@@ -90,68 +92,75 @@ export async function getCarriers(): Promise<Carrier[]> {
 // ============================================================
 
 export async function voteOnSchedule(
-  scheduleId: string, 
-  voteType: VoteType,
-  negativeReason?: NegativeReason
+	scheduleId: string,
+	voteType: VoteType,
+	negativeReason?: NegativeReason
 ): Promise<{ success: boolean; error?: string }> {
-  const supabase = createClient();
+	const supabase = createClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
-  
-  if (!user) {
-    return { success: false, error: 'Musisz być zalogowany' };
-  }
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
 
-  const { error } = await supabase
-    .from('verifications')
-    .upsert({
-      schedule_id: scheduleId,
-      user_id: user.id,
-      vote_type: voteType,
-      negative_reason: voteType === 'negative' ? negativeReason : null,
-    }, {
-      onConflict: 'schedule_id,user_id',
-    });
+	if (!user) {
+		return { success: false, error: "Musisz być zalogowany" };
+	}
 
-  if (error) {
-    console.error('Error voting:', error.message);
-    return { success: false, error: error.message };
-  }
+	const { error } = await supabase.from("verifications").upsert(
+		{
+			schedule_id: scheduleId,
+			user_id: user.id,
+			vote_type: voteType,
+			negative_reason: voteType === "negative" ? negativeReason : null,
+		},
+		{
+			onConflict: "schedule_id,user_id",
+		}
+	);
 
-  return { success: true };
+	if (error) {
+		console.error("Error voting:", error.message);
+		return { success: false, error: error.message };
+	}
+
+	return { success: true };
 }
 
 export async function getUserVote(scheduleId: string): Promise<Verification | null> {
-  const supabase = createClient();
+	const supabase = createClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
-  
-  if (!user) return null;
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
 
-  const { data } = await supabase
-    .from('verifications')
-    .select('*')
-    .eq('schedule_id', scheduleId)
-    .eq('user_id', user.id)
-    .single();
+	if (!user) return null;
 
-  return data;
+	const { data } = await supabase
+		.from("verifications")
+		.select("*")
+		.eq("schedule_id", scheduleId)
+		.eq("user_id", user.id)
+		.single();
+
+	return data;
 }
 
 export async function removeVote(scheduleId: string): Promise<{ success: boolean }> {
-  const supabase = createClient();
+	const supabase = createClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
-  
-  if (!user) return { success: false };
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
 
-  const { error } = await supabase
-    .from('verifications')
-    .delete()
-    .eq('schedule_id', scheduleId)
-    .eq('user_id', user.id);
+	if (!user) return { success: false };
 
-  return { success: !error };
+	const { error } = await supabase
+		.from("verifications")
+		.delete()
+		.eq("schedule_id", scheduleId)
+		.eq("user_id", user.id);
+
+	return { success: !error };
 }
 
 // ============================================================
@@ -159,30 +168,32 @@ export async function removeVote(scheduleId: string): Promise<{ success: boolean
 // ============================================================
 
 export async function toggleFavorite(scheduleId: string): Promise<{ isFavorite: boolean }> {
-  const supabase = createClient();
+	const supabase = createClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
-  
-  if (!user) return { isFavorite: false };
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
 
-  // Sprawdź czy już jest w ulubionych
-  const { data: existing } = await supabase
-    .from('favorites')
-    .select('id')
-    .eq('schedule_id', scheduleId)
-    .eq('user_id', user.id)
-    .single();
+	if (!user) return { isFavorite: false };
 
-  if (existing) {
-    await supabase.from('favorites').delete().eq('id', existing.id);
-    return { isFavorite: false };
-  } else {
-    await supabase.from('favorites').insert({
-      schedule_id: scheduleId,
-      user_id: user.id,
-    });
-    return { isFavorite: true };
-  }
+	// Sprawdź czy już jest w ulubionych
+	const { data: existing } = await supabase
+		.from("favorites")
+		.select("id")
+		.eq("schedule_id", scheduleId)
+		.eq("user_id", user.id)
+		.single();
+
+	if (existing) {
+		await supabase.from("favorites").delete().eq("id", existing.id);
+		return { isFavorite: false };
+	} else {
+		await supabase.from("favorites").insert({
+			schedule_id: scheduleId,
+			user_id: user.id,
+		});
+		return { isFavorite: true };
+	}
 }
 
 // ============================================================
@@ -190,209 +201,213 @@ export async function toggleFavorite(scheduleId: string): Promise<{ isFavorite: 
 // ============================================================
 
 export interface LineFullData {
-  line: {
-    id: string;
-    number: string;
-    description: string | null;
-    operation_note: string | null;
-    carrier: {
-      id: string;
-      name: string;
-      logo_url: string | null;
-      is_verified: boolean;
-    };
-  };
-  schedules: {
-    id: string;
-    direction: string;
-    version: number;
-    status: string;
-    is_incomplete: boolean;
-    is_verified: boolean;
-    days: string[];
-    excludes_holidays: boolean;
-    created_at: string;
-    last_modified_at: string;
-    net_score: number;
-    first_departure: string | null;
-  }[];
-  routeStops: {
-    id: string;
-    schedule_id: string;
-    stop_id: string;
-    order_index: number;
-    offset_minutes: number;
-  }[];
-  stops: {
-    id: string;
-    city: string;
-    name: string;
-    is_verified: boolean;
-  }[];
-  courses: {
-    id: string;
-    schedule_id: string;
-    departure_time: string;
-    use_offsets: boolean;
-  }[];
-  courseTimes: {
-    id: string;
-    course_id: string;
-    stop_id: string;
-    arrival_time: string | null;
-    order_index: number;
-  }[];
+	line: {
+		id: string;
+		number: string;
+		description: string | null;
+		operation_note: string | null;
+		carrier: {
+			id: string;
+			name: string;
+			logo_url: string | null;
+			is_verified: boolean;
+		};
+	};
+	schedules: {
+		id: string;
+		direction: string;
+		version: number;
+		status: string;
+		is_incomplete: boolean;
+		is_verified: boolean;
+		days: string[];
+		excludes_holidays: boolean;
+		created_at: string;
+		last_modified_at: string;
+		net_score: number;
+		first_departure: string | null;
+	}[];
+	routeStops: {
+		id: string;
+		schedule_id: string;
+		stop_id: string;
+		order_index: number;
+		offset_minutes: number;
+	}[];
+	stops: {
+		id: string;
+		city: string;
+		name: string;
+		is_verified: boolean;
+	}[];
+	courses: {
+		id: string;
+		schedule_id: string;
+		departure_time: string;
+		use_offsets: boolean;
+	}[];
+	courseTimes: {
+		id: string;
+		course_id: string;
+		stop_id: string;
+		arrival_time: string | null;
+		order_index: number;
+	}[];
 }
 
 export async function getLineFullData(lineId: string): Promise<LineFullData | null> {
-  const supabase = createClient();
+	const supabase = createClient();
 
-  // 1. Pobierz linię z przewoźnikiem
-  const { data: line, error: lineError } = await supabase
-    .from('lines')
-    .select(`
+	// 1. Pobierz linię z przewoźnikiem
+	const { data: line, error: lineError } = await supabase
+		.from("lines")
+		.select(
+			`
       id,
       number,
       description,
       operation_note,
       carrier:carriers(id, name, logo_url, is_verified)
-    `)
-    .eq('id', lineId)
-    .single();
+    `
+		)
+		.eq("id", lineId)
+		.single();
 
-  if (lineError || !line) {
-    console.error('Error fetching line:', lineError?.message);
-    return null;
-  }
+	if (lineError || !line) {
+		console.error("Error fetching line:", lineError?.message);
+		return null;
+	}
 
-  // 2. Pobierz rozkłady tej linii (active + pending)
-  const { data: schedulesRaw } = await supabase
-    .from('schedules')
-    .select('id, direction, version, status, is_incomplete, is_verified, days, excludes_holidays, created_at, last_modified_at')
-    .eq('line_id', lineId)
-    .in('status', ['active', 'pending']);
+	// 2. Pobierz rozkłady tej linii (active + pending)
+	const { data: schedulesRaw } = await supabase
+		.from("schedules")
+		.select(
+			"id, direction, version, status, is_incomplete, is_verified, days, excludes_holidays, created_at, last_modified_at"
+		)
+		.eq("line_id", lineId)
+		.in("status", ["active", "pending"]);
 
-  const scheduleIds = schedulesRaw?.map(s => s.id) ?? [];
+	const scheduleIds = schedulesRaw?.map((s) => s.id) ?? [];
 
-  if (scheduleIds.length === 0) {
-    // Linia bez rozkładów - nadal zwracamy
-    const carrier = Array.isArray(line.carrier) ? line.carrier[0] : line.carrier;
-    return {
-      line: {
-        id: line.id,
-        number: line.number,
-        description: line.description,
-        operation_note: line.operation_note,
-        carrier,
-      },
-      schedules: [],
-      routeStops: [],
-      stops: [],
-      courses: [],
-      courseTimes: [],
-    };
-  }
+	if (scheduleIds.length === 0) {
+		// Linia bez rozkładów - nadal zwracamy
+		const carrier = Array.isArray(line.carrier) ? line.carrier[0] : line.carrier;
+		return {
+			line: {
+				id: line.id,
+				number: line.number,
+				description: line.description,
+				operation_note: line.operation_note,
+				carrier,
+			},
+			schedules: [],
+			routeStops: [],
+			stops: [],
+			courses: [],
+			courseTimes: [],
+		};
+	}
 
-  // 3. Pobierz net_score z verification_stats_view
-  let verificationStats: Record<string, number> = {};
-  const { data: stats } = await supabase
-    .from('verification_stats_view')
-    .select('schedule_id, net_score')
-    .in('schedule_id', scheduleIds);
-  
-  if (stats) {
-    verificationStats = Object.fromEntries(
-      stats.map(s => [s.schedule_id, s.net_score])
-    );
-  }
+	// 3. Pobierz net_score z verification_stats_view
+	let verificationStats: Record<string, number> = {};
+	const { data: stats } = await supabase
+		.from("verification_stats_view")
+		.select("schedule_id, net_score")
+		.in("schedule_id", scheduleIds);
 
-  // 4. Pobierz first_departure z courses
-  const { data: allCourses } = await supabase
-    .from('courses')
-    .select('id, schedule_id, departure_time, use_offsets')
-    .in('schedule_id', scheduleIds)
-    .order('departure_time', { ascending: true });
+	if (stats) {
+		verificationStats = Object.fromEntries(stats.map((s) => [s.schedule_id, s.net_score]));
+	}
 
-  let firstDepartures: Record<string, string | null> = {};
-  if (allCourses) {
-    for (const course of allCourses) {
-      if (!firstDepartures[course.schedule_id]) {
-        firstDepartures[course.schedule_id] = course.departure_time;
-      }
-    }
-  }
+	// 4. Pobierz first_departure z courses
+	const { data: allCourses } = await supabase
+		.from("courses")
+		.select("id, schedule_id, departure_time, use_offsets")
+		.in("schedule_id", scheduleIds)
+		.order("departure_time", { ascending: true });
 
-  // Połącz dane rozkładów
-  const schedules = schedulesRaw?.map(s => ({
-    ...s,
-    net_score: verificationStats[s.id] ?? 0,
-    first_departure: firstDepartures[s.id] ?? null,
-  })) ?? [];
+	let firstDepartures: Record<string, string | null> = {};
+	if (allCourses) {
+		for (const course of allCourses) {
+			if (!firstDepartures[course.schedule_id]) {
+				firstDepartures[course.schedule_id] = course.departure_time;
+			}
+		}
+	}
 
-  // 5. Pobierz route_stops dla wszystkich schedules
-  const { data: routeStops } = await supabase
-    .from('route_stops')
-    .select('id, schedule_id, stop_id, order_index, offset_minutes')
-    .in('schedule_id', scheduleIds);
+	// Połącz dane rozkładów
+	const schedules =
+		schedulesRaw?.map((s) => ({
+			...s,
+			net_score: verificationStats[s.id] ?? 0,
+			first_departure: firstDepartures[s.id] ?? null,
+		})) ?? [];
 
-  // 6. Pobierz unikalne stops
-  const stopIds = [...new Set(routeStops?.map(rs => rs.stop_id) ?? [])];
-  
-  const { data: stops } = stopIds.length > 0
-    ? await supabase
-        .from('stops')
-        .select('id, city, name, is_verified')
-        .in('id', stopIds)
-    : { data: [] };
+	// 5. Pobierz route_stops dla wszystkich schedules
+	const { data: routeStops } = await supabase
+		.from("route_stops")
+		.select("id, schedule_id, stop_id, order_index, offset_minutes")
+		.in("schedule_id", scheduleIds);
 
-  // 7. Pobierz course_times (tylko dla use_offsets=false)
-  const manualCourseIds = allCourses?.filter(c => !c.use_offsets).map(c => c.id) ?? [];
-  
-  const { data: courseTimes } = manualCourseIds.length > 0
-    ? await supabase
-        .from('course_times')
-        .select('id, course_id, stop_id, arrival_time, order_index')
-        .in('course_id', manualCourseIds)
-    : { data: [] };
+	// 6. Pobierz unikalne stops
+	const stopIds = [...new Set(routeStops?.map((rs) => rs.stop_id) ?? [])];
 
-  const carrier = Array.isArray(line.carrier) ? line.carrier[0] : line.carrier;
+	const { data: stops } =
+		stopIds.length > 0
+			? await supabase.from("stops").select("id, city, name, is_verified").in("id", stopIds)
+			: { data: [] };
 
-  return {
-    line: {
-      id: line.id,
-      number: line.number,
-      description: line.description,
-      operation_note: line.operation_note,
-      carrier,
-    },
-    schedules: schedules ?? [],
-    routeStops: routeStops ?? [],
-    stops: stops ?? [],
-    courses: allCourses ?? [],
-    courseTimes: courseTimes ?? [],
-  };
+	// 7. Pobierz course_times (tylko dla use_offsets=false)
+	const manualCourseIds = allCourses?.filter((c) => !c.use_offsets).map((c) => c.id) ?? [];
+
+	const { data: courseTimes } =
+		manualCourseIds.length > 0
+			? await supabase
+					.from("course_times")
+					.select("id, course_id, stop_id, arrival_time, order_index")
+					.in("course_id", manualCourseIds)
+			: { data: [] };
+
+	const carrier = Array.isArray(line.carrier) ? line.carrier[0] : line.carrier;
+
+	return {
+		line: {
+			id: line.id,
+			number: line.number,
+			description: line.description,
+			operation_note: line.operation_note,
+			carrier,
+		},
+		schedules: schedules ?? [],
+		routeStops: routeStops ?? [],
+		stops: stops ?? [],
+		courses: allCourses ?? [],
+		courseTimes: courseTimes ?? [],
+	};
 }
 
 // Pobierz listę wszystkich linii (do przeglądarki "Do pobrania")
 export async function getAllLinesBasic() {
-  const supabase = createClient();
+	const supabase = createClient();
 
-  const { data, error } = await supabase
-    .from('lines')
-    .select(`
+	const { data, error } = await supabase
+		.from("lines")
+		.select(
+			`
       id,
       number,
       description,
       carrier:carriers(id, name, is_verified)
-    `)
-    .order('number', { ascending: true });
+    `
+		)
+		.order("number", { ascending: true });
 
-  if (error) {
-    console.error('Error fetching lines:', error.message);
-    return [];
-  }
+	if (error) {
+		console.error("Error fetching lines:", error.message);
+		return [];
+	}
 
-  return data ?? [];
+	return data ?? [];
 }
 
 // ============================================================
@@ -400,20 +415,20 @@ export async function getAllLinesBasic() {
 // ============================================================
 
 export async function getLinesByCarrier(carrierId: string) {
-  const supabase = createClient();
+	const supabase = createClient();
 
-  const { data, error } = await supabase
-    .from('lines')
-    .select('id, number, description, operation_note')
-    .eq('carrier_id', carrierId)
-    .order('number', { ascending: true });
+	const { data, error } = await supabase
+		.from("lines")
+		.select("id, number, description, operation_note")
+		.eq("carrier_id", carrierId)
+		.order("number", { ascending: true });
 
-  if (error) {
-    console.error('Error fetching lines:', error.message);
-    return [];
-  }
+	if (error) {
+		console.error("Error fetching lines:", error.message);
+		return [];
+	}
 
-  return data ?? [];
+	return data ?? [];
 }
 
 // ============================================================
@@ -421,18 +436,18 @@ export async function getLinesByCarrier(carrierId: string) {
 // ============================================================
 
 export async function searchStops(query: string, limit: number = 10) {
-  const supabase = createClient();
+	const supabase = createClient();
 
-  const { data, error } = await supabase
-    .from('stops')
-    .select('id, city, name, is_verified')
-    .or(`city.ilike.%${query}%,name.ilike.%${query}%`)
-    .limit(limit);
+	const { data, error } = await supabase
+		.from("stops")
+		.select("id, city, name, is_verified")
+		.or(`city.ilike.%${query}%,name.ilike.%${query}%`)
+		.limit(limit);
 
-  if (error) {
-    console.error('Error searching stops:', error.message);
-    return [];
-  }
+	if (error) {
+		console.error("Error searching stops:", error.message);
+		return [];
+	}
 
-  return data ?? [];
+	return data ?? [];
 }

@@ -1,451 +1,449 @@
-'use client';
+"use client";
 
-import { use, useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import PageWrapper from '@/components/PageWrapper';
-import { useScheduleDetails } from '@/lib/db/hooks';
-import { getTodayHolidayInfo } from '@/lib/holidays';
-import { createClient } from '@/lib/supabase/client';
-import { User } from '@supabase/supabase-js';
+import { use, useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import PageWrapper from "@/components/PageWrapper";
+import { useScheduleDetails } from "@/lib/db/hooks";
+import { getTodayHolidayInfo } from "@/lib/holidays";
+import { createClient } from "@/lib/supabase/client";
+import { User } from "@supabase/supabase-js";
 
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
-import VerifiedIcon from '@mui/icons-material/Verified';
-import PendingIcon from '@mui/icons-material/Pending';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
-import FlagOutlinedIcon from '@mui/icons-material/FlagOutlined';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import PlaceIcon from '@mui/icons-material/Place';
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
+import VerifiedIcon from "@mui/icons-material/Verified";
+import PendingIcon from "@mui/icons-material/Pending";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import PlaceIcon from "@mui/icons-material/Place";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 interface PageProps {
-  params: Promise<{ id: string }>;
+	params: Promise<{ id: string }>;
 }
 
-type VoteState = 'none' | 'up' | 'down';
+type VoteState = "none" | "up" | "down";
 
 export default function ScheduleDetailsPage({ params }: PageProps) {
-  const { id: scheduleId } = use(params);
-  const searchParams = useSearchParams();
-  const fromStopId = searchParams.get('fromStopId');
+	const { id: scheduleId } = use(params);
+	const searchParams = useSearchParams();
+	const fromStopId = searchParams.get("fromStopId");
 
-  const { schedule, line, stops, loading, error } = useScheduleDetails(scheduleId);
+	const { schedule, line, stops, loading, error } = useScheduleDetails(scheduleId);
 
-  const [user, setUser] = useState<User | null>(null);
-  const [voteState, setVoteState] = useState<VoteState>('none');
-  const [localScore, setLocalScore] = useState(0);
+	const [user, setUser] = useState<User | null>(null);
+	const [voteState, setVoteState] = useState<VoteState>("none");
+	const [localScore, setLocalScore] = useState(0);
 
-  // Auth
-  useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-    });
-  }, []);
+	// Auth
+	useEffect(() => {
+		const supabase = createClient();
+		supabase.auth.getSession().then(({ data: { session } }) => {
+			setUser(session?.user ?? null);
+		});
+	}, []);
 
-  // Sync localScore when schedule loads
-  useEffect(() => {
-    if (schedule) {
-      setLocalScore(schedule.netScore);
-    }
-  }, [schedule]);
+	// Sync localScore when schedule loads
+	useEffect(() => {
+		if (schedule) {
+			setLocalScore(schedule.netScore);
+		}
+	}, [schedule]);
 
-  // Holiday warning
-  const holidayInfo = getTodayHolidayInfo();
-  const showHolidayWarning = schedule?.excludesHolidays && holidayInfo.isHoliday;
+	// Holiday warning
+	const holidayInfo = getTodayHolidayInfo();
+	const showHolidayWarning = schedule?.excludesHolidays && holidayInfo.isHoliday;
 
-  // Status styling
-  const getStatusStyle = () => {
-    if (!schedule) return null;
+	// Status styling
+	const getStatusStyle = () => {
+		if (!schedule) return null;
 
-    if (schedule.status === 'pending') {
-      return {
-        borderColor: 'var(--md-sys-color-tertiary)',
-        badgeBg: 'var(--md-sys-color-tertiary-container)',
-        badgeText: 'var(--md-sys-color-on-tertiary-container)',
-        label: 'Oczekuje na weryfikację',
-        icon: <PendingIcon sx={{ fontSize: 16 }} />,
-      };
-    }
+		if (schedule.status === "pending") {
+			return {
+				borderColor: "var(--md-sys-color-tertiary)",
+				badgeBg: "var(--md-sys-color-tertiary-container)",
+				badgeText: "var(--md-sys-color-on-tertiary-container)",
+				label: "Oczekuje na weryfikację",
+				icon: <PendingIcon sx={{ fontSize: 16 }} />,
+			};
+		}
 
-    if (schedule.isVerified) {
-      return {
-        borderColor: 'var(--md-sys-color-primary)',
-        badgeBg: 'var(--md-sys-color-primary-container)',
-        badgeText: 'var(--md-sys-color-on-primary-container)',
-        label: 'Zweryfikowany',
-        icon: <VerifiedIcon sx={{ fontSize: 16 }} />,
-      };
-    }
+		if (schedule.isVerified) {
+			return {
+				borderColor: "var(--md-sys-color-primary)",
+				badgeBg: "var(--md-sys-color-primary-container)",
+				badgeText: "var(--md-sys-color-on-primary-container)",
+				label: "Zweryfikowany",
+				icon: <VerifiedIcon sx={{ fontSize: 16 }} />,
+			};
+		}
 
-    return {
-      borderColor: 'var(--md-sys-color-secondary)',
-      badgeBg: 'var(--md-sys-color-secondary-container)',
-      badgeText: 'var(--md-sys-color-on-secondary-container)',
-      label: 'Społecznościowy',
-      icon: <PersonOutlineIcon sx={{ fontSize: 16 }} />,
-    };
-  };
+		return {
+			borderColor: "var(--md-sys-color-secondary)",
+			badgeBg: "var(--md-sys-color-secondary-container)",
+			badgeText: "var(--md-sys-color-on-secondary-container)",
+			label: "Społecznościowy",
+			icon: <PersonOutlineIcon sx={{ fontSize: 16 }} />,
+		};
+	};
 
-  const status = getStatusStyle();
+	const status = getStatusStyle();
 
-  // Voting handlers
-  const handleVote = (vote: 'up' | 'down') => {
-    if (!user) {
-      alert('Zaloguj się, aby głosować');
-      return;
-    }
+	// Voting handlers
+	const handleVote = (vote: "up" | "down") => {
+		if (!user) {
+			alert("Zaloguj się, aby głosować");
+			return;
+		}
 
-    if (!schedule) return;
+		if (!schedule) return;
 
-    if (voteState === vote) {
-      setVoteState('none');
-      setLocalScore(schedule.netScore);
-    } else {
-      const scoreDiff = voteState === 'none' ? 1 : 2;
-      setVoteState(vote);
-      setLocalScore((prev) => (vote === 'up' ? prev + scoreDiff : prev - scoreDiff));
-    }
+		if (voteState === vote) {
+			setVoteState("none");
+			setLocalScore(schedule.netScore);
+		} else {
+			const scoreDiff = voteState === "none" ? 1 : 2;
+			setVoteState(vote);
+			setLocalScore((prev) => (vote === "up" ? prev + scoreDiff : prev - scoreDiff));
+		}
 
-    // TODO: Sync vote to Supabase
-  };
+		// TODO: Sync vote to Supabase
+	};
 
-  const handleReport = () => {
-    if (!user) {
-      alert('Zaloguj się, aby zgłosić problem');
-      return;
-    }
-    // TODO: Open report modal
-    alert('Funkcja zgłaszania wkrótce');
-  };
+	const handleReport = () => {
+		if (!user) {
+			alert("Zaloguj się, aby zgłosić problem");
+			return;
+		}
+		// TODO: Open report modal
+		alert("Funkcja zgłaszania wkrótce");
+	};
 
-  const handleEdit = () => {
-    // TODO: Navigate to edit mode
-    alert('Funkcja edycji wkrótce');
-  };
+	const handleEdit = () => {
+		// TODO: Navigate to edit mode
+		alert("Funkcja edycji wkrótce");
+	};
 
-  // Loading state
-  if (loading) {
-    return (
-      <PageWrapper maxWidth="max-w-2xl">
-        <div className="flex items-center gap-4 mb-6">
-          <Link
-            href="/app"
-            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
-          >
-            <ArrowBackIcon sx={{ color: 'var(--md-sys-color-on-surface)' }} />
-          </Link>
-          <h1 className="md-title-large">Szczegóły kursu</h1>
-        </div>
+	// Loading state
+	if (loading) {
+		return (
+			<PageWrapper maxWidth="max-w-2xl">
+				<div className="flex items-center gap-4 mb-6">
+					<Link
+						href="/app"
+						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+					>
+						<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+					</Link>
+					<h1 className="md-title-large">Szczegóły kursu</h1>
+				</div>
 
-        <div className="text-center py-12">
-          <div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
-            Ładowanie...
-          </p>
-        </div>
-      </PageWrapper>
-    );
-  }
+				<div className="text-center py-12">
+					<div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+					<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+						Ładowanie...
+					</p>
+				</div>
+			</PageWrapper>
+		);
+	}
 
-  // Error/Not found state
-  if (error || !schedule || !line) {
-    return (
-      <PageWrapper maxWidth="max-w-2xl">
-        <div className="flex items-center gap-4 mb-6">
-          <Link
-            href="/app"
-            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
-          >
-            <ArrowBackIcon sx={{ color: 'var(--md-sys-color-on-surface)' }} />
-          </Link>
-          <h1 className="md-title-large">Szczegóły kursu</h1>
-        </div>
+	// Error/Not found state
+	if (error || !schedule || !line) {
+		return (
+			<PageWrapper maxWidth="max-w-2xl">
+				<div className="flex items-center gap-4 mb-6">
+					<Link
+						href="/app"
+						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+					>
+						<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+					</Link>
+					<h1 className="md-title-large">Szczegóły kursu</h1>
+				</div>
 
-        <div className="text-center py-12">
-          <p className="md-body-large text-[var(--md-sys-color-error)]">
-            {error || 'Nie znaleziono rozkładu'}
-          </p>
-          <Link href="/app" className="md-text-button mt-4 inline-block">
-            Wróć do rozkładów
-          </Link>
-        </div>
-      </PageWrapper>
-    );
-  }
+				<div className="text-center py-12">
+					<p className="md-body-large text-[var(--md-sys-color-error)]">
+						{error || "Nie znaleziono rozkładu"}
+					</p>
+					<Link href="/app" className="md-text-button mt-4 inline-block">
+						Wróć do rozkładów
+					</Link>
+				</div>
+			</PageWrapper>
+		);
+	}
 
-  return (
-    <PageWrapper maxWidth="max-w-2xl">
-      {/* Header */}
-      <div className="flex items-center gap-4 mb-6">
-        <Link
-          href="/app"
-          className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
-        >
-          <ArrowBackIcon sx={{ color: 'var(--md-sys-color-on-surface)' }} />
-        </Link>
-        <h1 className="md-title-large">Szczegóły kursu</h1>
-      </div>
+	return (
+		<PageWrapper maxWidth="max-w-2xl">
+			{/* Header */}
+			<div className="flex items-center gap-4 mb-6">
+				<Link
+					href="/app"
+					className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+				>
+					<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+				</Link>
+				<h1 className="md-title-large">Szczegóły kursu</h1>
+			</div>
 
-      {/* Main info card */}
-      <div
-        className="md-card md-elevation-1 p-4 mb-4 border-l-4"
-        style={{ borderLeftColor: status?.borderColor }}
-      >
-        {/* Carrier + Line */}
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-12 h-12 rounded-full bg-[var(--md-sys-color-primary-container)] flex items-center justify-center">
-            <DirectionsBusIcon
-              sx={{ fontSize: 28, color: 'var(--md-sys-color-on-primary-container)' }}
-            />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <p className="md-title-medium">{line.carrierName}</p>
-              {line.carrierVerified && (
-                <VerifiedIcon sx={{ fontSize: 16, color: 'var(--md-sys-color-primary)' }} />
-              )}
-            </div>
-            <p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
-              Linia {line.number}
-            </p>
-          </div>
-        </div>
+			{/* Main info card */}
+			<div
+				className="md-card md-elevation-1 p-4 mb-4 border-l-4"
+				style={{ borderLeftColor: status?.borderColor }}
+			>
+				{/* Carrier + Line */}
+				<div className="flex items-center gap-3 mb-3">
+					<div className="w-12 h-12 rounded-full bg-[var(--md-sys-color-primary-container)] flex items-center justify-center">
+						<DirectionsBusIcon
+							sx={{ fontSize: 28, color: "var(--md-sys-color-on-primary-container)" }}
+						/>
+					</div>
+					<div className="flex-1">
+						<div className="flex items-center gap-2">
+							<p className="md-title-medium">{line.carrierName}</p>
+							{line.carrierVerified && (
+								<VerifiedIcon sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }} />
+							)}
+						</div>
+						<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+							Linia {line.number}
+						</p>
+					</div>
+				</div>
 
-        {/* Direction */}
-        <p className="md-title-large mb-3">{schedule.direction}</p>
+				{/* Direction */}
+				<p className="md-title-large mb-3">{schedule.direction}</p>
 
-        {/* Status badge */}
-        {status && (
-          <div className="flex items-center gap-2 mb-3">
-            <span
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm"
-              style={{
-                backgroundColor: status.badgeBg,
-                color: status.badgeText,
-              }}
-            >
-              {status.icon}
-              {status.label}
-            </span>
-          </div>
-        )}
+				{/* Status badge */}
+				{status && (
+					<div className="flex items-center gap-2 mb-3">
+						<span
+							className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm"
+							style={{
+								backgroundColor: status.badgeBg,
+								color: status.badgeText,
+							}}
+						>
+							{status.icon}
+							{status.label}
+						</span>
+					</div>
+				)}
 
-        {/* Days */}
-        <div className="flex flex-wrap gap-1.5 mb-3">
-          {schedule.days.map((day) => (
-            <span
-              key={day}
-              className="px-2.5 py-1 text-sm rounded-full bg-[var(--md-sys-color-secondary-container)] text-[var(--md-sys-color-on-secondary-container)]"
-            >
-              {day}
-            </span>
-          ))}
-          {schedule.excludesHolidays && (
-            <span className="px-2.5 py-1 text-sm rounded-full bg-[var(--md-sys-color-error-container)] text-[var(--md-sys-color-on-error-container)]">
-              bez świąt
-            </span>
-          )}
-        </div>
+				{/* Days */}
+				<div className="flex flex-wrap gap-1.5 mb-3">
+					{schedule.days.map((day) => (
+						<span
+							key={day}
+							className="px-2.5 py-1 text-sm rounded-full bg-[var(--md-sys-color-secondary-container)] text-[var(--md-sys-color-on-secondary-container)]"
+						>
+							{day}
+						</span>
+					))}
+					{schedule.excludesHolidays && (
+						<span className="px-2.5 py-1 text-sm rounded-full bg-[var(--md-sys-color-error-container)] text-[var(--md-sys-color-on-error-container)]">
+							bez świąt
+						</span>
+					)}
+				</div>
 
-        {/* Holiday warning */}
-        {showHolidayWarning && (
-          <div className="flex items-center gap-2 p-3 rounded-xl bg-[var(--md-sys-color-error-container)]">
-            <WarningAmberIcon
-              sx={{ fontSize: 20, color: 'var(--md-sys-color-on-error-container)' }}
-            />
-            <p className="md-body-medium text-[var(--md-sys-color-on-error-container)]">
-              Prawdopodobnie nie kursuje dziś - {holidayInfo.name}
-            </p>
-          </div>
-        )}
+				{/* Holiday warning */}
+				{showHolidayWarning && (
+					<div className="flex items-center gap-2 p-3 rounded-xl bg-[var(--md-sys-color-error-container)]">
+						<WarningAmberIcon
+							sx={{ fontSize: 20, color: "var(--md-sys-color-on-error-container)" }}
+						/>
+						<p className="md-body-medium text-[var(--md-sys-color-on-error-container)]">
+							Prawdopodobnie nie kursuje dziś - {holidayInfo.name}
+						</p>
+					</div>
+				)}
 
-        {/* Operation note */}
-        {line.operationNote && (
-          <p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)] italic mt-2">
-            {line.operationNote}
-          </p>
-        )}
-      </div>
+				{/* Operation note */}
+				{line.operationNote && (
+					<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)] italic mt-2">
+						{line.operationNote}
+					</p>
+				)}
+			</div>
 
-      {/* Route timeline */}
-      <div className="md-card md-elevation-1 p-4 mb-4">
-        <h2 className="md-title-medium mb-4">Trasa przejazdu</h2>
+			{/* Route timeline */}
+			<div className="md-card md-elevation-1 p-4 mb-4">
+				<h2 className="md-title-medium mb-4">Trasa przejazdu</h2>
 
-        <div className="relative">
-          {stops.map((stop, index) => {
-            const isFirst = index === 0;
-            const isLast = index === stops.length - 1;
-            const isHighlighted = fromStopId === stop.id;
+				<div className="relative">
+					{stops.map((stop, index) => {
+						const isFirst = index === 0;
+						const isLast = index === stops.length - 1;
+						const isHighlighted = fromStopId === stop.id;
 
-            return (
-              <div
-                key={stop.id}
-                className={`relative flex items-start gap-3 ${!isLast ? 'pb-6' : ''}`}
-              >
-                {/* Timeline line */}
-                {!isLast && (
-                  <div
-                    className="absolute left-[11px] top-6 w-0.5 h-[calc(100%-12px)] bg-[var(--md-sys-color-primary)]"
-                  />
-                )}
+						return (
+							<div
+								key={stop.id}
+								className={`relative flex items-start gap-3 ${!isLast ? "pb-6" : ""}`}
+							>
+								{/* Timeline line */}
+								{!isLast && (
+									<div className="absolute left-[11px] top-6 w-0.5 h-[calc(100%-12px)] bg-[var(--md-sys-color-primary)]" />
+								)}
 
-                {/* Timeline dot */}
-                <div className="relative z-10 flex-shrink-0">
-                  {isHighlighted ? (
-                    <div className="w-6 h-6 rounded-full bg-[var(--md-sys-color-primary)] flex items-center justify-center">
-                      <PlaceIcon sx={{ fontSize: 16, color: 'var(--md-sys-color-on-primary)' }} />
-                    </div>
-                  ) : isFirst || isLast ? (
-                    <div className="w-6 h-6 rounded-full bg-[var(--md-sys-color-primary)] flex items-center justify-center">
-                      <FiberManualRecordIcon
-                        sx={{ fontSize: 12, color: 'var(--md-sys-color-on-primary)' }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="w-6 h-6 rounded-full flex items-center justify-center border-2 border-[var(--md-sys-color-primary)] bg-[var(--md-sys-color-surface)]">
-                      <RadioButtonUncheckedIcon
-                        sx={{ fontSize: 8, color: 'var(--md-sys-color-primary)' }}
-                      />
-                    </div>
-                  )}
-                </div>
+								{/* Timeline dot */}
+								<div className="relative z-10 flex-shrink-0">
+									{isHighlighted ? (
+										<div className="w-6 h-6 rounded-full bg-[var(--md-sys-color-primary)] flex items-center justify-center">
+											<PlaceIcon sx={{ fontSize: 16, color: "var(--md-sys-color-on-primary)" }} />
+										</div>
+									) : isFirst || isLast ? (
+										<div className="w-6 h-6 rounded-full bg-[var(--md-sys-color-primary)] flex items-center justify-center">
+											<FiberManualRecordIcon
+												sx={{ fontSize: 12, color: "var(--md-sys-color-on-primary)" }}
+											/>
+										</div>
+									) : (
+										<div className="w-6 h-6 rounded-full flex items-center justify-center border-2 border-[var(--md-sys-color-primary)] bg-[var(--md-sys-color-surface)]">
+											<RadioButtonUncheckedIcon
+												sx={{ fontSize: 8, color: "var(--md-sys-color-primary)" }}
+											/>
+										</div>
+									)}
+								</div>
 
-                {/* Stop info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="min-w-0">
-                      <p
-                        className={`md-body-large truncate ${
-                          isHighlighted ? 'font-medium text-[var(--md-sys-color-primary)]' : ''
-                        }`}
-                      >
-                        {stop.city}
-                      </p>
-                      {stop.name && (
-                        <p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] truncate">
-                          {stop.name}
-                        </p>
-                      )}
-                    </div>
+								{/* Stop info */}
+								<div className="flex-1 min-w-0">
+									<div className="flex items-center justify-between gap-2">
+										<div className="min-w-0">
+											<p
+												className={`md-body-large truncate ${
+													isHighlighted ? "font-medium text-[var(--md-sys-color-primary)]" : ""
+												}`}
+											>
+												{stop.city}
+											</p>
+											{stop.name && (
+												<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] truncate">
+													{stop.name}
+												</p>
+											)}
+										</div>
 
-                    {/* Time */}
-                    <div
-                      className={`flex-shrink-0 px-3 py-1 rounded-lg ${
-                        isHighlighted
-                          ? 'bg-[var(--md-sys-color-primary-container)]'
-                          : 'bg-[var(--md-sys-color-surface-variant)]'
-                      }`}
-                    >
-                      <span
-                        className={`md-title-medium ${
-                          isHighlighted
-                            ? 'text-[var(--md-sys-color-on-primary-container)]'
-                            : 'text-[var(--md-sys-color-on-surface-variant)]'
-                        }`}
-                      >
-                        {stop.arrivalTime || '--:--'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+										{/* Time */}
+										<div
+											className={`flex-shrink-0 px-3 py-1 rounded-lg ${
+												isHighlighted
+													? "bg-[var(--md-sys-color-primary-container)]"
+													: "bg-[var(--md-sys-color-surface-variant)]"
+											}`}
+										>
+											<span
+												className={`md-title-medium ${
+													isHighlighted
+														? "text-[var(--md-sys-color-on-primary-container)]"
+														: "text-[var(--md-sys-color-on-surface-variant)]"
+												}`}
+											>
+												{stop.arrivalTime || "--:--"}
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						);
+					})}
+				</div>
 
-        {stops.length === 0 && (
-          <p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)] text-center py-4">
-            Brak danych o przystankach
-          </p>
-        )}
-      </div>
+				{stops.length === 0 && (
+					<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)] text-center py-4">
+						Brak danych o przystankach
+					</p>
+				)}
+			</div>
 
-      {/* Actions footer */}
-      <div className="md-card md-elevation-1 p-4 mb-6">
-        <div className="flex items-center justify-between">
-          {/* Score */}
-          <div className="flex items-center gap-2">
-            <span
-              className={`md-title-medium ${
-                localScore > 0
-                  ? 'text-[var(--md-sys-color-primary)]'
-                  : localScore < 0
-                    ? 'text-[var(--md-sys-color-error)]'
-                    : 'text-[var(--md-sys-color-on-surface-variant)]'
-              }`}
-            >
-              {localScore > 0 ? '+' : ''}
-              {localScore}
-            </span>
-            <span className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
-              punktów
-            </span>
-          </div>
+			{/* Actions footer */}
+			<div className="md-card md-elevation-1 p-4 mb-6">
+				<div className="flex items-center justify-between">
+					{/* Score */}
+					<div className="flex items-center gap-2">
+						<span
+							className={`md-title-medium ${
+								localScore > 0
+									? "text-[var(--md-sys-color-primary)]"
+									: localScore < 0
+										? "text-[var(--md-sys-color-error)]"
+										: "text-[var(--md-sys-color-on-surface-variant)]"
+							}`}
+						>
+							{localScore > 0 ? "+" : ""}
+							{localScore}
+						</span>
+						<span className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+							punktów
+						</span>
+					</div>
 
-          {/* Action buttons */}
-          <div className="flex items-center gap-1">
-            {/* Upvote */}
-            <button
-              onClick={() => handleVote('up')}
-              className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
-              title="Aktualny"
-            >
-              {voteState === 'up' ? (
-                <ThumbUpIcon sx={{ fontSize: 22, color: 'var(--md-sys-color-primary)' }} />
-              ) : (
-                <ThumbUpOutlinedIcon
-                  sx={{ fontSize: 22, color: 'var(--md-sys-color-on-surface-variant)' }}
-                />
-              )}
-            </button>
+					{/* Action buttons */}
+					<div className="flex items-center gap-1">
+						{/* Upvote */}
+						<button
+							onClick={() => handleVote("up")}
+							className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+							title="Aktualny"
+						>
+							{voteState === "up" ? (
+								<ThumbUpIcon sx={{ fontSize: 22, color: "var(--md-sys-color-primary)" }} />
+							) : (
+								<ThumbUpOutlinedIcon
+									sx={{ fontSize: 22, color: "var(--md-sys-color-on-surface-variant)" }}
+								/>
+							)}
+						</button>
 
-            {/* Downvote */}
-            <button
-              onClick={() => handleVote('down')}
-              className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
-              title="Nieaktualny"
-            >
-              {voteState === 'down' ? (
-                <ThumbDownIcon sx={{ fontSize: 22, color: 'var(--md-sys-color-error)' }} />
-              ) : (
-                <ThumbDownOutlinedIcon
-                  sx={{ fontSize: 22, color: 'var(--md-sys-color-on-surface-variant)' }}
-                />
-              )}
-            </button>
+						{/* Downvote */}
+						<button
+							onClick={() => handleVote("down")}
+							className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+							title="Nieaktualny"
+						>
+							{voteState === "down" ? (
+								<ThumbDownIcon sx={{ fontSize: 22, color: "var(--md-sys-color-error)" }} />
+							) : (
+								<ThumbDownOutlinedIcon
+									sx={{ fontSize: 22, color: "var(--md-sys-color-on-surface-variant)" }}
+								/>
+							)}
+						</button>
 
-            {/* Report */}
-            <button
-              onClick={handleReport}
-              className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
-              title="Zgłoś problem"
-            >
-              <FlagOutlinedIcon
-                sx={{ fontSize: 22, color: 'var(--md-sys-color-on-surface-variant)' }}
-              />
-            </button>
+						{/* Report */}
+						<button
+							onClick={handleReport}
+							className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+							title="Zgłoś problem"
+						>
+							<FlagOutlinedIcon
+								sx={{ fontSize: 22, color: "var(--md-sys-color-on-surface-variant)" }}
+							/>
+						</button>
 
-            {/* Edit (placeholder) */}
-            <button
-              onClick={handleEdit}
-              className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
-              title="Edytuj rozkład"
-            >
-              <EditOutlinedIcon
-                sx={{ fontSize: 22, color: 'var(--md-sys-color-on-surface-variant)' }}
-              />
-            </button>
-          </div>
-        </div>
-      </div>
-    </PageWrapper>
-  );
+						{/* Edit (placeholder) */}
+						<button
+							onClick={handleEdit}
+							className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+							title="Edytuj rozkład"
+						>
+							<EditOutlinedIcon
+								sx={{ fontSize: 22, color: "var(--md-sys-color-on-surface-variant)" }}
+							/>
+						</button>
+					</div>
+				</div>
+			</div>
+		</PageWrapper>
+	);
 }
