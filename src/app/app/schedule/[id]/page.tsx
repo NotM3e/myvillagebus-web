@@ -4,6 +4,7 @@ import { use, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import PageWrapper from "@/components/PageWrapper";
+import ReportModal from "@/components/ReportModal";
 import { useScheduleDetails } from "@/lib/db/hooks";
 import { getTodayHolidayInfo } from "@/lib/holidays";
 import { createClient } from "@/lib/supabase/client";
@@ -41,6 +42,7 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 	const [user, setUser] = useState<User | null>(null);
 	const [voteState, setVoteState] = useState<VoteState>("none");
 	const [localScore, setLocalScore] = useState(0);
+	const [showReportModal, setShowReportModal] = useState(false);
 
 	// Auth
 	useEffect(() => {
@@ -122,8 +124,20 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 			alert("Zaloguj się, aby zgłosić problem");
 			return;
 		}
-		// TODO: Open report modal
-		alert("Funkcja zgłaszania wkrótce");
+		setShowReportModal(true);
+	};
+
+	const handleReportSubmit = async (data: {
+		reasonId: string;
+		type: "data_error" | "trolling";
+		comment: string;
+	}) => {
+		// TODO: Sync to Supabase (zadanie 5.4)
+		console.log("Report submitted:", {
+			scheduleId,
+			...data,
+		});
+		await new Promise((resolve) => setTimeout(resolve, 500));
 	};
 
 	const handleEdit = () => {
@@ -475,6 +489,14 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 					</div>
 				</div>
 			</div>
+			{/* Report Modal */}
+			<ReportModal
+				isOpen={showReportModal}
+				onClose={() => setShowReportModal(false)}
+				scheduleId={scheduleId}
+				scheduleName={schedule ? `${line?.carrierName} - ${schedule.direction}` : undefined}
+				onSubmit={handleReportSubmit}
+			/>
 		</PageWrapper>
 	);
 }
