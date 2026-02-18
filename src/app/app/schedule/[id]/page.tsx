@@ -8,6 +8,7 @@ import ReportModal from "@/components/ReportModal";
 import { useScheduleDetails } from "@/lib/db/hooks";
 import { getTodayHolidayInfo } from "@/lib/holidays";
 import { createClient } from "@/lib/supabase/client";
+import { submitReport } from "@/lib/supabase/mutations";
 import { User } from "@supabase/supabase-js";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -132,12 +133,21 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 		type: "data_error" | "trolling";
 		comment: string;
 	}) => {
-		// TODO: Sync to Supabase (zadanie 5.4)
-		console.log("Report submitted:", {
-			scheduleId,
-			...data,
-		});
-		await new Promise((resolve) => setTimeout(resolve, 500));
+		if (!user) throw new Error("Nie zalogowano");
+
+		const result = await submitReport(
+			{
+				scheduleId,
+				reasonId: data.reasonId,
+				type: data.type,
+				comment: data.comment,
+			},
+			user.id
+		);
+
+		if (!result.success) {
+			throw new Error(result.error || "Błąd wysyłania zgłoszenia");
+		}
 	};
 
 	const handleEdit = () => {

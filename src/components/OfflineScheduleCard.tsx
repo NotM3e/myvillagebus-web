@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { OfflineScheduleWithDetails } from "@/lib/db/hooks";
 import { getTodayHolidayInfo } from "@/lib/holidays";
 import { createClient } from "@/lib/supabase/client";
+import { submitReport } from "@/lib/supabase/mutations";
 import { User } from "@supabase/supabase-js";
 import ReportModal from "./ReportModal";
 
@@ -101,15 +102,21 @@ export default function OfflineScheduleCard({
 		type: "data_error" | "trolling";
 		comment: string;
 	}) => {
-		// TODO: Sync to Supabase (zadanie 5.4)
-		// Na razie symulujemy sukces
-		console.log("Report submitted:", {
-			scheduleId: schedule.id,
-			...data,
-		});
+		if (!user) throw new Error("Nie zalogowano");
 
-		// Symulacja opóźnienia
-		await new Promise((resolve) => setTimeout(resolve, 500));
+		const result = await submitReport(
+			{
+				scheduleId: schedule.id,
+				reasonId: data.reasonId,
+				type: data.type,
+				comment: data.comment,
+			},
+			user.id
+		);
+
+		if (!result.success) {
+			throw new Error(result.error || "Błąd wysyłania zgłoszenia");
+		}
 	};
 
 	// Status styling

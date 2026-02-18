@@ -201,3 +201,41 @@ export async function submitSchedule(
 		};
 	}
 }
+
+// ============================================================
+// REPORTS
+// ============================================================
+
+export interface SubmitReportData {
+	scheduleId: string;
+	reasonId: string;
+	type: "data_error" | "trolling";
+	comment: string;
+}
+
+export async function submitReport(
+	data: SubmitReportData,
+	userId: string
+): Promise<{ success: boolean; error?: string }> {
+	const supabase = createClient();
+
+	try {
+		const { error } = await supabase.from("reports").insert({
+			type: data.type,
+			schedule_id: data.scheduleId,
+			reporter_id: userId,
+			description: data.comment || `[${data.reasonId}]`,
+			status: "pending",
+		});
+
+		if (error) {
+			console.error("Error submitting report:", error.message);
+			return { success: false, error: error.message };
+		}
+
+		return { success: true };
+	} catch (err) {
+		console.error("Error submitting report:", err);
+		return { success: false, error: "Nieznany błąd" };
+	}
+}
