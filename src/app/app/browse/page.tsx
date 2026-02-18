@@ -237,66 +237,85 @@ export default function BrowsePage() {
 					) : Object.keys(groupedCloudLines).length === 0 ? (
 						<div className="text-center py-12">
 							<p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
-								{searchQuery ? `Brak wynikow dla "${searchQuery}"` : "Brak dostepnych linii"}
+								{searchQuery
+									? `Brak wynikow dla "${searchQuery}"`
+									: "Brak dostepnych linii"}
 							</p>
 						</div>
 					) : (
 						<div className="space-y-6">
-							{Object.entries(groupedCloudLines).map(([carrierName, { carrier, lines }]) => (
-								<div key={carrierName}>
-									{/* Carrier header */}
-									<div className="flex items-center gap-2 mb-3">
-										<h2 className="md-title-medium">{carrierName}</h2>
-										{carrier.is_verified && (
-											<VerifiedIcon sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }} />
-										)}
-									</div>
+							{Object.entries(groupedCloudLines).map(
+								([carrierName, { carrier, lines }]) => (
+									<div key={carrierName}>
+										{/* Carrier header */}
+										<div className="flex items-center gap-2 mb-3">
+											<h2 className="md-title-medium">{carrierName}</h2>
+											{carrier.is_verified && (
+												<VerifiedIcon
+													sx={{
+														fontSize: 16,
+														color: "var(--md-sys-color-primary)",
+													}}
+												/>
+											)}
+										</div>
 
-									{/* Lines */}
-									<div className="space-y-2">
-										{lines.map((line) => {
-											const downloaded = isDownloaded(line.id);
-											const syncing = syncingLineIds.has(line.id);
+										{/* Lines */}
+										<div className="space-y-2">
+											{lines.map((line) => {
+												const downloaded = isDownloaded(line.id);
+												const syncing = syncingLineIds.has(line.id);
 
-											return (
-												<div
-													key={line.id}
-													className="md-card md-elevation-1 p-4 flex items-center justify-between"
-												>
-													<div>
-														<p className="md-title-small">Linia {line.number}</p>
-														{line.description && (
-															<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
-																{line.description}
+												return (
+													<div
+														key={line.id}
+														className="md-card md-elevation-1 p-4 flex items-center justify-between"
+													>
+														<div>
+															<p className="md-title-small">
+																Linia {line.number}
 															</p>
+															{line.description && (
+																<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+																	{line.description}
+																</p>
+															)}
+														</div>
+
+														{downloaded ? (
+															<div className="flex items-center gap-1 text-[var(--md-sys-color-primary)]">
+																<CheckCircleIcon
+																	sx={{ fontSize: 20 }}
+																/>
+																<span className="md-label-medium">
+																	Pobrano
+																</span>
+															</div>
+														) : (
+															<button
+																onClick={() =>
+																	handleDownload(line.id)
+																}
+																disabled={syncing}
+																className="md-filled-button flex items-center gap-2 py-2 px-4"
+															>
+																{syncing ? (
+																	<div className="w-5 h-5 border-2 border-[var(--md-sys-color-on-primary)] border-t-transparent rounded-full animate-spin" />
+																) : (
+																	<CloudDownloadIcon
+																		sx={{ fontSize: 20 }}
+																	/>
+																)}
+																Pobierz
+															</button>
 														)}
 													</div>
-
-													{downloaded ? (
-														<div className="flex items-center gap-1 text-[var(--md-sys-color-primary)]">
-															<CheckCircleIcon sx={{ fontSize: 20 }} />
-															<span className="md-label-medium">Pobrano</span>
-														</div>
-													) : (
-														<button
-															onClick={() => handleDownload(line.id)}
-															disabled={syncing}
-															className="md-filled-button flex items-center gap-2 py-2 px-4"
-														>
-															{syncing ? (
-																<div className="w-5 h-5 border-2 border-[var(--md-sys-color-on-primary)] border-t-transparent rounded-full animate-spin" />
-															) : (
-																<CloudDownloadIcon sx={{ fontSize: 20 }} />
-															)}
-															Pobierz
-														</button>
-													)}
-												</div>
-											);
-										})}
+												);
+											})}
+										</div>
 									</div>
-								</div>
-							))}
+								)
+							)}
 						</div>
 					)}
 				</>
@@ -312,10 +331,15 @@ export default function BrowsePage() {
 					) : Object.keys(groupedDownloadedLines).length === 0 ? (
 						<div className="text-center py-12">
 							<p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
-								{searchQuery ? `Brak wynikow dla "${searchQuery}"` : "Brak pobranych linii"}
+								{searchQuery
+									? `Brak wynikow dla "${searchQuery}"`
+									: "Brak pobranych linii"}
 							</p>
 							{!searchQuery && (
-								<button onClick={() => setActiveTab("available")} className="md-text-button mt-4">
+								<button
+									onClick={() => setActiveTab("available")}
+									className="md-text-button mt-4"
+								>
 									Przejdz do dostepnych linii
 								</button>
 							)}
@@ -329,7 +353,12 @@ export default function BrowsePage() {
 										<div className="flex items-center gap-2 mb-3">
 											<h2 className="md-title-medium">{carrierName}</h2>
 											{carrierVerified && (
-												<VerifiedIcon sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }} />
+												<VerifiedIcon
+													sx={{
+														fontSize: 16,
+														color: "var(--md-sys-color-primary)",
+													}}
+												/>
 											)}
 										</div>
 
@@ -340,10 +369,15 @@ export default function BrowsePage() {
 												const meta = getSyncMeta(line.id);
 
 												return (
-													<div key={line.id} className="md-card md-elevation-1 p-4">
+													<div
+														key={line.id}
+														className="md-card md-elevation-1 p-4"
+													>
 														<div className="flex items-center justify-between mb-2">
 															<div>
-																<p className="md-title-small">Linia {line.number}</p>
+																<p className="md-title-small">
+																	Linia {line.number}
+																</p>
 																{line.description && (
 																	<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
 																		{line.description}
@@ -357,9 +391,13 @@ export default function BrowsePage() {
 															{/* Last sync */}
 															{meta && (
 																<div className="flex items-center gap-1 text-[var(--md-sys-color-on-surface-variant)]">
-																	<AccessTimeIcon sx={{ fontSize: 14 }} />
+																	<AccessTimeIcon
+																		sx={{ fontSize: 14 }}
+																	/>
 																	<span className="md-body-small">
-																		{formatRelativeTime(meta.lastSyncAt)}
+																		{formatRelativeTime(
+																			meta.lastSyncAt
+																		)}
 																	</span>
 																</div>
 															)}
@@ -369,7 +407,9 @@ export default function BrowsePage() {
 															{/* Actions */}
 															<div className="flex items-center gap-2">
 																<button
-																	onClick={() => handleRefresh(line.id)}
+																	onClick={() =>
+																		handleRefresh(line.id)
+																	}
 																	disabled={syncing}
 																	className="md-text-button flex items-center gap-1 text-sm"
 																	title="Odswiez dane"
@@ -377,17 +417,23 @@ export default function BrowsePage() {
 																	{syncing ? (
 																		<div className="w-4 h-4 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
 																	) : (
-																		<RefreshIcon sx={{ fontSize: 18 }} />
+																		<RefreshIcon
+																			sx={{ fontSize: 18 }}
+																		/>
 																	)}
 																	Odswiez
 																</button>
 
 																<button
-																	onClick={() => handleDelete(line.id)}
+																	onClick={() =>
+																		handleDelete(line.id)
+																	}
 																	disabled={syncing}
 																	className="md-text-button flex items-center gap-1 text-sm text-[var(--md-sys-color-error)]"
 																>
-																	<DeleteOutlineIcon sx={{ fontSize: 18 }} />
+																	<DeleteOutlineIcon
+																		sx={{ fontSize: 18 }}
+																	/>
 																	Usun
 																</button>
 															</div>

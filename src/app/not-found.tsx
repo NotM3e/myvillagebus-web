@@ -8,7 +8,9 @@ export default function NotFound() {
 		<PageWrapper maxWidth="max-w-2xl" className="flex items-center text-center">
 			{/* Icon */}
 			<div className="inline-flex items-center justify-center w-32 h-32 mb-6 rounded-full bg-[var(--md-sys-color-error-container)]">
-				<ErrorOutlineIcon sx={{ fontSize: 64, color: "var(--md-sys-color-on-error-container)" }} />
+				<ErrorOutlineIcon
+					sx={{ fontSize: 64, color: "var(--md-sys-color-on-error-container)" }}
+				/>
 			</div>
 
 			{/* Error Code */}
@@ -23,7 +25,10 @@ export default function NotFound() {
 			</p>
 
 			{/* CTA */}
-			<Link href="/" className="md-filled-button inline-flex items-center gap-2 md-elevation-1">
+			<Link
+				href="/"
+				className="md-filled-button inline-flex items-center gap-2 md-elevation-1"
+			>
 				<HomeIcon />
 				Powrót do strony głównej
 			</Link>

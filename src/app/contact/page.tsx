@@ -40,7 +40,9 @@ export default function ContactPage() {
 			{/* Header */}
 			<div className="text-center mb-12">
 				<div className="inline-flex items-center justify-center w-24 h-24 mb-6 rounded-full bg-[var(--md-sys-color-secondary-container)]">
-					<EmailIcon sx={{ fontSize: 48, color: "var(--md-sys-color-on-secondary-container)" }} />
+					<EmailIcon
+						sx={{ fontSize: 48, color: "var(--md-sys-color-on-secondary-container)" }}
+					/>
 				</div>
 
 				<h1 className="md-headline-large mb-4">Kontakt</h1>
@@ -53,7 +55,11 @@ export default function ContactPage() {
 			{/* Contact Form */}
 			<div className="md-card md-elevation-2 p-8 mb-8">
 				<form onSubmit={handleSubmit} className="space-y-6">
-					<input type="hidden" name="access_key" value="b32c3e2c-1326-49c6-b6fe-a6f960867882" />
+					<input
+						type="hidden"
+						name="access_key"
+						value="b32c3e2c-1326-49c6-b6fe-a6f960867882"
+					/>
 
 					{/* Name Field */}
 					<div>

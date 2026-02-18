@@ -190,7 +190,10 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 					<div className="md-card md-elevation-1 p-4 flex items-center gap-4">
 						<div className="w-12 h-12 rounded-full bg-[var(--md-sys-color-primary-container)] flex items-center justify-center">
 							<DirectionsBusIcon
-								sx={{ fontSize: 24, color: "var(--md-sys-color-on-primary-container)" }}
+								sx={{
+									fontSize: 24,
+									color: "var(--md-sys-color-on-primary-container)",
+								}}
 							/>
 						</div>
 
@@ -210,7 +213,9 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 							)}
 						</div>
 
-						<CheckCircleIcon sx={{ fontSize: 24, color: "var(--md-sys-color-primary)" }} />
+						<CheckCircleIcon
+							sx={{ fontSize: 24, color: "var(--md-sys-color-primary)" }}
+						/>
 					</div>
 				) : showNewLineForm ? (
 					// New line form
@@ -243,7 +248,10 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 						</div>
 
 						<div className="flex gap-3">
-							<button onClick={() => setShowNewLineForm(false)} className="md-outlined-button">
+							<button
+								onClick={() => setShowNewLineForm(false)}
+								className="md-outlined-button"
+							>
 								Anuluj
 							</button>
 							<button
@@ -271,7 +279,10 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 										className="w-full md-card md-elevation-1 p-3 flex items-center gap-3 hover:bg-[var(--md-sys-color-surface-variant)] transition-colors text-left"
 									>
 										<DirectionsBusIcon
-											sx={{ fontSize: 20, color: "var(--md-sys-color-primary)" }}
+											sx={{
+												fontSize: 20,
+												color: "var(--md-sys-color-primary)",
+											}}
 										/>
 										<div>
 											<p className="md-body-large">Linia {line.number}</p>
@@ -413,7 +424,12 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 										onClick={() => handleAddStop(stop)}
 										className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[var(--md-sys-color-surface-variant)] transition-colors text-left"
 									>
-										<PlaceIcon sx={{ fontSize: 20, color: "var(--md-sys-color-primary)" }} />
+										<PlaceIcon
+											sx={{
+												fontSize: 20,
+												color: "var(--md-sys-color-primary)",
+											}}
+										/>
 										<div>
 											<p className="md-body-medium">{stop.city}</p>
 											{stop.name && (
@@ -466,7 +482,10 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 						</div>
 
 						<div className="flex gap-3">
-							<button onClick={() => setShowNewStopForm(false)} className="md-outlined-button">
+							<button
+								onClick={() => setShowNewStopForm(false)}
+								className="md-outlined-button"
+							>
 								Anuluj
 							</button>
 							<button

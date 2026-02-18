@@ -210,7 +210,9 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 						<div className="flex items-center gap-2">
 							<p className="md-title-medium">{line.carrierName}</p>
 							{line.carrierVerified && (
-								<VerifiedIcon sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }} />
+								<VerifiedIcon
+									sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }}
+								/>
 							)}
 						</div>
 						<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
@@ -299,18 +301,29 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 								<div className="relative z-10 flex-shrink-0">
 									{isHighlighted ? (
 										<div className="w-6 h-6 rounded-full bg-[var(--md-sys-color-primary)] flex items-center justify-center">
-											<PlaceIcon sx={{ fontSize: 16, color: "var(--md-sys-color-on-primary)" }} />
+											<PlaceIcon
+												sx={{
+													fontSize: 16,
+													color: "var(--md-sys-color-on-primary)",
+												}}
+											/>
 										</div>
 									) : isFirst || isLast ? (
 										<div className="w-6 h-6 rounded-full bg-[var(--md-sys-color-primary)] flex items-center justify-center">
 											<FiberManualRecordIcon
-												sx={{ fontSize: 12, color: "var(--md-sys-color-on-primary)" }}
+												sx={{
+													fontSize: 12,
+													color: "var(--md-sys-color-on-primary)",
+												}}
 											/>
 										</div>
 									) : (
 										<div className="w-6 h-6 rounded-full flex items-center justify-center border-2 border-[var(--md-sys-color-primary)] bg-[var(--md-sys-color-surface)]">
 											<RadioButtonUncheckedIcon
-												sx={{ fontSize: 8, color: "var(--md-sys-color-primary)" }}
+												sx={{
+													fontSize: 8,
+													color: "var(--md-sys-color-primary)",
+												}}
 											/>
 										</div>
 									)}
@@ -322,7 +335,9 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 										<div className="min-w-0">
 											<p
 												className={`md-body-large truncate ${
-													isHighlighted ? "font-medium text-[var(--md-sys-color-primary)]" : ""
+													isHighlighted
+														? "font-medium text-[var(--md-sys-color-primary)]"
+														: ""
 												}`}
 											>
 												{stop.city}
@@ -397,10 +412,15 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 							title="Aktualny"
 						>
 							{voteState === "up" ? (
-								<ThumbUpIcon sx={{ fontSize: 22, color: "var(--md-sys-color-primary)" }} />
+								<ThumbUpIcon
+									sx={{ fontSize: 22, color: "var(--md-sys-color-primary)" }}
+								/>
 							) : (
 								<ThumbUpOutlinedIcon
-									sx={{ fontSize: 22, color: "var(--md-sys-color-on-surface-variant)" }}
+									sx={{
+										fontSize: 22,
+										color: "var(--md-sys-color-on-surface-variant)",
+									}}
 								/>
 							)}
 						</button>
@@ -412,10 +432,15 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 							title="Nieaktualny"
 						>
 							{voteState === "down" ? (
-								<ThumbDownIcon sx={{ fontSize: 22, color: "var(--md-sys-color-error)" }} />
+								<ThumbDownIcon
+									sx={{ fontSize: 22, color: "var(--md-sys-color-error)" }}
+								/>
 							) : (
 								<ThumbDownOutlinedIcon
-									sx={{ fontSize: 22, color: "var(--md-sys-color-on-surface-variant)" }}
+									sx={{
+										fontSize: 22,
+										color: "var(--md-sys-color-on-surface-variant)",
+									}}
 								/>
 							)}
 						</button>
@@ -427,7 +452,10 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 							title="Zgłoś problem"
 						>
 							<FlagOutlinedIcon
-								sx={{ fontSize: 22, color: "var(--md-sys-color-on-surface-variant)" }}
+								sx={{
+									fontSize: 22,
+									color: "var(--md-sys-color-on-surface-variant)",
+								}}
 							/>
 						</button>
 
@@ -438,7 +466,10 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 							title="Edytuj rozkład"
 						>
 							<EditOutlinedIcon
-								sx={{ fontSize: 22, color: "var(--md-sys-color-on-surface-variant)" }}
+								sx={{
+									fontSize: 22,
+									color: "var(--md-sys-color-on-surface-variant)",
+								}}
 							/>
 						</button>
 					</div>

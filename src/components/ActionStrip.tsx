@@ -115,7 +115,11 @@ export default function ActionStrip({
 		) {
 			return "Dni robocze";
 		}
-		if (selectedDays.length === 2 && selectedDays.includes("Sob") && selectedDays.includes("Nd")) {
+		if (
+			selectedDays.length === 2 &&
+			selectedDays.includes("Sob") &&
+			selectedDays.includes("Nd")
+		) {
 			return "Weekend";
 		}
 		if (selectedDays.length === 1) return selectedDays[0];
@@ -218,7 +222,12 @@ export default function ActionStrip({
 								className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface)] transition-colors"
 								title="Wyczyść"
 							>
-								<CloseIcon sx={{ fontSize: 18, color: "var(--md-sys-color-on-surface-variant)" }} />
+								<CloseIcon
+									sx={{
+										fontSize: 18,
+										color: "var(--md-sys-color-on-surface-variant)",
+									}}
+								/>
 							</button>
 						)}
 					</div>

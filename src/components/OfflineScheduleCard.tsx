@@ -146,7 +146,9 @@ export default function OfflineScheduleCard({
 						<div className="flex items-center gap-2">
 							<p className="md-title-medium">{schedule.carrierName}</p>
 							{schedule.carrierVerified && (
-								<VerifiedIcon sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }} />
+								<VerifiedIcon
+									sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }}
+								/>
 							)}
 						</div>
 						<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
@@ -236,7 +238,9 @@ export default function OfflineScheduleCard({
 							{localScore > 0 ? "+" : ""}
 							{localScore}
 						</span>
-						<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">pkt</span>
+						<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+							pkt
+						</span>
 					</div>
 
 					{/* Actions */}
@@ -248,10 +252,15 @@ export default function OfflineScheduleCard({
 							title="Aktualny"
 						>
 							{voteState === "up" ? (
-								<ThumbUpIcon sx={{ fontSize: 20, color: "var(--md-sys-color-primary)" }} />
+								<ThumbUpIcon
+									sx={{ fontSize: 20, color: "var(--md-sys-color-primary)" }}
+								/>
 							) : (
 								<ThumbUpOutlinedIcon
-									sx={{ fontSize: 20, color: "var(--md-sys-color-on-surface-variant)" }}
+									sx={{
+										fontSize: 20,
+										color: "var(--md-sys-color-on-surface-variant)",
+									}}
 								/>
 							)}
 						</button>
@@ -263,10 +272,15 @@ export default function OfflineScheduleCard({
 							title="Nieaktualny"
 						>
 							{voteState === "down" ? (
-								<ThumbDownIcon sx={{ fontSize: 20, color: "var(--md-sys-color-error)" }} />
+								<ThumbDownIcon
+									sx={{ fontSize: 20, color: "var(--md-sys-color-error)" }}
+								/>
 							) : (
 								<ThumbDownOutlinedIcon
-									sx={{ fontSize: 20, color: "var(--md-sys-color-on-surface-variant)" }}
+									sx={{
+										fontSize: 20,
+										color: "var(--md-sys-color-on-surface-variant)",
+									}}
 								/>
 							)}
 						</button>
@@ -278,7 +292,10 @@ export default function OfflineScheduleCard({
 							title="Zgłoś problem"
 						>
 							<FlagOutlinedIcon
-								sx={{ fontSize: 20, color: "var(--md-sys-color-on-surface-variant)" }}
+								sx={{
+									fontSize: 20,
+									color: "var(--md-sys-color-on-surface-variant)",
+								}}
 							/>
 						</button>
 					</div>

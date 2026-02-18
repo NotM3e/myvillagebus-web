@@ -6,7 +6,9 @@ export default function AuthErrorPage() {
 	return (
 		<PageWrapper maxWidth="max-w-md" className="flex items-center text-center">
 			<div className="w-20 h-20 rounded-full bg-[var(--md-sys-color-error-container)] flex items-center justify-center mb-6 mx-auto">
-				<ErrorOutlineIcon sx={{ fontSize: 40, color: "var(--md-sys-color-on-error-container)" }} />
+				<ErrorOutlineIcon
+					sx={{ fontSize: 40, color: "var(--md-sys-color-on-error-container)" }}
+				/>
 			</div>
 
 			<h1 className="md-headline-medium mb-4">Błąd logowania</h1>

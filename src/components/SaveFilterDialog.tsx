@@ -89,7 +89,9 @@ export default function SaveFilterDialog({
 							autoFocus
 						/>
 						{error && (
-							<p className="mt-2 md-body-small text-[var(--md-sys-color-error)]">{error}</p>
+							<p className="mt-2 md-body-small text-[var(--md-sys-color-error)]">
+								{error}
+							</p>
 						)}
 					</div>
 
@@ -98,7 +100,10 @@ export default function SaveFilterDialog({
 						<button onClick={handleClose} className="md-text-button">
 							Anuluj
 						</button>
-						<button onClick={handleSave} className="md-filled-button flex items-center gap-2">
+						<button
+							onClick={handleSave}
+							className="md-filled-button flex items-center gap-2"
+						>
 							<SaveIcon sx={{ fontSize: 18 }} />
 							Zapisz
 						</button>

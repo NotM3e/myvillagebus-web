@@ -92,7 +92,15 @@ export async function downloadLine(lineId: string): Promise<{ success: boolean; 
 		// 3. Zapisz w transakcji (atomowo)
 		await db.transaction(
 			"rw",
-			[db.lines, db.schedules, db.stops, db.routeStops, db.courses, db.courseTimes, db.syncMeta],
+			[
+				db.lines,
+				db.schedules,
+				db.stops,
+				db.routeStops,
+				db.courses,
+				db.courseTimes,
+				db.syncMeta,
+			],
 			async () => {
 				// Usuń stare dane tej linii (jeśli istnieją)
 				await deleteLineData(lineId);

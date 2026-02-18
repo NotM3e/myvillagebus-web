@@ -221,8 +221,8 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 				</div>
 
 				<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-3">
-					Wpisz godziny odjazdu z pierwszego przystanku ({data.stops[0]?.city || "?"}). Każda
-					godzina w nowej linii.
+					Wpisz godziny odjazdu z pierwszego przystanku ({data.stops[0]?.city || "?"}).
+					Każda godzina w nowej linii.
 				</p>
 
 				{/* Bulk entry textarea */}
@@ -242,7 +242,10 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 							<div className="p-3 rounded-xl bg-[var(--md-sys-color-primary-container)]">
 								<div className="flex items-center gap-2 mb-2">
 									<AccessTimeIcon
-										sx={{ fontSize: 18, color: "var(--md-sys-color-on-primary-container)" }}
+										sx={{
+											fontSize: 18,
+											color: "var(--md-sys-color-on-primary-container)",
+										}}
 									/>
 									<span className="md-label-large text-[var(--md-sys-color-on-primary-container)]">
 										Rozpoznano {validCourses.length}{" "}
@@ -271,10 +274,14 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 							<div className="p-3 rounded-xl bg-[var(--md-sys-color-error-container)]">
 								<div className="flex items-center gap-2 mb-2">
 									<WarningAmberIcon
-										sx={{ fontSize: 18, color: "var(--md-sys-color-on-error-container)" }}
+										sx={{
+											fontSize: 18,
+											color: "var(--md-sys-color-on-error-container)",
+										}}
 									/>
 									<span className="md-label-large text-[var(--md-sys-color-on-error-container)]">
-										{invalidCourses.length} {invalidCourses.length === 1 ? "błąd" : "błędów"}
+										{invalidCourses.length}{" "}
+										{invalidCourses.length === 1 ? "błąd" : "błędów"}
 									</span>
 								</div>
 								<div className="space-y-1">
@@ -320,7 +327,9 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 							• Przystanków: <strong>{data.stops.length}</strong>
 						</li>
 						{data.excludesHolidays && (
-							<li className="text-[var(--md-sys-color-error)]">• Nie kursuje w święta</li>
+							<li className="text-[var(--md-sys-color-error)]">
+								• Nie kursuje w święta
+							</li>
 						)}
 					</ul>
 				</div>

@@ -108,7 +108,10 @@ function AppContent() {
 	// Filtrowanie
 	const filteredSchedules = useMemo(() => {
 		// Helper: pobierz czas na wybranym przystanku
-		const calcDisplayTime = (scheduleId: string, firstDeparture: string | null): string | null => {
+		const calcDisplayTime = (
+			scheduleId: string,
+			firstDeparture: string | null
+		): string | null => {
 			if (!firstDeparture) return null;
 
 			if (!fromStop) {
@@ -133,7 +136,9 @@ function AppContent() {
 
 		// Filtr dni
 		if (selectedDays.length < 7) {
-			result = result.filter((schedule) => schedule.days.some((day) => selectedDays.includes(day)));
+			result = result.filter((schedule) =>
+				schedule.days.some((day) => selectedDays.includes(day))
+			);
 		}
 
 		// Filtr czasu - używamy czasu na wybranym przystanku
@@ -180,7 +185,9 @@ function AppContent() {
 	const handleSaveFilter = async (name: string) => {
 		await saveFilter({
 			name,
-			fromStop: fromStop ? { id: fromStop.id, city: fromStop.city, name: fromStop.name } : null,
+			fromStop: fromStop
+				? { id: fromStop.id, city: fromStop.city, name: fromStop.name }
+				: null,
 			toStop: toStop ? { id: toStop.id, city: toStop.city, name: toStop.name } : null,
 			days: selectedDays.length < 7 ? selectedDays : null,
 			timeFrom: selectedTime,
@@ -211,7 +218,10 @@ function AppContent() {
 							Rozkład został dodany! Oczekuje na weryfikację.
 						</p>
 					</div>
-					<button onClick={() => setShowSuccess(false)} className="md-text-button text-sm">
+					<button
+						onClick={() => setShowSuccess(false)}
+						className="md-text-button text-sm"
+					>
 						OK
 					</button>
 				</div>
@@ -251,7 +261,10 @@ function AppContent() {
 					<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)] mb-6">
 						Pobierz linie autobusowe, aby przeglądać rozkłady offline.
 					</p>
-					<Link href="/app/browse" className="md-filled-button inline-flex items-center gap-2">
+					<Link
+						href="/app/browse"
+						className="md-filled-button inline-flex items-center gap-2"
+					>
 						<CloudDownloadIcon sx={{ fontSize: 20 }} />
 						Przeglądaj dostępne linie
 					</Link>
@@ -322,7 +335,9 @@ function AppLoading() {
 		<PageWrapper maxWidth="max-w-2xl">
 			<div className="text-center py-12 mt-4">
 				<div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-				<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">Ładowanie...</p>
+				<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+					Ładowanie...
+				</p>
 			</div>
 		</PageWrapper>
 	);

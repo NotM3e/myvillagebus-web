@@ -59,7 +59,9 @@ export default function CreateSchedulePage() {
 			<PageWrapper maxWidth="max-w-md">
 				<div className="text-center py-12">
 					<div className="w-20 h-20 rounded-full bg-[var(--md-sys-color-primary-container)] flex items-center justify-center mx-auto mb-6">
-						<LoginIcon sx={{ fontSize: 40, color: "var(--md-sys-color-on-primary-container)" }} />
+						<LoginIcon
+							sx={{ fontSize: 40, color: "var(--md-sys-color-on-primary-container)" }}
+						/>
 					</div>
 
 					<h1 className="md-headline-medium mb-4">Zaloguj się</h1>

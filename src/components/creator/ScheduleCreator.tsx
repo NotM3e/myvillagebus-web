@@ -132,7 +132,9 @@ export default function ScheduleCreator({ user }: ScheduleCreatorProps) {
 								{index < currentStep ? (
 									<CheckIcon sx={{ fontSize: 18 }} />
 								) : (
-									<span className="md-label-medium sm:md-label-large">{index + 1}</span>
+									<span className="md-label-medium sm:md-label-large">
+										{index + 1}
+									</span>
 								)}
 							</div>
 							<span

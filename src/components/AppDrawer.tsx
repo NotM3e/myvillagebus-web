@@ -96,7 +96,9 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
 				<div className="flex flex-col h-full">
 					{/* Header */}
 					<div className="flex items-center justify-between p-4 border-b border-[var(--md-sys-color-outline-variant)]">
-						<span className="md-title-large text-[var(--md-sys-color-primary)]">WSIOBUS</span>
+						<span className="md-title-large text-[var(--md-sys-color-primary)]">
+							WSIOBUS
+						</span>
 						<button
 							onClick={onClose}
 							className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
@@ -121,13 +123,17 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
 											/>
 										) : (
 											<PersonOutlineIcon
-												sx={{ fontSize: 28, color: "var(--md-sys-color-on-primary-container)" }}
+												sx={{
+													fontSize: 28,
+													color: "var(--md-sys-color-on-primary-container)",
+												}}
 											/>
 										)}
 									</div>
 									<div className="flex-1 min-w-0">
 										<p className="md-title-medium truncate">
-											{user.user_metadata?.full_name ?? user.email?.split("@")[0]}
+											{user.user_metadata?.full_name ??
+												user.email?.split("@")[0]}
 										</p>
 										<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
 											Viewer • 0 pkt
@@ -163,12 +169,20 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
 											onClick={handleLinkClick}
 											className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[var(--md-sys-color-surface-variant)] transition-colors text-left"
 										>
-											<RouteIcon sx={{ fontSize: 20, color: "var(--md-sys-color-primary)" }} />
+											<RouteIcon
+												sx={{
+													fontSize: 20,
+													color: "var(--md-sys-color-primary)",
+												}}
+											/>
 											<div className="flex-1 min-w-0">
-												<span className="md-body-medium truncate block">{filter.name}</span>
+												<span className="md-body-medium truncate block">
+													{filter.name}
+												</span>
 												{(filter.fromStop || filter.toStop) && (
 													<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)] truncate block">
-														{filter.fromStop?.city ?? "?"} → {filter.toStop?.city ?? "?"}
+														{filter.fromStop?.city ?? "?"} →{" "}
+														{filter.toStop?.city ?? "?"}
 													</span>
 												)}
 											</div>
@@ -190,7 +204,10 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
 									className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
 								>
 									<DirectionsBusIcon
-										sx={{ fontSize: 24, color: "var(--md-sys-color-on-surface-variant)" }}
+										sx={{
+											fontSize: 24,
+											color: "var(--md-sys-color-on-surface-variant)",
+										}}
 									/>
 									<div>
 										<p className="md-body-large">Zarządzaj liniami</p>
@@ -206,7 +223,10 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
 									className="w-full flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[var(--md-sys-color-surface-variant)] transition-colors text-left"
 								>
 									<AddCircleOutlineIcon
-										sx={{ fontSize: 24, color: "var(--md-sys-color-on-surface-variant)" }}
+										sx={{
+											fontSize: 24,
+											color: "var(--md-sys-color-on-surface-variant)",
+										}}
 									/>
 									<div>
 										<p className="md-body-large">Dodaj rozkład</p>
@@ -222,7 +242,10 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
 									className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
 								>
 									<SettingsOutlinedIcon
-										sx={{ fontSize: 24, color: "var(--md-sys-color-on-surface-variant)" }}
+										sx={{
+											fontSize: 24,
+											color: "var(--md-sys-color-on-surface-variant)",
+										}}
 									/>
 									<p className="md-body-large">Ustawienia</p>
 								</Link>

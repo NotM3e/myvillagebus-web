@@ -52,9 +52,13 @@ export default function AppHeader({ onMenuClick }: AppHeaderProps) {
 						title={isOnline ? "Online" : "Offline"}
 					>
 						{isOnline ? (
-							<CloudDoneOutlinedIcon sx={{ fontSize: 20, color: "var(--md-sys-color-primary)" }} />
+							<CloudDoneOutlinedIcon
+								sx={{ fontSize: 20, color: "var(--md-sys-color-primary)" }}
+							/>
 						) : (
-							<CloudOffOutlinedIcon sx={{ fontSize: 20, color: "var(--md-sys-color-error)" }} />
+							<CloudOffOutlinedIcon
+								sx={{ fontSize: 20, color: "var(--md-sys-color-error)" }}
+							/>
 						)}
 					</div>
 
@@ -64,7 +68,9 @@ export default function AppHeader({ onMenuClick }: AppHeaderProps) {
 						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
 						aria-label="Ustawienia"
 					>
-						<SettingsOutlinedIcon sx={{ color: "var(--md-sys-color-on-surface-variant)" }} />
+						<SettingsOutlinedIcon
+							sx={{ color: "var(--md-sys-color-on-surface-variant)" }}
+						/>
 					</Link>
 				</div>
 			</div>

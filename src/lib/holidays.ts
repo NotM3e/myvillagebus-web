@@ -55,7 +55,11 @@ export function getPolishHolidays(year: number): Holiday[] {
 
 		// Święta ruchome
 		{ date: formatDate(easter), name: "Wielkanoc", isMoveable: true },
-		{ date: formatDate(addDays(easter, 1)), name: "Poniedziałek Wielkanocny", isMoveable: true },
+		{
+			date: formatDate(addDays(easter, 1)),
+			name: "Poniedziałek Wielkanocny",
+			isMoveable: true,
+		},
 		{ date: formatDate(addDays(easter, 49)), name: "Zielone Świątki", isMoveable: true },
 		{ date: formatDate(addDays(easter, 60)), name: "Boże Ciało", isMoveable: true },
 	];

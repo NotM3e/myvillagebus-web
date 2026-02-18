@@ -66,7 +66,9 @@ export default function AuthButton() {
 							className="w-10 h-10 rounded-full"
 						/>
 					) : (
-						<PersonOutlineIcon sx={{ color: "var(--md-sys-color-on-primary-container)" }} />
+						<PersonOutlineIcon
+							sx={{ color: "var(--md-sys-color-on-primary-container)" }}
+						/>
 					)}
 				</div>
 				<button

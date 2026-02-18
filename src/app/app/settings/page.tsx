@@ -91,12 +91,19 @@ export default function SettingsPage() {
 								<p className="md-body-large">Pobrane linie</p>
 								<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
 									{lines.length}{" "}
-									{lines.length === 1 ? "linia" : lines.length < 5 ? "linie" : "linii"}
+									{lines.length === 1
+										? "linia"
+										: lines.length < 5
+											? "linie"
+											: "linii"}
 								</p>
 							</div>
 							{showConfirm === "lines" ? (
 								<div className="flex gap-2">
-									<button onClick={() => setShowConfirm(null)} className="md-text-button text-sm">
+									<button
+										onClick={() => setShowConfirm(null)}
+										className="md-text-button text-sm"
+									>
 										Anuluj
 									</button>
 									<button
@@ -130,12 +137,19 @@ export default function SettingsPage() {
 								<p className="md-body-large">Zapisane filtry</p>
 								<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
 									{filters.length}{" "}
-									{filters.length === 1 ? "filtr" : filters.length < 5 ? "filtry" : "filtrow"}
+									{filters.length === 1
+										? "filtr"
+										: filters.length < 5
+											? "filtry"
+											: "filtrow"}
 								</p>
 							</div>
 							{showConfirm === "filters" ? (
 								<div className="flex gap-2">
-									<button onClick={() => setShowConfirm(null)} className="md-text-button text-sm">
+									<button
+										onClick={() => setShowConfirm(null)}
+										className="md-text-button text-sm"
+									>
 										Anuluj
 									</button>
 									<button
@@ -180,7 +194,10 @@ export default function SettingsPage() {
 						>
 							<div className="flex items-center gap-3">
 								<PendingActionsIcon
-									sx={{ fontSize: 24, color: "var(--md-sys-color-on-surface-variant)" }}
+									sx={{
+										fontSize: 24,
+										color: "var(--md-sys-color-on-surface-variant)",
+									}}
 								/>
 								<div>
 									<p className="md-body-large">Pokazuj oczekujace</p>
@@ -216,7 +233,9 @@ export default function SettingsPage() {
 					<div className="md-card md-elevation-1 divide-y divide-[var(--md-sys-color-outline-variant)]">
 						{/* Sync only WiFi */}
 						<button
-							onClick={() => updateSettings({ syncOnlyWifi: !settings?.syncOnlyWifi })}
+							onClick={() =>
+								updateSettings({ syncOnlyWifi: !settings?.syncOnlyWifi })
+							}
 							className="w-full p-4 flex items-center justify-between text-left"
 						>
 							<div>
@@ -252,7 +271,9 @@ export default function SettingsPage() {
 					<div className="md-card md-elevation-1 divide-y divide-[var(--md-sys-color-outline-variant)]">
 						{isInstalled ? (
 							<div className="p-4 flex items-center gap-3">
-								<CheckCircleIcon sx={{ fontSize: 24, color: "var(--md-sys-color-primary)" }} />
+								<CheckCircleIcon
+									sx={{ fontSize: 24, color: "var(--md-sys-color-primary)" }}
+								/>
 								<div>
 									<p className="md-body-large">Aplikacja zainstalowana</p>
 									<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
@@ -271,7 +292,9 @@ export default function SettingsPage() {
 										Dodaj Wsiobus do ekranu glownego
 									</p>
 								</div>
-								<InstallMobileIcon sx={{ fontSize: 24, color: "var(--md-sys-color-primary)" }} />
+								<InstallMobileIcon
+									sx={{ fontSize: 24, color: "var(--md-sys-color-primary)" }}
+								/>
 							</button>
 						) : isIOS ? (
 							<>
@@ -285,30 +308,36 @@ export default function SettingsPage() {
 											Instrukcja dla iOS
 										</p>
 									</div>
-									<IosShareIcon sx={{ fontSize: 24, color: "var(--md-sys-color-primary)" }} />
+									<IosShareIcon
+										sx={{ fontSize: 24, color: "var(--md-sys-color-primary)" }}
+									/>
 								</button>
 
 								{showIOSInstructions && (
 									<div className="p-4 bg-[var(--md-sys-color-surface-variant)]">
-										<p className="md-body-medium mb-3">Jak zainstalowac na iOS:</p>
+										<p className="md-body-medium mb-3">
+											Jak zainstalowac na iOS:
+										</p>
 										<ol className="space-y-2 md-body-small text-[var(--md-sys-color-on-surface-variant)]">
 											<li className="flex gap-2">
 												<span>1.</span>
 												<span>
-													Kliknij ikone <strong>Udostepnij</strong> (kwadrat ze strzalka) na dole
-													ekranu
+													Kliknij ikone <strong>Udostepnij</strong>{" "}
+													(kwadrat ze strzalka) na dole ekranu
 												</span>
 											</li>
 											<li className="flex gap-2">
 												<span>2.</span>
 												<span>
-													Przewin w dol i wybierz <strong>Dodaj do ekranu poczatkowego</strong>
+													Przewin w dol i wybierz{" "}
+													<strong>Dodaj do ekranu poczatkowego</strong>
 												</span>
 											</li>
 											<li className="flex gap-2">
 												<span>3.</span>
 												<span>
-													Kliknij <strong>Dodaj</strong> w prawym gornym rogu
+													Kliknij <strong>Dodaj</strong> w prawym gornym
+													rogu
 												</span>
 											</li>
 										</ol>
@@ -319,8 +348,8 @@ export default function SettingsPage() {
 							<div className="p-4">
 								<p className="md-body-large mb-2">Zainstaluj aplikacje</p>
 								<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
-									Uzyj menu przegladarki (trzy kropki) i wybierz "Zainstaluj aplikacje" lub "Dodaj
-									do ekranu glownego".
+									Uzyj menu przegladarki (trzy kropki) i wybierz "Zainstaluj
+									aplikacje" lub "Dodaj do ekranu glownego".
 								</p>
 							</div>
 						)}
@@ -343,7 +372,10 @@ export default function SettingsPage() {
 						>
 							<p className="md-body-large">Strona projektu</p>
 							<OpenInNewIcon
-								sx={{ fontSize: 20, color: "var(--md-sys-color-on-surface-variant)" }}
+								sx={{
+									fontSize: 20,
+									color: "var(--md-sys-color-on-surface-variant)",
+								}}
 							/>
 						</a>
 
@@ -355,7 +387,10 @@ export default function SettingsPage() {
 						>
 							<p className="md-body-large">Kontakt</p>
 							<OpenInNewIcon
-								sx={{ fontSize: 20, color: "var(--md-sys-color-on-surface-variant)" }}
+								sx={{
+									fontSize: 20,
+									color: "var(--md-sys-color-on-surface-variant)",
+								}}
 							/>
 						</a>
 

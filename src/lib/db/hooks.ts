@@ -189,18 +189,20 @@ export function useOfflineSchedules(options: UseOfflineSchedulesOptions = {}) {
 			}
 
 			// Połącz z danymi linii
-			const schedulesWithDetails: OfflineScheduleWithDetails[] = schedulesData.map((schedule) => {
-				const line = linesData.find((l) => l.id === schedule.lineId);
-				return {
-					...schedule,
-					lineNumber: line?.number ?? "",
-					lineDescription: line?.description ?? null,
-					lineOperationNote: line?.operationNote ?? null,
-					carrierName: line?.carrierName ?? "",
-					carrierLogo: line?.carrierLogo ?? null,
-					carrierVerified: line?.carrierVerified ?? false,
-				};
-			});
+			const schedulesWithDetails: OfflineScheduleWithDetails[] = schedulesData.map(
+				(schedule) => {
+					const line = linesData.find((l) => l.id === schedule.lineId);
+					return {
+						...schedule,
+						lineNumber: line?.number ?? "",
+						lineDescription: line?.description ?? null,
+						lineOperationNote: line?.operationNote ?? null,
+						carrierName: line?.carrierName ?? "",
+						carrierLogo: line?.carrierLogo ?? null,
+						carrierVerified: line?.carrierVerified ?? false,
+					};
+				}
+			);
 
 			// Sortuj po nazwie przewoźnika, potem po pierwszym odjeździe
 			schedulesWithDetails.sort((a, b) => {
@@ -642,7 +644,10 @@ export function useScheduleDetails(scheduleId: string): ScheduleDetailsData {
 				setLine(lineData ?? null);
 
 				// 3. Pobierz route_stops
-				const routeStops = await db.routeStops.where("scheduleId").equals(scheduleId).toArray();
+				const routeStops = await db.routeStops
+					.where("scheduleId")
+					.equals(scheduleId)
+					.toArray();
 
 				routeStops.sort((a, b) => a.orderIndex - b.orderIndex);
 
@@ -658,7 +663,10 @@ export function useScheduleDetails(scheduleId: string): ScheduleDetailsData {
 				// 6. Jeśli use_offsets=false, pobierz course_times
 				let courseTimesMap: Record<string, string | null> = {};
 				if (course && !course.useOffsets) {
-					const courseTimes = await db.courseTimes.where("courseId").equals(course.id).toArray();
+					const courseTimes = await db.courseTimes
+						.where("courseId")
+						.equals(course.id)
+						.toArray();
 
 					for (const ct of courseTimes) {
 						courseTimesMap[ct.stopId] = ct.arrivalTime?.slice(0, 5) ?? null;

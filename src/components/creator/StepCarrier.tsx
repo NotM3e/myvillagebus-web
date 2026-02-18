@@ -90,7 +90,9 @@ export default function StepCarrier({ data, updateData }: StepCarrierProps) {
 							)}
 						</div>
 						<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
-							{data.carrier.isNew ? "Zostanie utworzony przy zapisie" : "Wybrany przewoźnik"}
+							{data.carrier.isNew
+								? "Zostanie utworzony przy zapisie"
+								: "Wybrany przewoźnik"}
 						</p>
 					</div>
 
@@ -129,7 +131,10 @@ export default function StepCarrier({ data, updateData }: StepCarrierProps) {
 					</div>
 
 					<div className="flex gap-3">
-						<button onClick={() => setShowNewForm(false)} className="md-outlined-button">
+						<button
+							onClick={() => setShowNewForm(false)}
+							className="md-outlined-button"
+						>
 							Anuluj
 						</button>
 						<button
@@ -189,7 +194,10 @@ export default function StepCarrier({ data, updateData }: StepCarrierProps) {
 						>
 							<div className="w-10 h-10 rounded-full bg-[var(--md-sys-color-secondary-container)] flex items-center justify-center">
 								<BusinessIcon
-									sx={{ fontSize: 20, color: "var(--md-sys-color-on-secondary-container)" }}
+									sx={{
+										fontSize: 20,
+										color: "var(--md-sys-color-on-secondary-container)",
+									}}
 								/>
 							</div>
 
@@ -197,7 +205,12 @@ export default function StepCarrier({ data, updateData }: StepCarrierProps) {
 								<div className="flex items-center gap-2">
 									<p className="md-body-large">{carrier.name}</p>
 									{carrier.is_verified && (
-										<VerifiedIcon sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }} />
+										<VerifiedIcon
+											sx={{
+												fontSize: 16,
+												color: "var(--md-sys-color-primary)",
+											}}
+										/>
 									)}
 								</div>
 							</div>

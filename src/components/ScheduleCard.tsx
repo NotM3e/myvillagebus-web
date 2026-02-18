@@ -29,7 +29,9 @@ export default function ScheduleCard({ schedule }: ScheduleCardProps) {
 					<div className="flex items-center gap-2">
 						<p className="md-title-medium">{schedule.carrier_name}</p>
 						{schedule.carrier_verified && (
-							<VerifiedIcon sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }} />
+							<VerifiedIcon
+								sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }}
+							/>
 						)}
 					</div>
 					<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">

@@ -59,7 +59,8 @@ export default function Home() {
 				<p className="md-body-large text-[var(--md-sys-color-on-surface-variant)] max-w-2xl mx-auto mb-8">
 					Rozkłady małych przewoźników w jednym miejscu.
 					<br />
-					Bez szukania zdjęć w galerii, bez pytania znajomych - po prostu otwierasz i jedziesz.
+					Bez szukania zdjęć w galerii, bez pytania znajomych - po prostu otwierasz i
+					jedziesz.
 				</p>
 
 				{/* CTA Buttons */}
@@ -82,13 +83,16 @@ export default function Home() {
 			{/* Community section */}
 			<div className="md-card md-elevation-3 max-w-3xl mx-auto mb-8">
 				<div className="p-8">
-					<h2 className="md-headline-medium mb-4 text-center">Rozkłady tworzy społeczność</h2>
+					<h2 className="md-headline-medium mb-4 text-center">
+						Rozkłady tworzy społeczność
+					</h2>
 					<p className="md-body-large text-[var(--md-sys-color-on-surface-variant)] text-center">
 						Nie musisz czekać aż przewoźnik zrobi aplikację.
 						<br />
 						Ktoś dodaje rozkład, inni sprawdzają czy się zgadza, wszyscy korzystają.
 						<br />
-						To jak Wikipedia dla autobusów - każdy może pomóc, a system reputacji dba o jakość.
+						To jak Wikipedia dla autobusów - każdy może pomóc, a system reputacji dba o
+						jakość.
 					</p>
 				</div>
 			</div>
@@ -99,7 +103,10 @@ export default function Home() {
 					<div className="md-card md-elevation-1 text-center">
 						<div className="inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-[var(--md-sys-color-primary-container)]">
 							<FlashOnIcon
-								sx={{ fontSize: 32, color: "var(--md-sys-color-on-primary-container)" }}
+								sx={{
+									fontSize: 32,
+									color: "var(--md-sys-color-on-primary-container)",
+								}}
 							/>
 						</div>
 						<h3 className="md-title-large mb-2">Zawsze offline</h3>
@@ -113,34 +120,48 @@ export default function Home() {
 					<div className="md-card md-elevation-1 text-center">
 						<div className="inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-[var(--md-sys-color-secondary-container)]">
 							<CloudOffIcon
-								sx={{ fontSize: 32, color: "var(--md-sys-color-on-secondary-container)" }}
+								sx={{
+									fontSize: 32,
+									color: "var(--md-sys-color-on-secondary-container)",
+								}}
 							/>
 						</div>
 						<h3 className="md-title-large mb-2">Tworzysz co potrzebujesz</h3>
 						<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
-							Nie ma Twojego rozkładu? Dodaj go. Zmienił się na wakacje? Popraw. Masz kontrolę.
+							Nie ma Twojego rozkładu? Dodaj go. Zmienił się na wakacje? Popraw. Masz
+							kontrolę.
 						</p>
 					</div>
 
 					<div className="md-card md-elevation-1 text-center">
 						<div className="inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-[var(--md-sys-color-tertiary-container)]">
-							<SortIcon sx={{ fontSize: 32, color: "var(--md-sys-color-on-tertiary-container)" }} />
+							<SortIcon
+								sx={{
+									fontSize: 32,
+									color: "var(--md-sys-color-on-tertiary-container)",
+								}}
+							/>
 						</div>
 						<h3 className="md-title-large mb-2">Społeczność pilnuje jakości</h3>
 						<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
-							Głosuj za dobrymi rozkładami, zgłaszaj błędy. Im więcej pomagasz, tym więcej możesz -
-							zaufani użytkownicy omijają moderację.
+							Głosuj za dobrymi rozkładami, zgłaszaj błędy. Im więcej pomagasz, tym
+							więcej możesz - zaufani użytkownicy omijają moderację.
 						</p>
 					</div>
 
 					<div className="md-card md-elevation-1 text-center">
 						<div className="inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-[var(--md-sys-color-tertiary-container)]">
-							<SaveIcon sx={{ fontSize: 32, color: "var(--md-sys-color-on-tertiary-container)" }} />
+							<SaveIcon
+								sx={{
+									fontSize: 32,
+									color: "var(--md-sys-color-on-tertiary-container)",
+								}}
+							/>
 						</div>
 						<h3 className="md-title-large mb-2">Zapisuj ulubione trasy</h3>
 						<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
-							Stwórz profil filtrów dla regularnych przejazdów. "Dom-praca w dni powszednie" - jeden
-							klik i widzisz tylko to co Cię interesuje.
+							Stwórz profil filtrów dla regularnych przejazdów. "Dom-praca w dni
+							powszednie" - jeden klik i widzisz tylko to co Cię interesuje.
 						</p>
 					</div>
 				</div>
@@ -151,8 +172,8 @@ export default function Home() {
 				<div className="p-8">
 					<h2 className="md-headline-medium mb-4 text-center">O Projekcie</h2>
 					<p className="md-body-large text-[var(--md-sys-color-on-surface-variant)] text-center">
-						Amatorski projekt stworzony w celu rozwijania umiejętności programowania i jednocześnie
-						pomagający złapać się na autobus.
+						Amatorski projekt stworzony w celu rozwijania umiejętności programowania i
+						jednocześnie pomagający złapać się na autobus.
 					</p>
 				</div>
 			</div>

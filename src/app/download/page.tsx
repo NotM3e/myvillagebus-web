@@ -35,7 +35,9 @@ export default function DownloadPage() {
 			{/* Header */}
 			<div className="text-center mb-12">
 				<div className="inline-flex items-center justify-center w-24 h-24 mb-6 rounded-full bg-[var(--md-sys-color-tertiary-container)]">
-					<AndroidIcon sx={{ fontSize: 48, color: "var(--md-sys-color-on-tertiary-container)" }} />
+					<AndroidIcon
+						sx={{ fontSize: 48, color: "var(--md-sys-color-on-tertiary-container)" }}
+					/>
 				</div>
 
 				<h1 className="md-headline-large mb-4">Pobierz aplikację Android</h1>
@@ -48,7 +50,9 @@ export default function DownloadPage() {
 			{/* Download Card */}
 			<div className="p-8 mb-8 text-center">
 				<div className="inline-flex items-center justify-center w-20 h-20 mb-6 rounded-full bg-[var(--md-sys-color-primary-container)]">
-					<DownloadIcon sx={{ fontSize: 40, color: "var(--md-sys-color-on-primary-container)" }} />
+					<DownloadIcon
+						sx={{ fontSize: 40, color: "var(--md-sys-color-on-primary-container)" }}
+					/>
 				</div>
 
 				<h2 className="md-headline-medium mb-4">Mój Wsiobus v{APP_VERSION}</h2>
@@ -70,9 +74,9 @@ export default function DownloadPage() {
 			{/* Why Web Version */}
 			<div className="mb-6 p-4 rounded-xl bg-[var(--md-sys-color-tertiary-container)] text-[var(--md-sys-color-on-tertiary-container)]">
 				<p className="md-body-medium">
-					⚠️ Aplikacja jest wersją demo usługi jaką jest ten projekt. Całość będzie działało na
-					aplikacji przeglądarkowej dostępnej na każdym urządzeniu, a planowany termin publikacji
-					usługi to kwiecień 2026.
+					⚠️ Aplikacja jest wersją demo usługi jaką jest ten projekt. Całość będzie
+					działało na aplikacji przeglądarkowej dostępnej na każdym urządzeniu, a
+					planowany termin publikacji usługi to kwiecień 2026.
 				</p>
 			</div>
 
@@ -82,20 +86,20 @@ export default function DownloadPage() {
 				<ul className="space-y-3 md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
 					<li className="flex gap-3">
 						<span>
-							<strong>Jedno miejsce, wszystkie urządzenia:</strong> Android, iOS, komputer -
-							zainstaluj PWA i masz ikonę na ekranie głównym
+							<strong>Jedno miejsce, wszystkie urządzenia:</strong> Android, iOS,
+							komputer - zainstaluj PWA i masz ikonę na ekranie głównym
 						</span>
 					</li>
 					<li className="flex gap-3">
 						<span>
-							<strong>Szybsze aktualizacje:</strong> Poprawki wchodzą od razu, nie czekasz na sklep
-							Google Play
+							<strong>Szybsze aktualizacje:</strong> Poprawki wchodzą od razu, nie
+							czekasz na sklep Google Play
 						</span>
 					</li>
 					<li className="flex gap-3">
 						<span>
-							<strong>Automatyczna synchronizacja:</strong> Zmiany w rozkładach pojawiają się u
-							wszystkich natychmiast
+							<strong>Automatyczna synchronizacja:</strong> Zmiany w rozkładach
+							pojawiają się u wszystkich natychmiast
 						</span>
 					</li>
 				</ul>

@@ -172,7 +172,9 @@ export async function submitSchedule(
 				offset_minutes: 0,
 			}));
 
-			const { error: routeStopsError } = await supabase.from("route_stops").insert(routeStopsData);
+			const { error: routeStopsError } = await supabase
+				.from("route_stops")
+				.insert(routeStopsData);
 
 			if (routeStopsError) {
 				throw new Error(`Błąd tworzenia trasy: ${routeStopsError.message}`);
