@@ -7,7 +7,12 @@ import PageWrapper from "@/components/PageWrapper";
 import ReportModal from "@/components/ReportModal";
 import { useScheduleDetails } from "@/lib/db/hooks";
 import { getTodayHolidayInfo } from "@/lib/holidays";
-import { getUserVote, voteOnSchedule, removeVote } from "@/lib/supabase/queries";
+import {
+	getUserVote,
+	voteOnSchedule,
+	removeVote,
+	getScheduleNetScore,
+} from "@/lib/supabase/queries";
 import { createClient } from "@/lib/supabase/client";
 import { submitReport } from "@/lib/supabase/mutations";
 import { User } from "@supabase/supabase-js";
@@ -47,19 +52,22 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 	const [voteLoading, setVoteLoading] = useState(false);
 	const [showReportModal, setShowReportModal] = useState(false);
 
-	// Auth and load existing vote
+	// Auth and load existing vote with fresh score
 	useEffect(() => {
 		const supabase = createClient();
 		supabase.auth.getSession().then(({ data: { session } }) => {
 			setUser(session?.user ?? null);
 
-			// Load existing vote if logged in
 			if (session?.user) {
-				getUserVote(scheduleId).then((vote) => {
-					if (vote) {
-						setVoteState(vote.vote_type === "positive" ? "up" : "down");
+				// Fetch vote and fresh score from Supabase
+				Promise.all([getUserVote(scheduleId), getScheduleNetScore(scheduleId)]).then(
+					([vote, netScore]) => {
+						setLocalScore(netScore);
+						if (vote) {
+							setVoteState(vote.vote_type === "positive" ? "up" : "down");
+						}
 					}
-				});
+				);
 			}
 		});
 	}, [scheduleId]);

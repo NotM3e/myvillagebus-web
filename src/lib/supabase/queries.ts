@@ -451,3 +451,19 @@ export async function searchStops(query: string, limit: number = 10) {
 
 	return data ?? [];
 }
+
+// ============================================================
+// SCHEDULE SCORE (fresh from Supabase)
+// ============================================================
+
+export async function getScheduleNetScore(scheduleId: string): Promise<number> {
+	const supabase = createClient();
+
+	const { data } = await supabase
+		.from("verification_stats_view")
+		.select("net_score")
+		.eq("schedule_id", scheduleId)
+		.single();
+
+	return data?.net_score ?? 0;
+}

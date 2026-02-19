@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import type { OfflineScheduleWithDetails } from "@/lib/db/hooks";
+import { db } from "@/lib/db";
 import { getTodayHolidayInfo } from "@/lib/holidays";
 import { getUserVote, voteOnSchedule, removeVote } from "@/lib/supabase/queries";
 import { createClient } from "@/lib/supabase/client";
@@ -89,8 +90,12 @@ export default function OfflineScheduleCard({
 				// Remove vote
 				const result = await removeVote(schedule.id);
 				if (result.success) {
+					const scoreDiff = vote === "up" ? -1 : 1;
+					const newScore = localScore + scoreDiff;
 					setVoteState("none");
-					setLocalScore(schedule.netScore);
+					setLocalScore(newScore);
+					// Update IndexedDB for future loads
+					db.schedules.update(schedule.id, { netScore: newScore }).catch(console.error);
 				}
 			} else {
 				// Add or change vote
@@ -98,8 +103,11 @@ export default function OfflineScheduleCard({
 				const result = await voteOnSchedule(schedule.id, voteType);
 				if (result.success) {
 					const scoreDiff = voteState === "none" ? 1 : 2;
+					const newScore = localScore + (vote === "up" ? scoreDiff : -scoreDiff);
 					setVoteState(vote);
-					setLocalScore((prev) => (vote === "up" ? prev + scoreDiff : prev - scoreDiff));
+					setLocalScore(newScore);
+					// Update IndexedDB for future loads
+					db.schedules.update(schedule.id, { netScore: newScore }).catch(console.error);
 				}
 			}
 		} catch (err) {
