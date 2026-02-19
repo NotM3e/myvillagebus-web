@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import type { OfflineScheduleWithDetails } from "@/lib/db/hooks";
 import { getTodayHolidayInfo } from "@/lib/holidays";
+import { getUserVote, voteOnSchedule, removeVote } from "@/lib/supabase/queries";
 import { createClient } from "@/lib/supabase/client";
 import { submitReport } from "@/lib/supabase/mutations";
 import { User } from "@supabase/supabase-js";
@@ -37,15 +38,25 @@ export default function OfflineScheduleCard({
 	const [user, setUser] = useState<User | null>(null);
 	const [voteState, setVoteState] = useState<VoteState>("none");
 	const [localScore, setLocalScore] = useState(schedule.netScore);
+	const [voteLoading, setVoteLoading] = useState(false);
 	const [showReportModal, setShowReportModal] = useState(false);
 
-	// Check auth status
+	// Check auth status and load existing vote
 	useEffect(() => {
 		const supabase = createClient();
 		supabase.auth.getSession().then(({ data: { session } }) => {
 			setUser(session?.user ?? null);
+
+			// Load existing vote if logged in
+			if (session?.user) {
+				getUserVote(schedule.id).then((vote) => {
+					if (vote) {
+						setVoteState(vote.vote_type === "positive" ? "up" : "down");
+					}
+				});
+			}
 		});
-	}, []);
+	}, [schedule.id]);
 
 	// Holiday warning
 	const holidayInfo = getTodayHolidayInfo();
@@ -61,28 +72,41 @@ export default function OfflineScheduleCard({
 		? `/app/schedule/${schedule.id}?fromStopId=${fromStopId}`
 		: `/app/schedule/${schedule.id}`;
 
-	const handleVote = (vote: "up" | "down", e: React.MouseEvent) => {
-		e.preventDefault(); // Prevent Link navigation
+	const handleVote = async (vote: "up" | "down", e: React.MouseEvent) => {
+		e.preventDefault();
 		e.stopPropagation();
 
 		if (!user) {
-			// TODO: Show login prompt
 			alert("Zaloguj się, aby głosować");
 			return;
 		}
 
-		if (voteState === vote) {
-			// Remove vote
-			setVoteState("none");
-			setLocalScore(schedule.netScore);
-		} else {
-			// Change vote
-			const scoreDiff = voteState === "none" ? 1 : 2;
-			setVoteState(vote);
-			setLocalScore((prev) => (vote === "up" ? prev + scoreDiff : prev - scoreDiff));
-		}
+		if (voteLoading) return;
+		setVoteLoading(true);
 
-		// TODO: Sync vote to Supabase
+		try {
+			if (voteState === vote) {
+				// Remove vote
+				const result = await removeVote(schedule.id);
+				if (result.success) {
+					setVoteState("none");
+					setLocalScore(schedule.netScore);
+				}
+			} else {
+				// Add or change vote
+				const voteType = vote === "up" ? "positive" : "negative";
+				const result = await voteOnSchedule(schedule.id, voteType);
+				if (result.success) {
+					const scoreDiff = voteState === "none" ? 1 : 2;
+					setVoteState(vote);
+					setLocalScore((prev) => (vote === "up" ? prev + scoreDiff : prev - scoreDiff));
+				}
+			}
+		} catch (err) {
+			console.error("Vote error:", err);
+		} finally {
+			setVoteLoading(false);
+		}
 	};
 
 	const handleReportClick = (e: React.MouseEvent) => {
@@ -261,7 +285,8 @@ export default function OfflineScheduleCard({
 							{/* Upvote */}
 							<button
 								onClick={(e) => handleVote("up", e)}
-								className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+								disabled={voteLoading}
+								className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors disabled:opacity-50"
 								title="Aktualny"
 							>
 								{voteState === "up" ? (
@@ -281,7 +306,8 @@ export default function OfflineScheduleCard({
 							{/* Downvote */}
 							<button
 								onClick={(e) => handleVote("down", e)}
-								className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+								disabled={voteLoading}
+								className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors disabled:opacity-50"
 								title="Nieaktualny"
 							>
 								{voteState === "down" ? (

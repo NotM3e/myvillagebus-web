@@ -7,6 +7,7 @@ import PageWrapper from "@/components/PageWrapper";
 import ReportModal from "@/components/ReportModal";
 import { useScheduleDetails } from "@/lib/db/hooks";
 import { getTodayHolidayInfo } from "@/lib/holidays";
+import { getUserVote, voteOnSchedule, removeVote } from "@/lib/supabase/queries";
 import { createClient } from "@/lib/supabase/client";
 import { submitReport } from "@/lib/supabase/mutations";
 import { User } from "@supabase/supabase-js";
@@ -43,15 +44,25 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 	const [user, setUser] = useState<User | null>(null);
 	const [voteState, setVoteState] = useState<VoteState>("none");
 	const [localScore, setLocalScore] = useState(0);
+	const [voteLoading, setVoteLoading] = useState(false);
 	const [showReportModal, setShowReportModal] = useState(false);
 
-	// Auth
+	// Auth and load existing vote
 	useEffect(() => {
 		const supabase = createClient();
 		supabase.auth.getSession().then(({ data: { session } }) => {
 			setUser(session?.user ?? null);
+
+			// Load existing vote if logged in
+			if (session?.user) {
+				getUserVote(scheduleId).then((vote) => {
+					if (vote) {
+						setVoteState(vote.vote_type === "positive" ? "up" : "down");
+					}
+				});
+			}
 		});
-	}, []);
+	}, [scheduleId]);
 
 	// Sync localScore when schedule loads
 	useEffect(() => {
@@ -100,24 +111,38 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 	const status = getStatusStyle();
 
 	// Voting handlers
-	const handleVote = (vote: "up" | "down") => {
+	const handleVote = async (vote: "up" | "down") => {
 		if (!user) {
 			alert("Zaloguj się, aby głosować");
 			return;
 		}
 
-		if (!schedule) return;
+		if (!schedule || voteLoading) return;
+		setVoteLoading(true);
 
-		if (voteState === vote) {
-			setVoteState("none");
-			setLocalScore(schedule.netScore);
-		} else {
-			const scoreDiff = voteState === "none" ? 1 : 2;
-			setVoteState(vote);
-			setLocalScore((prev) => (vote === "up" ? prev + scoreDiff : prev - scoreDiff));
+		try {
+			if (voteState === vote) {
+				// Remove vote
+				const result = await removeVote(scheduleId);
+				if (result.success) {
+					setVoteState("none");
+					setLocalScore(schedule.netScore);
+				}
+			} else {
+				// Add or change vote
+				const voteType = vote === "up" ? "positive" : "negative";
+				const result = await voteOnSchedule(scheduleId, voteType);
+				if (result.success) {
+					const scoreDiff = voteState === "none" ? 1 : 2;
+					setVoteState(vote);
+					setLocalScore((prev) => (vote === "up" ? prev + scoreDiff : prev - scoreDiff));
+				}
+			}
+		} catch (err) {
+			console.error("Vote error:", err);
+		} finally {
+			setVoteLoading(false);
 		}
-
-		// TODO: Sync vote to Supabase
 	};
 
 	const handleReport = () => {
@@ -432,7 +457,8 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 						{/* Upvote */}
 						<button
 							onClick={() => handleVote("up")}
-							className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+							disabled={voteLoading}
+							className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors disabled:opacity-50"
 							title="Aktualny"
 						>
 							{voteState === "up" ? (
@@ -452,7 +478,8 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 						{/* Downvote */}
 						<button
 							onClick={() => handleVote("down")}
-							className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+							disabled={voteLoading}
+							className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors disabled:opacity-50"
 							title="Nieaktualny"
 						>
 							{voteState === "down" ? (
