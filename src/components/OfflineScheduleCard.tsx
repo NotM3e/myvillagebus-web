@@ -155,7 +155,7 @@ export default function OfflineScheduleCard({
 	return (
 		<>
 			<div
-				className="md-card md-elevation-1 mb-4 border-l-4 overflow-hidden"
+				className="md-card md-elevation-1 mb-4 border-l- overflow-hidden"
 				style={{ borderLeftColor: status.borderColor }}
 			>
 				{/* Clickable area - Header + Body */}
@@ -198,21 +198,24 @@ export default function OfflineScheduleCard({
 						</div>
 					</div>
 
-					{/* Direction */}
-					<p className="md-body-large mt-3 mb-2">{schedule.direction}</p>
+					{/* Seletion*/}
+					<div className="flex items-center">
+						{/* Direction */}
+						<p className="flex-1 md-body-large mt-3 mb-2">{schedule.direction}</p>
 
-					{/* Status badge */}
-					<div className="flex items-center gap-2 mb-2">
-						<span
-							className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs"
-							style={{
-								backgroundColor: status.badgeBg,
-								color: status.badgeText,
-							}}
-						>
-							{status.icon}
-							{status.label}
-						</span>
+						{/* Status badge */}
+						<div className="flex items-center gap-2">
+							<span
+								className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs"
+								style={{
+									backgroundColor: status.badgeBg,
+									color: status.badgeText,
+								}}
+							>
+								{status.icon}
+								{status.label}
+							</span>
+						</div>
 					</div>
 
 					{/* Holiday warning */}
@@ -229,35 +232,11 @@ export default function OfflineScheduleCard({
 							</p>
 						</div>
 					)}
-
-					{/* Operation note */}
-					{schedule.lineOperationNote && (
-						<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-2 italic">
-							{schedule.lineOperationNote}
-						</p>
-					)}
-
-					{/* Days */}
-					<div className="flex flex-wrap gap-1">
-						{schedule.days.map((day) => (
-							<span
-								key={day}
-								className="px-2 py-1 text-xs rounded-full bg-[var(--md-sys-color-secondary-container)] text-[var(--md-sys-color-on-secondary-container)]"
-							>
-								{day}
-							</span>
-						))}
-						{schedule.excludesHolidays && (
-							<span className="px-2 py-1 text-xs rounded-full bg-[var(--md-sys-color-error-container)] text-[var(--md-sys-color-on-error-container)]">
-								bez świąt
-							</span>
-						)}
-					</div>
 				</Link>
 
 				{/* Footer: Score + Actions - NOT clickable for navigation */}
-				<div className="px-4 pb-4 pt-2">
-					<div className="flex items-center justify-between pt-2 border-t border-[var(--md-sys-color-outline-variant)]">
+				<div className="px-4">
+					<div className="flex items-center justify-between border-t border-[var(--md-sys-color-outline-variant)]">
 						{/* Score */}
 						<div className="flex items-center gap-1">
 							<span
