@@ -130,8 +130,14 @@ export default function OfflineScheduleCard({
 	};
 
 	const handleReportSubmit = async (data: {
-		reasonId: string;
-		type: "data_error" | "trolling";
+		reason:
+			| "OUTDATED"
+			| "WRONG_TIME"
+			| "WRONG_ROUTE"
+			| "NOT_EXIST"
+			| "VANDALISM"
+			| "DUPLICATE"
+			| "OTHER";
 		comment: string;
 	}) => {
 		if (!user) throw new Error("Nie zalogowano");
@@ -139,8 +145,7 @@ export default function OfflineScheduleCard({
 		const result = await submitReport(
 			{
 				scheduleId: schedule.id,
-				reasonId: data.reasonId,
-				type: data.type,
+				reason: data.reason,
 				comment: data.comment,
 			},
 			user.id

@@ -6,19 +6,29 @@ import FlagIcon from "@mui/icons-material/Flag";
 import SendIcon from "@mui/icons-material/Send";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
-export interface ReportReason {
-	id: string;
+export type ReportReasonType =
+	| "OUTDATED"
+	| "WRONG_TIME"
+	| "WRONG_ROUTE"
+	| "NOT_EXIST"
+	| "VANDALISM"
+	| "DUPLICATE"
+	| "OTHER";
+
+export interface ReportReasonOption {
+	value: ReportReasonType;
 	label: string;
-	type: "data_error" | "trolling";
+	priority: "critical" | "high" | "standard";
 }
 
-const REPORT_REASONS: ReportReason[] = [
-	{ id: "outdated", label: "Nieaktualny rozkład", type: "data_error" },
-	{ id: "wrong_time", label: "Błędna godzina", type: "data_error" },
-	{ id: "wrong_route", label: "Błędna trasa", type: "data_error" },
-	{ id: "not_exists", label: "Przejazd nie istnieje", type: "data_error" },
-	{ id: "trolling", label: "Trolling / Wandalizm", type: "trolling" },
-	{ id: "other", label: "Duplikat / Inny", type: "data_error" },
+const REPORT_REASONS: ReportReasonOption[] = [
+	{ value: "OUTDATED", label: "Nieaktualny rozkład", priority: "standard" },
+	{ value: "WRONG_TIME", label: "Błędna godzina", priority: "high" },
+	{ value: "WRONG_ROUTE", label: "Błędna trasa", priority: "high" },
+	{ value: "NOT_EXIST", label: "Przejazd nie istnieje", priority: "critical" },
+	{ value: "VANDALISM", label: "Trolling / Wandalizm", priority: "critical" },
+	{ value: "DUPLICATE", label: "Duplikat", priority: "standard" },
+	{ value: "OTHER", label: "Inny problem", priority: "standard" },
 ];
 
 interface ReportModalProps {
@@ -26,11 +36,7 @@ interface ReportModalProps {
 	onClose: () => void;
 	scheduleId: string;
 	scheduleName?: string;
-	onSubmit: (data: {
-		reasonId: string;
-		type: "data_error" | "trolling";
-		comment: string;
-	}) => Promise<void>;
+	onSubmit: (data: { reason: ReportReasonType; comment: string }) => Promise<void>;
 }
 
 export default function ReportModal({
@@ -40,7 +46,7 @@ export default function ReportModal({
 	scheduleName,
 	onSubmit,
 }: ReportModalProps) {
-	const [selectedReason, setSelectedReason] = useState<ReportReason | null>(null);
+	const [selectedReason, setSelectedReason] = useState<ReportReasonOption | null>(null);
 	const [comment, setComment] = useState("");
 	const [submitting, setSubmitting] = useState(false);
 	const [submitted, setSubmitted] = useState(false);
@@ -56,8 +62,7 @@ export default function ReportModal({
 
 		try {
 			await onSubmit({
-				reasonId: selectedReason.id,
-				type: selectedReason.type,
+				reason: selectedReason.value,
 				comment: comment.trim(),
 			});
 			setSubmitted(true);
@@ -147,16 +152,16 @@ export default function ReportModal({
 
 								<div className="grid grid-cols-2 gap-2 mb-4">
 									{REPORT_REASONS.map((reason) => {
-										const isSelected = selectedReason?.id === reason.id;
-										const isTrolling = reason.type === "trolling";
+										const isSelected = selectedReason?.value === reason.value;
+										const isCritical = reason.priority === "critical";
 
 										return (
 											<button
-												key={reason.id}
+												key={reason.value}
 												onClick={() => setSelectedReason(reason)}
 												className={`p-3 rounded-xl text-left transition-colors border-2 ${
 													isSelected
-														? isTrolling
+														? isCritical
 															? "border-[var(--md-sys-color-error)] bg-[var(--md-sys-color-error-container)]"
 															: "border-[var(--md-sys-color-primary)] bg-[var(--md-sys-color-primary-container)]"
 														: "border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface-variant)]"
@@ -165,7 +170,7 @@ export default function ReportModal({
 												<span
 													className={`md-body-medium ${
 														isSelected
-															? isTrolling
+															? isCritical
 																? "text-[var(--md-sys-color-on-error-container)]"
 																: "text-[var(--md-sys-color-on-primary-container)]"
 															: "text-[var(--md-sys-color-on-surface)]"
@@ -185,7 +190,7 @@ export default function ReportModal({
 											htmlFor="report-comment"
 											className="md-label-large text-[var(--md-sys-color-on-surface-variant)]"
 										>
-											Dodatkowy opis (opcjonalnie)
+											Dodatkowy opis
 										</label>
 										<span
 											className={`md-body-small ${

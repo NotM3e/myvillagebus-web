@@ -208,8 +208,14 @@ export async function submitSchedule(
 
 export interface SubmitReportData {
 	scheduleId: string;
-	reasonId: string;
-	type: "data_error" | "trolling";
+	reason:
+		| "OUTDATED"
+		| "WRONG_TIME"
+		| "WRONG_ROUTE"
+		| "NOT_EXIST"
+		| "VANDALISM"
+		| "DUPLICATE"
+		| "OTHER";
 	comment: string;
 }
 
@@ -221,10 +227,10 @@ export async function submitReport(
 
 	try {
 		const { error } = await supabase.from("reports").insert({
-			type: data.type,
+			reason: data.reason,
 			schedule_id: data.scheduleId,
 			reporter_id: userId,
-			description: data.comment || `[${data.reasonId}]`,
+			description: data.comment || null,
 			status: "pending",
 		});
 
