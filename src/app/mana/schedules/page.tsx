@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { logAuditEvent } from "@/lib/supabase/audit";
+import ScheduleCompare from "@/components/manage/ScheduleCompare";
 import Link from "next/link";
 
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -47,6 +48,7 @@ export default function ManaSchedulesPage() {
 	const [loading, setLoading] = useState(true);
 	const [filter, setFilter] = useState<ScheduleStatus | "all">("pending");
 	const [actionLoading, setActionLoading] = useState<string | null>(null);
+	const [compareSchedule, setCompareSchedule] = useState<PendingSchedule | null>(null);
 
 	const fetchSchedules = async () => {
 		setLoading(true);
@@ -290,9 +292,23 @@ export default function ManaSchedulesPage() {
 
 									{/* Actions */}
 									<div className="flex items-center gap-2">
+										{schedule.parent_id && schedule.status === "pending" && (
+											<button
+												onClick={() => setCompareSchedule(schedule)}
+												className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-tertiary-container)] transition-colors"
+												title="Porównaj wersje"
+											>
+												<CompareArrowsIcon
+													sx={{
+														fontSize: 20,
+														color: "var(--md-sys-color-tertiary)",
+													}}
+												/>
+											</button>
+										)}
+
 										<Link
-											href={`/app/schedule/${schedule.id}`}
-											target="_blank"
+											href={`/mana/schedules/${schedule.id}`}
 											className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
 											title="Podgląd"
 										>
@@ -350,6 +366,24 @@ export default function ManaSchedulesPage() {
 						);
 					})}
 				</div>
+			)}
+			{/* Compare Modal */}
+			{compareSchedule && compareSchedule.parent_id && (
+				<ScheduleCompare
+					isOpen={!!compareSchedule}
+					onClose={() => setCompareSchedule(null)}
+					currentId={compareSchedule.id}
+					parentId={compareSchedule.parent_id}
+					onApprove={async () => {
+						await handleApprove(compareSchedule.id, compareSchedule.parent_id);
+						setCompareSchedule(null);
+					}}
+					onReject={async () => {
+						await handleReject(compareSchedule.id);
+						setCompareSchedule(null);
+					}}
+					loading={actionLoading === compareSchedule.id}
+				/>
 			)}
 		</div>
 	);
