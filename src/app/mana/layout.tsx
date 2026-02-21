@@ -12,12 +12,14 @@ import PeopleIcon from "@mui/icons-material/People";
 import PlaceIcon from "@mui/icons-material/Place";
 import HistoryIcon from "@mui/icons-material/History";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ScheduleIcon from "@mui/icons-material/Schedule";
 
 const ALLOWED_ROLES: UserRole[] = ["admin", "super_editor"];
 
 const NAV_ITEMS = [
 	{ href: "/mana", label: "Dashboard", icon: DashboardIcon },
 	{ href: "/mana/reports", label: "Zgłoszenia", icon: ReportProblemIcon },
+	{ href: "/mana/schedules", label: "Moderacja", icon: ScheduleIcon },
 	{ href: "/mana/users", label: "Użytkownicy", icon: PeopleIcon },
 	{ href: "/mana/data", label: "Słowniki", icon: PlaceIcon },
 	{ href: "/mana/logs", label: "Logi", icon: HistoryIcon },

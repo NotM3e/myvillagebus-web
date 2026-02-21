@@ -7,9 +7,11 @@ import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import PeopleIcon from "@mui/icons-material/People";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import PlaceIcon from "@mui/icons-material/Place";
+import ScheduleIcon from "@mui/icons-material/Schedule";
 
 interface DashboardStats {
 	pendingReports: number;
+	pendingSchedules: number;
 	totalUsers: number;
 	totalSchedules: number;
 	totalStops: number;
@@ -23,15 +25,24 @@ export default function ManaDashboard() {
 		const fetchStats = async () => {
 			const supabase = createClient();
 
-			const [reportsRes, usersRes, schedulesRes, stopsRes] = await Promise.all([
-				supabase.from("reports").select("id", { count: "exact" }).eq("status", "pending"),
-				supabase.from("profiles").select("id", { count: "exact" }),
-				supabase.from("schedules").select("id", { count: "exact" }),
-				supabase.from("stops").select("id", { count: "exact" }),
-			]);
+			const [reportsRes, usersRes, schedulesRes, pendingSchedulesRes, stopsRes] =
+				await Promise.all([
+					supabase
+						.from("reports")
+						.select("id", { count: "exact" })
+						.eq("status", "pending"),
+					supabase.from("profiles").select("id", { count: "exact" }),
+					supabase.from("schedules").select("id", { count: "exact" }),
+					supabase
+						.from("schedules")
+						.select("id", { count: "exact" })
+						.eq("status", "pending"),
+					supabase.from("stops").select("id", { count: "exact" }),
+				]);
 
 			setStats({
 				pendingReports: reportsRes.count ?? 0,
+				pendingSchedules: pendingSchedulesRes.count ?? 0,
 				totalUsers: usersRes.count ?? 0,
 				totalSchedules: schedulesRes.count ?? 0,
 				totalStops: stopsRes.count ?? 0,
@@ -59,6 +70,15 @@ export default function ManaDashboard() {
 				? "var(--md-sys-color-error)"
 				: "var(--md-sys-color-primary)",
 			href: "/mana/reports",
+		},
+		{
+			label: "Oczekujące rozkłady",
+			value: stats?.pendingSchedules ?? 0,
+			icon: ScheduleIcon,
+			color: stats?.pendingSchedules
+				? "var(--md-sys-color-tertiary)"
+				: "var(--md-sys-color-primary)",
+			href: "/mana/schedules",
 		},
 		{
 			label: "Użytkownicy",
