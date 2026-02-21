@@ -69,7 +69,7 @@ export default function ManaDashboard() {
 			color: stats?.pendingReports
 				? "var(--md-sys-color-error)"
 				: "var(--md-sys-color-primary)",
-			href: "/mana/reports",
+			href: "/manage/reports",
 		},
 		{
 			label: "Oczekujące rozkłady",
@@ -78,14 +78,14 @@ export default function ManaDashboard() {
 			color: stats?.pendingSchedules
 				? "var(--md-sys-color-tertiary)"
 				: "var(--md-sys-color-primary)",
-			href: "/mana/schedules",
+			href: "/manage/schedules",
 		},
 		{
 			label: "Użytkownicy",
 			value: stats?.totalUsers ?? 0,
 			icon: PeopleIcon,
 			color: "var(--md-sys-color-secondary)",
-			href: "/mana/users",
+			href: "/manage/users",
 		},
 		{
 			label: "Rozkłady",
@@ -99,7 +99,7 @@ export default function ManaDashboard() {
 			value: stats?.totalStops ?? 0,
 			icon: PlaceIcon,
 			color: "var(--md-sys-color-primary)",
-			href: "/mana/data",
+			href: "/manage/data",
 		},
 	];
 

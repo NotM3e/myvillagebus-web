@@ -308,7 +308,7 @@ export default function ManaSchedulesPage() {
 										)}
 
 										<Link
-											href={`/mana/schedules/${schedule.id}`}
+											href={`/manage/schedules/${schedule.id}`}
 											className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
 											title="Podgląd"
 										>

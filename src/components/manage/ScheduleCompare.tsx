@@ -113,9 +113,19 @@ export default function ScheduleCompare({
 					.eq("schedule_id", id)
 					.limit(1);
 
+				const lineData = Array.isArray(schedule.line) ? schedule.line[0] : schedule.line;
+				const carrierData = Array.isArray(lineData?.carrier)
+					? lineData.carrier[0]
+					: lineData?.carrier;
+
 				return {
 					...schedule,
-					line: Array.isArray(schedule.line) ? schedule.line[0] : schedule.line,
+					line: {
+						number: lineData?.number || "",
+						carrier: {
+							name: carrierData?.name || "",
+						},
+					},
 					stops: (routeStops || []).map((rs: any) => ({
 						...rs,
 						stop: Array.isArray(rs.stop) ? rs.stop[0] : rs.stop,

@@ -93,13 +93,32 @@ export default function ManaScheduleDetailPage({ params }: PageProps) {
 			}
 
 			// Normalize
-			const normalized = {
-				...scheduleData,
-				line: Array.isArray(scheduleData.line) ? scheduleData.line[0] : scheduleData.line,
+			const lineData = Array.isArray(scheduleData.line)
+				? scheduleData.line[0]
+				: scheduleData.line;
+			const carrierData = Array.isArray(lineData?.carrier)
+				? lineData.carrier[0]
+				: lineData?.carrier;
+
+			const normalized: ScheduleDetails = {
+				id: scheduleData.id,
+				direction: scheduleData.direction,
+				version: scheduleData.version,
+				status: scheduleData.status,
+				days: scheduleData.days,
+				excludes_holidays: scheduleData.excludes_holidays,
+				created_at: scheduleData.created_at,
+				line: {
+					number: lineData?.number || "",
+					carrier: {
+						name: carrierData?.name || "",
+						is_verified: carrierData?.is_verified || false,
+					},
+				},
 				creator: Array.isArray(scheduleData.creator)
 					? scheduleData.creator[0]
 					: scheduleData.creator,
-			} as ScheduleDetails;
+			};
 
 			setSchedule(normalized);
 
@@ -177,7 +196,7 @@ export default function ManaScheduleDetailPage({ params }: PageProps) {
 			<div>
 				<div className="flex items-center gap-4 mb-6">
 					<Link
-						href="/mana/schedules"
+						href="/manage/schedules"
 						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
 					>
 						<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
@@ -196,7 +215,7 @@ export default function ManaScheduleDetailPage({ params }: PageProps) {
 			<div>
 				<div className="flex items-center gap-4 mb-6">
 					<Link
-						href="/mana/schedules"
+						href="/manage/schedules"
 						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
 					>
 						<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
@@ -215,7 +234,7 @@ export default function ManaScheduleDetailPage({ params }: PageProps) {
 			{/* Header */}
 			<div className="flex items-center gap-4 mb-6">
 				<Link
-					href="/mana/schedules"
+					href="/manage/schedules"
 					className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
 				>
 					<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />

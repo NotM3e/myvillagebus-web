@@ -17,17 +17,17 @@ import ScheduleIcon from "@mui/icons-material/Schedule";
 const ALLOWED_ROLES: UserRole[] = ["admin", "super_editor"];
 
 const NAV_ITEMS = [
-	{ href: "/mana", label: "Dashboard", icon: DashboardIcon },
-	{ href: "/mana/reports", label: "Zgłoszenia", icon: ReportProblemIcon },
-	{ href: "/mana/schedules", label: "Moderacja", icon: ScheduleIcon },
-	{ href: "/mana/users", label: "Użytkownicy", icon: PeopleIcon },
-	{ href: "/mana/data", label: "Słowniki", icon: PlaceIcon },
-	{ href: "/mana/logs", label: "Logi", icon: HistoryIcon },
+	{ href: "/manage", label: "Dashboard", icon: DashboardIcon },
+	{ href: "/manage/reports", label: "Zgłoszenia", icon: ReportProblemIcon },
+	{ href: "/manage/schedules", label: "Rozkłady", icon: ScheduleIcon },
+	{ href: "/manage/users", label: "Użytkownicy", icon: PeopleIcon },
+	{ href: "/manage/data", label: "Słowniki", icon: PlaceIcon },
+	{ href: "/manage/logs", label: "Logi", icon: HistoryIcon },
 ];
 
 export default function ManaLayout({ children }: { children: React.ReactNode }) {
 	const [authorized, setAuthorized] = useState<boolean | null>(null);
-	const [currentPath, setCurrentPath] = useState("/mana");
+	const [currentPath, setCurrentPath] = useState("/manage");
 	const router = useRouter();
 
 	useEffect(() => {
