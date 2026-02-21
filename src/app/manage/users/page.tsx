@@ -15,6 +15,14 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 type UserRole = "viewer" | "contributor" | "trusted_editor" | "super_editor" | "admin";
+const ROLE_HIERARCHY: Record<UserRole, number> = {
+	viewer: 0,
+	contributor: 1,
+	trusted_editor: 2,
+	super_editor: 3,
+	admin: 4,
+};
+
 type UserStatus = "active" | "shadow_banned" | "banned";
 
 interface UserProfile {
@@ -65,6 +73,7 @@ export default function ManageUsersPage() {
 	const [statusFilter, setStatusFilter] = useState<UserStatus | "all">("all");
 	const [actionLoading, setActionLoading] = useState<string | null>(null);
 	const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+	const [currentUserRole, setCurrentUserRole] = useState<UserRole | null>(null);
 
 	const fetchUsers = async () => {
 		setLoading(true);
@@ -75,6 +84,15 @@ export default function ManageUsersPage() {
 			data: { user },
 		} = await supabase.auth.getUser();
 		setCurrentUserId(user?.id || null);
+
+		if (user) {
+			const { data: profile } = await supabase
+				.from("profiles")
+				.select("role")
+				.eq("id", user.id)
+				.single();
+			setCurrentUserRole((profile?.role as UserRole) || null);
+		}
 
 		let query = supabase.from("profiles").select("*").order("reputation", { ascending: false });
 
@@ -116,10 +134,23 @@ export default function ManageUsersPage() {
 			return;
 		}
 
+		// Tylko admin może zmieniać role
+		if (currentUserRole !== "admin") {
+			alert("Tylko administrator może zmieniać role użytkowników");
+			return;
+		}
+
+		const targetUser = users.find((u) => u.id === userId);
+		if (!targetUser) return;
+
+		// Nie można zmieniać roli użytkownikowi z wyższą lub równą rangą
+		if (ROLE_HIERARCHY[targetUser.role] >= ROLE_HIERARCHY[currentUserRole]) {
+			alert("Nie możesz zmienić roli użytkownikowi z wyższą lub równą rangą");
+			return;
+		}
+
 		setActionLoading(userId);
 		const supabase = createClient();
-
-		const oldUser = users.find((u) => u.id === userId);
 
 		const { error } = await supabase
 			.from("profiles")
@@ -131,7 +162,7 @@ export default function ManageUsersPage() {
 				action: "USER_ROLE_CHANGE",
 				targetTable: "profiles",
 				targetId: userId,
-				payload: { oldRole: oldUser?.role, newRole },
+				payload: { oldRole: targetUser.role, newRole },
 			});
 			fetchUsers();
 		}
@@ -142,6 +173,15 @@ export default function ManageUsersPage() {
 	const handleStatusChange = async (userId: string, newStatus: UserStatus) => {
 		if (userId === currentUserId) {
 			alert("Nie możesz zmienić własnego statusu");
+			return;
+		}
+
+		const targetUser = users.find((u) => u.id === userId);
+		if (!targetUser || !currentUserRole) return;
+
+		// Nie można banować użytkownika z wyższą lub równą rangą
+		if (ROLE_HIERARCHY[targetUser.role] >= ROLE_HIERARCHY[currentUserRole]) {
+			alert("Nie możesz zmienić statusu użytkownikowi z wyższą lub równą rangą");
 			return;
 		}
 
@@ -327,7 +367,13 @@ export default function ManageUsersPage() {
 													e.target.value as UserRole
 												)
 											}
-											disabled={isLoading || isSelf}
+											disabled={
+												isLoading ||
+												isSelf ||
+												currentUserRole !== "admin" ||
+												ROLE_HIERARCHY[user.role] >=
+													ROLE_HIERARCHY[currentUserRole || "viewer"]
+											}
 											className="px-3 py-2 rounded-lg bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] text-sm border-none focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)] disabled:opacity-50"
 										>
 											{ROLE_OPTIONS.map((role) => (
@@ -338,60 +384,66 @@ export default function ManageUsersPage() {
 										</select>
 
 										{/* Status buttons */}
-										{!isSelf && (
-											<>
-												{user.status === "active" ? (
-													<>
+										{!isSelf &&
+											currentUserRole &&
+											ROLE_HIERARCHY[user.role] <
+												ROLE_HIERARCHY[currentUserRole] && (
+												<>
+													{user.status === "active" ? (
+														<>
+															<button
+																onClick={() =>
+																	handleStatusChange(
+																		user.id,
+																		"shadow_banned"
+																	)
+																}
+																disabled={isLoading}
+																className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-tertiary-container)] transition-colors disabled:opacity-50"
+																title="Shadow Ban"
+															>
+																<VisibilityOffIcon
+																	sx={{
+																		fontSize: 20,
+																		color: "var(--md-sys-color-tertiary)",
+																	}}
+																/>
+															</button>
+															<button
+																onClick={() =>
+																	handleStatusChange(
+																		user.id,
+																		"banned"
+																	)
+																}
+																disabled={isLoading}
+																className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-error-container)] transition-colors disabled:opacity-50"
+																title="Ban"
+															>
+																<BlockIcon
+																	sx={{
+																		fontSize: 20,
+																		color: "var(--md-sys-color-error)",
+																	}}
+																/>
+															</button>
+														</>
+													) : (
 														<button
 															onClick={() =>
 																handleStatusChange(
 																	user.id,
-																	"shadow_banned"
+																	"active"
 																)
 															}
 															disabled={isLoading}
-															className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-tertiary-container)] transition-colors disabled:opacity-50"
-															title="Shadow Ban"
+															className="md-outlined-button text-sm disabled:opacity-50"
 														>
-															<VisibilityOffIcon
-																sx={{
-																	fontSize: 20,
-																	color: "var(--md-sys-color-tertiary)",
-																}}
-															/>
+															Odbanuj
 														</button>
-														<button
-															onClick={() =>
-																handleStatusChange(
-																	user.id,
-																	"banned"
-																)
-															}
-															disabled={isLoading}
-															className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-error-container)] transition-colors disabled:opacity-50"
-															title="Ban"
-														>
-															<BlockIcon
-																sx={{
-																	fontSize: 20,
-																	color: "var(--md-sys-color-error)",
-																}}
-															/>
-														</button>
-													</>
-												) : (
-													<button
-														onClick={() =>
-															handleStatusChange(user.id, "active")
-														}
-														disabled={isLoading}
-														className="md-outlined-button text-sm disabled:opacity-50"
-													>
-														Odbanuj
-													</button>
-												)}
-											</>
-										)}
+													)}
+												</>
+											)}
 
 										{/* Details link */}
 										<Link
