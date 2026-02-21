@@ -196,3 +196,32 @@ export interface ScheduleWithDetails extends ActiveScheduleView {
 	route_stops: RouteStopWithDetails[];
 	courses: Course[];
 }
+
+// ============================================================
+// AUDIT LOGS
+// ============================================================
+
+export type AuditAction =
+	| "REPORT_RESOLVE"
+	| "REPORT_DISMISS"
+	| "SCHEDULE_APPROVE"
+	| "SCHEDULE_REJECT"
+	| "SCHEDULE_ARCHIVE"
+	| "USER_ROLE_CHANGE"
+	| "USER_SHADOW_BAN"
+	| "USER_BAN"
+	| "USER_UNBAN"
+	| "STOP_MERGE"
+	| "STOP_VERIFY"
+	| "CARRIER_VERIFY"
+	| "SETTINGS_CHANGE";
+
+export interface AuditLog {
+	id: string;
+	user_id: string;
+	action: AuditAction;
+	target_table: string;
+	target_id: string | null;
+	payload: Record<string, unknown> | null;
+	created_at: string;
+}
