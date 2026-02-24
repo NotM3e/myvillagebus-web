@@ -12,7 +12,7 @@ export interface OfflineLine {
 	carrierId: string;
 	carrierName: string;
 	carrierLogo: string | null;
-	carrierVerified: boolean;
+	carrierStatus: "unverified" | "verified" | "partner";
 }
 
 // Rozkład (schedule) - uproszczony dla offline

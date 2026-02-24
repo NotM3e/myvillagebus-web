@@ -34,7 +34,7 @@ export async function downloadLine(lineId: string): Promise<{ success: boolean; 
 			carrierId: line.carrier.id,
 			carrierName: line.carrier.name,
 			carrierLogo: line.carrier.logo_url,
-			carrierVerified: line.carrier.is_verified,
+			carrierStatus: line.carrier.status,
 		};
 
 		const offlineSchedules: OfflineSchedule[] = schedules.map((s) => ({

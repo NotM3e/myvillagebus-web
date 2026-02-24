@@ -210,7 +210,7 @@ export interface LineFullData {
 			id: string;
 			name: string;
 			logo_url: string | null;
-			is_verified: boolean;
+			status: "unverified" | "verified" | "partner";
 		};
 	};
 	schedules: {
@@ -267,7 +267,7 @@ export async function getLineFullData(lineId: string): Promise<LineFullData | nu
       number,
       description,
       operation_note,
-      carrier:carriers(id, name, logo_url, is_verified)
+      carrier:carriers(id, name, logo_url, status)
     `
 		)
 		.eq("id", lineId)
@@ -397,7 +397,7 @@ export async function getAllLinesBasic() {
       id,
       number,
       description,
-      carrier:carriers(id, name, is_verified)
+      carrier:carriers(id, name, status)
     `
 		)
 		.order("number", { ascending: true });

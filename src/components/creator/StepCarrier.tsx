@@ -204,7 +204,7 @@ export default function StepCarrier({ data, updateData }: StepCarrierProps) {
 							<div className="flex-1">
 								<div className="flex items-center gap-2">
 									<p className="md-body-large">{carrier.name}</p>
-									{carrier.is_verified && (
+									{carrier.status !== "unverified" && (
 										<VerifiedIcon
 											sx={{
 												fontSize: 16,

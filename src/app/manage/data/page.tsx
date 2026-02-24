@@ -24,7 +24,7 @@ interface Stop {
 interface Carrier {
 	id: string;
 	name: string;
-	is_verified: boolean;
+	status: "unverified" | "verified" | "partner";
 	created_at: string;
 }
 
@@ -192,28 +192,6 @@ export default function ManageDataPage() {
 
 		fetchStops();
 		setSelectedStops(new Set());
-		setActionLoading(false);
-	};
-
-	const handleVerifyCarrier = async (carrierId: string, verified: boolean) => {
-		setActionLoading(true);
-		const supabase = createClient();
-
-		const { error } = await supabase
-			.from("carriers")
-			.update({ is_verified: verified })
-			.eq("id", carrierId);
-
-		if (!error) {
-			await logAuditEvent({
-				action: "CARRIER_VERIFY",
-				targetTable: "carriers",
-				targetId: carrierId,
-				payload: { is_verified: verified },
-			});
-			fetchCarriers();
-		}
-
 		setActionLoading(false);
 	};
 
@@ -406,7 +384,7 @@ export default function ManageDataPage() {
 								<div className="flex-1 min-w-0">
 									<div className="flex items-center gap-2">
 										<p className="md-title-medium truncate">{carrier.name}</p>
-										{carrier.is_verified && (
+										{carrier.status !== "unverified" && (
 											<VerifiedIcon
 												sx={{
 													fontSize: 16,
@@ -416,20 +394,6 @@ export default function ManageDataPage() {
 										)}
 									</div>
 								</div>
-
-								<button
-									onClick={() =>
-										handleVerifyCarrier(carrier.id, !carrier.is_verified)
-									}
-									disabled={actionLoading}
-									className={`px-4 py-2 rounded-lg text-sm transition-colors disabled:opacity-50 ${
-										carrier.is_verified
-											? "bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)]"
-											: "bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)]"
-									}`}
-								>
-									{carrier.is_verified ? "Usuń weryfikację" : "Weryfikuj"}
-								</button>
 							</div>
 						))
 					)}

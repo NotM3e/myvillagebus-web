@@ -6,6 +6,7 @@ export type ScheduleStatus = "pending" | "active" | "flagged" | "archived";
 export type UpdateType = "fix" | "season_change";
 export type UserRole = "viewer" | "contributor" | "trusted_editor" | "super_editor" | "admin";
 export type UserStatus = "active" | "shadow_banned" | "banned";
+export type CarrierStatus = "unverified" | "verified" | "partner";
 export type VoteType = "positive" | "negative";
 export type NegativeReason = "wrong_times" | "missing_stops" | "outdated" | "other";
 export type ReportType = "data_error" | "trolling";
@@ -38,7 +39,7 @@ export interface Carrier {
 	address: string | null;
 	contact: string | null;
 	cities_served: string[] | null;
-	is_verified: boolean;
+	status: CarrierStatus;
 	logo_url: string | null;
 	created_at: string;
 }
@@ -172,7 +173,7 @@ export interface ActiveScheduleView extends Schedule {
 	line_operation_note: string | null;
 	carrier_name: string;
 	carrier_logo: string | null;
-	carrier_verified: boolean;
+	carrier_status: CarrierStatus;
 	net_score: number;
 	first_departure: string | null;
 }

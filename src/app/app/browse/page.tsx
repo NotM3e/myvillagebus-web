@@ -22,7 +22,7 @@ interface CloudLine {
 	carrier: {
 		id: string;
 		name: string;
-		is_verified: boolean;
+		status: "unverified" | "verified" | "partner";
 	};
 }
 
@@ -119,14 +119,17 @@ export default function BrowsePage() {
 			const carrierName = line.carrierName;
 			if (!acc[carrierName]) {
 				acc[carrierName] = {
-					carrierVerified: line.carrierVerified,
+					carrierStatus: line.carrierStatus,
 					lines: [],
 				};
 			}
 			acc[carrierName].lines.push(line);
 			return acc;
 		},
-		{} as Record<string, { carrierVerified: boolean; lines: typeof downloadedLines }>
+		{} as Record<
+			string,
+			{ carrierStatus: "unverified" | "verified" | "partner"; lines: typeof downloadedLines }
+		>
 	);
 
 	// Sprawdz czy linia jest pobrana
@@ -250,7 +253,7 @@ export default function BrowsePage() {
 										{/* Carrier header */}
 										<div className="flex items-center gap-2 mb-3">
 											<h2 className="md-title-medium">{carrierName}</h2>
-											{carrier.is_verified && (
+											{carrier.status !== "unverified" && (
 												<VerifiedIcon
 													sx={{
 														fontSize: 16,
@@ -347,12 +350,12 @@ export default function BrowsePage() {
 					) : (
 						<div className="space-y-6">
 							{Object.entries(groupedDownloadedLines).map(
-								([carrierName, { carrierVerified, lines }]) => (
+								([carrierName, { carrierStatus, lines }]) => (
 									<div key={carrierName}>
 										{/* Carrier header */}
 										<div className="flex items-center gap-2 mb-3">
 											<h2 className="md-title-medium">{carrierName}</h2>
-											{carrierVerified && (
+											{carrierStatus !== "unverified" && (
 												<VerifiedIcon
 													sx={{
 														fontSize: 16,

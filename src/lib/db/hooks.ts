@@ -141,7 +141,7 @@ export interface OfflineScheduleWithDetails extends OfflineSchedule {
 	lineOperationNote: string | null;
 	carrierName: string;
 	carrierLogo: string | null;
-	carrierVerified: boolean;
+	carrierStatus: "unverified" | "verified" | "partner";
 }
 
 // ============================================================
@@ -199,7 +199,7 @@ export function useOfflineSchedules(options: UseOfflineSchedulesOptions = {}) {
 						lineOperationNote: line?.operationNote ?? null,
 						carrierName: line?.carrierName ?? "",
 						carrierLogo: line?.carrierLogo ?? null,
-						carrierVerified: line?.carrierVerified ?? false,
+						carrierStatus: line?.carrierStatus ?? "unverified",
 					};
 				}
 			);
@@ -264,7 +264,7 @@ export function useOfflineSchedules(options: UseOfflineSchedulesOptions = {}) {
 				lineOperationNote: line?.operationNote ?? null,
 				carrierName: line?.carrierName ?? "",
 				carrierLogo: line?.carrierLogo ?? null,
-				carrierVerified: line?.carrierVerified ?? false,
+				carrierStatus: line?.carrierStatus ?? "unverified",
 			};
 		});
 

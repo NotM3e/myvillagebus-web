@@ -210,7 +210,7 @@ export default function OfflineScheduleCard({
 						<div className="flex-1">
 							<div className="flex items-center gap-2">
 								<p className="md-title-medium">{schedule.carrierName}</p>
-								{schedule.carrierVerified && (
+								{schedule.carrierStatus !== "unverified" && (
 									<VerifiedIcon
 										sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }}
 									/>
