@@ -271,7 +271,7 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 					<div className="flex-1">
 						<div className="flex items-center gap-2">
 							<p className="md-title-medium">{line.carrierName}</p>
-							{line.carrierVerified && (
+							{line.carrierStatus !== "unverified" && (
 								<VerifiedIcon
 									sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }}
 								/>
