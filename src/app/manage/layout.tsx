@@ -82,9 +82,9 @@ export default function ManaLayout({ children }: { children: React.ReactNode }) 
 	}
 
 	return (
-		<div className="min-h-screen bg-[var(--md-sys-color-background)] flex">
+		<div className="h-screen bg-[var(--md-sys-color-background)] flex overflow-hidden">
 			{/* Sidebar */}
-			<aside className="w-64 bg-[var(--md-sys-color-surface)] border-r border-[var(--md-sys-color-outline-variant)] flex flex-col">
+			<aside className="w-64 h-full bg-[var(--md-sys-color-surface)] border-r border-[var(--md-sys-color-outline-variant)] flex flex-col shrink-0">
 				{/* Header */}
 				<div className="p-4 border-b border-[var(--md-sys-color-outline-variant)]">
 					<h1 className="md-title-large text-[var(--md-sys-color-primary)]">
@@ -93,7 +93,7 @@ export default function ManaLayout({ children }: { children: React.ReactNode }) 
 				</div>
 
 				{/* Navigation */}
-				<nav className="flex-1 p-2">
+				<nav className="flex-1 p-2 overflow-y-auto">
 					{NAV_ITEMS.map((item) => {
 						const Icon = item.icon;
 						const isActive = currentPath === item.href;
@@ -129,7 +129,7 @@ export default function ManaLayout({ children }: { children: React.ReactNode }) 
 			</aside>
 
 			{/* Main content */}
-			<main className="flex-1 p-6 overflow-auto">{children}</main>
+			<main className="flex-1 p-6 overflow-y-auto">{children}</main>
 		</div>
 	);
 }
