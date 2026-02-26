@@ -10,6 +10,7 @@ import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import MergeIcon from "@mui/icons-material/MergeType";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import StopDetailsModal from "@/components/manage/StopDetailsModal";
 
 type TabType = "stops" | "carriers";
 
@@ -43,6 +44,8 @@ export default function ManageDataPage() {
 
 	// Action state
 	const [actionLoading, setActionLoading] = useState(false);
+
+	const [selectedStop, setSelectedStop] = useState<Stop | null>(null);
 
 	const fetchStops = async () => {
 		setLoading(true);
@@ -195,6 +198,15 @@ export default function ManageDataPage() {
 		setActionLoading(false);
 	};
 
+	const handleStopModalClose = () => {
+		setSelectedStop(null);
+	};
+
+	const handleStopUpdate = () => {
+		fetchStops();
+		setSelectedStops(new Set());
+	};
+
 	return (
 		<div>
 			<h1 className="md-headline-medium mb-6">Słowniki danych</h1>
@@ -308,7 +320,7 @@ export default function ManageDataPage() {
 							return (
 								<div
 									key={stop.id}
-									onClick={() => toggleStopSelection(stop.id)}
+									onClick={() => setSelectedStop(stop)}
 									className={`md-card md-elevation-1 p-3 flex items-center gap-3 cursor-pointer transition-colors ${
 										isSelected
 											? "ring-2 ring-[var(--md-sys-color-primary)] bg-[var(--md-sys-color-primary-container)]"
@@ -317,7 +329,11 @@ export default function ManageDataPage() {
 								>
 									{/* Checkbox */}
 									<div
-										className={`w-6 h-6 rounded border-2 flex items-center justify-center ${
+										onClick={(e) => {
+											e.stopPropagation();
+											toggleStopSelection(stop.id);
+										}}
+										className={`w-6 h-6 rounded border-2 flex items-center justify-center cursor-pointer ${
 											isSelected
 												? "bg-[var(--md-sys-color-primary)] border-[var(--md-sys-color-primary)]"
 												: "border-[var(--md-sys-color-outline)]"
@@ -399,6 +415,13 @@ export default function ManageDataPage() {
 					)}
 				</div>
 			)}
+			{/* Stop Details Modal */}
+			<StopDetailsModal
+				isOpen={!!selectedStop}
+				onClose={handleStopModalClose}
+				stop={selectedStop}
+				onUpdate={handleStopUpdate}
+			/>
 		</div>
 	);
 }
