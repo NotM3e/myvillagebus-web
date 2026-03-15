@@ -11,6 +11,7 @@ import VerifiedIcon from "@mui/icons-material/Verified";
 import MergeIcon from "@mui/icons-material/MergeType";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import StopDetailsModal from "@/components/manage/StopDetailsModal";
+import CarrierDetailsModal from "@/components/manage/CarrierDetailsModal";
 
 type TabType = "stops" | "carriers";
 
@@ -25,6 +26,10 @@ interface Stop {
 interface Carrier {
 	id: string;
 	name: string;
+	address: string | null;
+	contact: string | null;
+	logo_url: string | null;
+	cities_served: string[] | null;
 	status: "unverified" | "verified" | "partner";
 	created_at: string;
 }
@@ -46,6 +51,7 @@ export default function ManageDataPage() {
 	const [actionLoading, setActionLoading] = useState(false);
 
 	const [selectedStop, setSelectedStop] = useState<Stop | null>(null);
+	const [selectedCarrier, setSelectedCarrier] = useState<Carrier | null>(null);
 
 	const fetchStops = async () => {
 		setLoading(true);
@@ -205,6 +211,14 @@ export default function ManageDataPage() {
 	const handleStopUpdate = () => {
 		fetchStops();
 		setSelectedStops(new Set());
+	};
+
+	const handleCarrierModalClose = () => {
+		setSelectedCarrier(null);
+	};
+
+	const handleCarrierUpdate = () => {
+		fetchCarriers();
 	};
 
 	return (
@@ -388,7 +402,8 @@ export default function ManageDataPage() {
 						filteredCarriers.map((carrier) => (
 							<div
 								key={carrier.id}
-								className="md-card md-elevation-1 p-4 flex items-center gap-4"
+								onClick={() => setSelectedCarrier(carrier)}
+								className="md-card md-elevation-1 p-4 flex items-center gap-4 cursor-pointer hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
 							>
 								<DirectionsBusIcon
 									sx={{
@@ -421,6 +436,13 @@ export default function ManageDataPage() {
 				onClose={handleStopModalClose}
 				stop={selectedStop}
 				onUpdate={handleStopUpdate}
+			/>
+
+			<CarrierDetailsModal
+				isOpen={!!selectedCarrier}
+				onClose={handleCarrierModalClose}
+				carrier={selectedCarrier}
+				onUpdate={handleCarrierUpdate}
 			/>
 		</div>
 	);
