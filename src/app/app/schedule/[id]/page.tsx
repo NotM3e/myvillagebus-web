@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import PageWrapper from "@/components/PageWrapper";
 import ReportModal from "@/components/ReportModal";
+import CarrierBadge from "@/components/CarrierBadge";
 import { useScheduleDetails } from "@/lib/db/hooks";
 import { getTodayHolidayInfo } from "@/lib/holidays";
 import {
@@ -271,11 +272,7 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 					<div className="flex-1">
 						<div className="flex items-center gap-2">
 							<p className="md-title-medium">{line.carrierName}</p>
-							{line.carrierStatus !== "unverified" && (
-								<VerifiedIcon
-									sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }}
-								/>
-							)}
+							<CarrierBadge status={line.carrierStatus} />
 						</div>
 						<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
 							Linia {line.number}
@@ -337,6 +334,11 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 						{line.operationNote}
 					</p>
 				)}
+
+				{/* Carrier status description */}
+				<div className="mt-3 pt-3 border-t border-[var(--md-sys-color-outline-variant)]">
+					<CarrierBadge status={line.carrierStatus} showLabel size="medium" />
+				</div>
 			</div>
 
 			{/* Route timeline */}
@@ -351,7 +353,7 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 
 						return (
 							<div
-								key={stop.id}
+								key={`${stop.id}-${index}`}
 								className={`relative flex items-start gap-3 ${!isLast ? "pb-6" : ""}`}
 							>
 								{/* Timeline line */}

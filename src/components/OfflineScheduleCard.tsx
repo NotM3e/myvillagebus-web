@@ -10,6 +10,7 @@ import { createClient } from "@/lib/supabase/client";
 import { submitReport } from "@/lib/supabase/mutations";
 import { User } from "@supabase/supabase-js";
 import ReportModal from "./ReportModal";
+import CarrierBadge from "./CarrierBadge";
 
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -210,11 +211,7 @@ export default function OfflineScheduleCard({
 						<div className="flex-1">
 							<div className="flex items-center gap-2">
 								<p className="md-title-medium">{schedule.carrierName}</p>
-								{schedule.carrierStatus !== "unverified" && (
-									<VerifiedIcon
-										sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }}
-									/>
-								)}
+								<CarrierBadge status={schedule.carrierStatus} />
 							</div>
 							<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
 								Linia {schedule.lineNumber}
