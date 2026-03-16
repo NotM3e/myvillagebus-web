@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import CarrierBadge from "@/components/CarrierBadge";
 import { createClient } from "@/lib/supabase/client";
 import { logAuditEvent } from "@/lib/supabase/audit";
 
@@ -415,14 +416,7 @@ export default function ManageDataPage() {
 								<div className="flex-1 min-w-0">
 									<div className="flex items-center gap-2">
 										<p className="md-title-medium truncate">{carrier.name}</p>
-										{carrier.status !== "unverified" && (
-											<VerifiedIcon
-												sx={{
-													fontSize: 16,
-													color: "var(--md-sys-color-primary)",
-												}}
-											/>
-										)}
+										<CarrierBadge status={carrier.status} />
 									</div>
 								</div>
 							</div>

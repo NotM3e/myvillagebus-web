@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from "react";
 import PageWrapper from "@/components/PageWrapper";
+import CarrierBadge from "@/components/CarrierBadge";
 import { useDownloadedLines, useAllSyncMeta } from "@/lib/db/hooks";
 import { downloadLine, deleteLine } from "@/lib/db/sync";
 import { getAllLinesBasic } from "@/lib/supabase/queries";
+
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SearchIcon from "@mui/icons-material/Search";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
@@ -253,14 +255,7 @@ export default function BrowsePage() {
 										{/* Carrier header */}
 										<div className="flex items-center gap-2 mb-3">
 											<h2 className="md-title-medium">{carrierName}</h2>
-											{carrier.status !== "unverified" && (
-												<VerifiedIcon
-													sx={{
-														fontSize: 16,
-														color: "var(--md-sys-color-primary)",
-													}}
-												/>
-											)}
+											<CarrierBadge status={carrier.status} />
 										</div>
 
 										{/* Lines */}
@@ -355,14 +350,7 @@ export default function BrowsePage() {
 										{/* Carrier header */}
 										<div className="flex items-center gap-2 mb-3">
 											<h2 className="md-title-medium">{carrierName}</h2>
-											{carrierStatus !== "unverified" && (
-												<VerifiedIcon
-													sx={{
-														fontSize: 16,
-														color: "var(--md-sys-color-primary)",
-													}}
-												/>
-											)}
+											<CarrierBadge status={carrierStatus} />
 										</div>
 
 										{/* Lines */}

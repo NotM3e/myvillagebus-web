@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import CarrierBadge from "@/components/CarrierBadge";
 import { getCarriers } from "@/lib/supabase/queries";
 import type { Carrier } from "@/types/database";
 import type { CreatorData } from "./ScheduleCreator";
+
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import BusinessIcon from "@mui/icons-material/Business";
@@ -204,14 +206,7 @@ export default function StepCarrier({ data, updateData }: StepCarrierProps) {
 							<div className="flex-1">
 								<div className="flex items-center gap-2">
 									<p className="md-body-large">{carrier.name}</p>
-									{carrier.status !== "unverified" && (
-										<VerifiedIcon
-											sx={{
-												fontSize: 16,
-												color: "var(--md-sys-color-primary)",
-											}}
-										/>
-									)}
+									<CarrierBadge status={carrier.status} />
 								</div>
 							</div>
 						</button>
