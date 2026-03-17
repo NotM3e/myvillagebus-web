@@ -2,9 +2,15 @@
 
 ## Git Commits
 
-- Krótki opis po angielsku, bez prefixów (feat:/fix:)
-- Poziom B1+
-- Przykład: "Add user management to admin panel"
+Format: krótki opis po angielsku, bez prefixów (feat:/fix:), poziom B1+
+
+Przykład:
+```bash
+git commit -m "Add carrier details modal for admin panel" -m "- Edit carrier name, address, contact
+- Three-level status selector
+- Sync Cities button
+- Audit logging"
+```
 
 ## Komentarze w kodzie
 
@@ -19,6 +25,8 @@
 
 ## Nazewnictwo
 
-- camelCase dla zmiennych/funkcji
-- PascalCase dla komponentów
-- snake_case dla kolumn w bazie (Supabase convention)
+Zmienne, funkcje - camelCase
+Komponenty React - PascalCase
+Kolumny w bazie - snake_case
+Pliki komponentów - PascalCase.tsx
+Pliki lib/hooks - camelCase.ts

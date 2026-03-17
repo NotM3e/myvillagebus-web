@@ -14,6 +14,7 @@
     - Zarządzanie rozkładami (approve/reject/compare)
     - Zarządzanie użytkownikami (role, bany)
     - Słowniki (przystanki + przewoźnicy z modalami)
+    - Audit Trail Viewer (filtrowanie, paginacja, payload explorer)
 - 3-stopniowy status przewoźników (unverified/verified/partner)
 - CarrierBadge z ikonami
 
@@ -22,7 +23,7 @@
 - Edycja rozkładów (nie w MVP)
 - Kalendarz (sezonowość)
 - System reputacji (user_activities)
-- Audit Trail Viewer (/manage/logs)
+
 - Kartoteka użytkownika (/manage/users/[id])
 
 ## Opcjonalne rozbudowy
