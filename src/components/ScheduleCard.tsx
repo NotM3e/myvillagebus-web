@@ -28,7 +28,7 @@ export default function ScheduleCard({ schedule }: ScheduleCardProps) {
 				<div className="flex-1">
 					<div className="flex items-center gap-2">
 						<p className="md-title-medium">{schedule.carrier_name}</p>
-						{schedule.carrier_verified && (
+						{schedule.carrier_status && (
 							<VerifiedIcon
 								sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }}
 							/>
