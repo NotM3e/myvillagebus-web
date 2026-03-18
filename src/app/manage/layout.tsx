@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { UserRole } from "@/types/database";
 import Link from "next/link";
@@ -13,22 +13,26 @@ import PlaceIcon from "@mui/icons-material/Place";
 import HistoryIcon from "@mui/icons-material/History";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ScheduleIcon from "@mui/icons-material/Schedule";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
 const ALLOWED_ROLES: UserRole[] = ["admin", "super_editor"];
 
 const NAV_ITEMS = [
-	{ href: "/manage", label: "Dashboard", icon: DashboardIcon },
-	{ href: "/manage/reports", label: "Zgłoszenia", icon: ReportProblemIcon },
+	{ href: "/manage", label: "Przegląd", icon: DashboardIcon },
+	{ href: "/manage/reports", label: "Moderacja", icon: ReportProblemIcon },
 	{ href: "/manage/schedules", label: "Rozkłady", icon: ScheduleIcon },
-	{ href: "/manage/users", label: "Użytkownicy", icon: PeopleIcon },
-	{ href: "/manage/data", label: "Słowniki", icon: PlaceIcon },
-	{ href: "/manage/logs", label: "Logi", icon: HistoryIcon },
+	{ href: "/manage/users", label: "Społeczność", icon: PeopleIcon },
+	{ href: "/manage/data", label: "Dane bazowe", icon: PlaceIcon },
+	{ href: "/manage/logs", label: "Dziennik zdarzeń", icon: HistoryIcon },
 ];
 
 export default function ManaLayout({ children }: { children: React.ReactNode }) {
 	const [authorized, setAuthorized] = useState<boolean | null>(null);
 	const [currentPath, setCurrentPath] = useState("/manage");
+	const [sidebarOpen, setSidebarOpen] = useState(false);
 	const router = useRouter();
+	const pathname = usePathname();
 
 	useEffect(() => {
 		const checkAuth = async () => {
@@ -61,8 +65,13 @@ export default function ManaLayout({ children }: { children: React.ReactNode }) 
 	}, [router]);
 
 	useEffect(() => {
-		setCurrentPath(window.location.pathname);
-	}, []);
+		setCurrentPath(pathname || "/manage");
+	}, [pathname]);
+
+	// Automatyczne zamykanie menu na mobile po zmianie ścieżki
+	useEffect(() => {
+		setSidebarOpen(false);
+	}, [pathname]);
 
 	if (authorized === null) {
 		return (
@@ -82,14 +91,32 @@ export default function ManaLayout({ children }: { children: React.ReactNode }) 
 	}
 
 	return (
-		<div className="h-screen bg-[var(--md-sys-color-background)] flex overflow-hidden">
+		<div className="h-[100dvh] bg-[var(--md-sys-color-background)] flex overflow-hidden">
+			{/* Mobile Backdrop */}
+			{sidebarOpen && (
+				<div 
+					className="fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity"
+					onClick={() => setSidebarOpen(false)}
+				/>
+			)}
+
 			{/* Sidebar */}
-			<aside className="w-64 h-full bg-[var(--md-sys-color-surface)] border-r border-[var(--md-sys-color-outline-variant)] flex flex-col shrink-0">
+			<aside 
+				className={`fixed md:relative inset-y-0 left-0 z-50 w-64 h-full bg-[var(--md-sys-color-surface)] border-r border-[var(--md-sys-color-outline-variant)] flex flex-col shrink-0 transition-transform duration-300 ease-in-out md:translate-x-0 ${
+					sidebarOpen ? "translate-x-0" : "-translate-x-full"
+				}`}
+			>
 				{/* Header */}
-				<div className="p-4 border-b border-[var(--md-sys-color-outline-variant)]">
+				<div className="p-4 border-b border-[var(--md-sys-color-outline-variant)] flex items-center justify-between">
 					<h1 className="md-title-large text-[var(--md-sys-color-primary)]">
 						Panel Zarządzania
 					</h1>
+					<button 
+						className="md:hidden p-1 rounded-full hover:bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)]"
+						onClick={() => setSidebarOpen(false)}
+					>
+						<CloseIcon sx={{ fontSize: 24 }} />
+					</button>
 				</div>
 
 				{/* Navigation */}
@@ -102,7 +129,6 @@ export default function ManaLayout({ children }: { children: React.ReactNode }) 
 							<Link
 								key={item.href}
 								href={item.href}
-								onClick={() => setCurrentPath(item.href)}
 								className={`flex items-center gap-3 px-4 py-3 rounded-xl mb-1 transition-colors ${
 									isActive
 										? "bg-[var(--md-sys-color-primary-container)] text-[var(--md-sys-color-on-primary-container)]"
@@ -128,8 +154,26 @@ export default function ManaLayout({ children }: { children: React.ReactNode }) 
 				</div>
 			</aside>
 
-			{/* Main content */}
-			<main className="flex-1 p-6 overflow-y-auto">{children}</main>
+			{/* Main content + Mobile Header */}
+			<div className="flex-1 flex flex-col min-w-0">
+				{/* Mobile Header (visible only on small screens) */}
+				<header className="md:hidden flex items-center p-4 border-b border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface)] shrink-0">
+					<button 
+						className="p-1 -ml-1 mr-3 rounded-full hover:bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)]"
+						onClick={() => setSidebarOpen(true)}
+					>
+						<MenuIcon sx={{ fontSize: 24 }} />
+					</button>
+					<h2 className="md-title-medium text-[var(--md-sys-color-on-surface)] truncate">
+						{NAV_ITEMS.find(i => i.href === currentPath)?.label || "Panel Zarządzania"}
+					</h2>
+				</header>
+
+				{/* Page Content */}
+				<main className="flex-1 p-4 md:p-6 overflow-y-auto">
+					{children}
+				</main>
+			</div>
 		</div>
 	);
 }
