@@ -1,6 +1,10 @@
 import { createClient as createSupabaseClient, SupabaseClient } from "@supabase/supabase-js";
 
-let supabaseInstance: SupabaseClient | null = null;
+const globalForSupabase = globalThis as unknown as {
+	supabaseInstance: SupabaseClient | undefined;
+};
+
+let supabaseInstance = globalForSupabase.supabaseInstance;
 
 export function createClient(): SupabaseClient {
 	// Server-side: always create new instance (SSR safety)
@@ -35,5 +39,8 @@ export function createClient(): SupabaseClient {
 		);
 	}
 
+	if (process.env.NODE_ENV !== "production") {
+		globalForSupabase.supabaseInstance = supabaseInstance;
+	}
 	return supabaseInstance;
 }
