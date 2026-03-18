@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { db, initializeSettings } from "./index";
-import { downloadLine, deleteLine, isLineDownloaded } from "./sync";
-("@/types/offline");
+import { downloadLine, deleteLine, isLineDownloaded, checkForUpdates, forceCheckForUpdates, getLastCheckInfo } from "./sync";
+
 import type {
 	AppSettings,
 	OfflineSchedule,
@@ -455,6 +455,46 @@ export function useAllSyncMeta() {
 	}, []);
 
 	return { syncMetas, loading, refresh };
+}
+
+// ============================================================
+// HOOK: useUpdateChecker
+// ============================================================
+
+export function useUpdateChecker() {
+	const [lastCheckAt, setLastCheckAt] = useState<string | null>(null);
+	const [updatesAvailable, setUpdatesAvailable] = useState(0);
+	const [checking, setChecking] = useState(false);
+
+	// Load state on mount
+	useEffect(() => {
+		getLastCheckInfo().then(({ lastCheckAt, updatesAvailable }) => {
+			setLastCheckAt(lastCheckAt);
+			setUpdatesAvailable(updatesAvailable);
+		});
+	}, []);
+
+	// Auto-check on app start when online
+	useEffect(() => {
+		if (typeof navigator !== "undefined" && navigator.onLine) {
+			checkForUpdates().then(({ checked, updatesAvailable }) => {
+				if (checked) {
+					setLastCheckAt(new Date().toISOString());
+					setUpdatesAvailable(updatesAvailable);
+				}
+			});
+		}
+	}, []);
+
+	const refresh = async () => {
+		setChecking(true);
+		const { updatesAvailable } = await forceCheckForUpdates();
+		setLastCheckAt(new Date().toISOString());
+		setUpdatesAvailable(updatesAvailable);
+		setChecking(false);
+	};
+
+	return { lastCheckAt, updatesAvailable, checking, refresh };
 }
 
 // ============================================================

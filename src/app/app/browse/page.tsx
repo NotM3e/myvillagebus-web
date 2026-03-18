@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import PageWrapper from "@/components/PageWrapper";
 import CarrierBadge from "@/components/CarrierBadge";
-import { useDownloadedLines, useAllSyncMeta } from "@/lib/db/hooks";
+import { useDownloadedLines, useAllSyncMeta, useUpdateChecker } from "@/lib/db/hooks";
 import { downloadLine, deleteLine } from "@/lib/db/sync";
 import { getAllLinesBasic } from "@/lib/supabase/queries";
 
@@ -15,6 +15,8 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import SystemUpdateAltIcon from "@mui/icons-material/SystemUpdateAlt";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import Link from "next/link";
 
 interface CloudLine {
@@ -45,6 +47,11 @@ function formatRelativeTime(dateString: string): string {
 	return date.toLocaleDateString("pl-PL", { day: "numeric", month: "short" });
 }
 
+function isStale(lastSyncAt: string, days: number = 7): boolean {
+	const diffDays = (Date.now() - new Date(lastSyncAt).getTime()) / 86400000;
+	return diffDays > days;
+}
+
 export default function BrowsePage() {
 	const [activeTab, setActiveTab] = useState<"downloaded" | "available">("available");
 	const [searchQuery, setSearchQuery] = useState("");
@@ -65,7 +72,8 @@ export default function BrowsePage() {
 	};
 
 	const { lines: downloadedLines, loading: loadingDownloaded, refresh } = useDownloadedLines();
-	const { syncMetas } = useAllSyncMeta();
+	const { syncMetas, refresh: refreshSyncMetas } = useAllSyncMeta();
+	const { lastCheckAt, updatesAvailable, checking, refresh: checkUpdates } = useUpdateChecker();
 
 	// Pobierz liste linii z chmury
 	useEffect(() => {
@@ -159,6 +167,7 @@ export default function BrowsePage() {
 		await downloadLine(lineId);
 		await refresh();
 		window.dispatchEvent(new Event("lines-updated"));
+		refreshSyncMetas();
 		removeSyncing(lineId);
 	};
 
@@ -343,6 +352,37 @@ export default function BrowsePage() {
 							)}
 						</div>
 					) : (
+					<>
+						{/* Update status bar */}
+						{downloadedLines.length > 0 && (
+							<div className="flex items-center justify-between mb-4 p-3 rounded-xl bg-[var(--md-sys-color-surface-variant)]">
+								<div className="flex items-center gap-2">
+									<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+										{lastCheckAt
+											? `Sprawdzono: ${formatRelativeTime(lastCheckAt)}`
+											: "Nie sprawdzono jeszcze"}
+									</span>
+									{updatesAvailable > 0 && (
+										<span className="px-2 py-0.5 rounded-full text-xs bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)]">
+											{updatesAvailable}{" "}
+											{updatesAvailable === 1 ? "aktualizacja" : "aktualizacji"}
+										</span>
+									)}
+								</div>
+								<button
+									onClick={checkUpdates}
+									disabled={checking}
+									className="md-text-button flex items-center gap-1 text-sm disabled:opacity-50"
+								>
+									{checking ? (
+										<div className="w-4 h-4 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
+									) : (
+										<RefreshIcon sx={{ fontSize: 18 }} />
+									)}
+									Sprawdż
+								</button>
+							</div>
+						)}
 						<div className="space-y-6">
 							{Object.entries(groupedDownloadedLines).map(
 								([carrierName, { carrierStatus, lines }]) => (
@@ -358,49 +398,59 @@ export default function BrowsePage() {
 											{lines.map((line) => {
 												const syncing = syncingLineIds.has(line.id);
 												const meta = getSyncMeta(line.id);
+												const hasUpdate = meta?.hasUpdate ?? false;
 
 												return (
 													<div
 														key={line.id}
-														className="md-card md-elevation-1 p-4"
+														className={`md-card md-elevation-1 p-4 ${
+															hasUpdate
+																? "border-l-4 border-l-[var(--md-sys-color-primary)]"
+																: ""
+														}`}
 													>
 														<div className="flex items-center justify-between mb-2">
-															<div>
-																<p className="md-title-small">
-																	Linia {line.number}
-																</p>
-																{line.description && (
-																	<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
-																		{line.description}
-																	</p>
+															<div className="flex items-center gap-2">
+																<p className="md-title-small">Linia {line.number}</p>
+																{hasUpdate && (
+																	<span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-[var(--md-sys-color-primary-container)] text-[var(--md-sys-color-on-primary-container)]">
+																		<SystemUpdateAltIcon sx={{ fontSize: 12 }} />
+																		Aktualizacja
+																	</span>
 																)}
 															</div>
 														</div>
 
+														{line.description && (
+															<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-2">
+																{line.description}
+															</p>
+														)}
+
 														{/* Sync info + actions */}
 														<div className="flex items-center justify-between pt-2 border-t border-[var(--md-sys-color-outline-variant)]">
-															{/* Last sync */}
-															{meta && (
-																<div className="flex items-center gap-1 text-[var(--md-sys-color-on-surface-variant)]">
-																	<AccessTimeIcon
-																		sx={{ fontSize: 14 }}
-																	/>
-																	<span className="md-body-small">
-																		{formatRelativeTime(
-																			meta.lastSyncAt
-																		)}
-																	</span>
+															{/* Last sync + stale warning */}
+															{meta ? (
+																<div className="flex flex-col gap-0.5">
+																	<div className="flex items-center gap-1 text-[var(--md-sys-color-on-surface-variant)]">
+																		<AccessTimeIcon sx={{ fontSize: 14 }} />
+																		<span className="md-body-small">{formatRelativeTime(meta.lastSyncAt)}</span>
+																	</div>
+																	{isStale(meta.lastSyncAt) && !hasUpdate && (
+																		<div className="flex items-center gap-1 text-[var(--md-sys-color-tertiary)]">
+																			<WarningAmberIcon sx={{ fontSize: 12 }} />
+																			<span className="md-body-small">Nie sprawdzano od dawna</span>
+																		</div>
+																	)}
 																</div>
+															) : (
+																<div />
 															)}
-
-															{!meta && <div />}
 
 															{/* Actions */}
 															<div className="flex items-center gap-2">
 																<button
-																	onClick={() =>
-																		handleRefresh(line.id)
-																	}
+																	onClick={() => handleRefresh(line.id)}
 																	disabled={syncing}
 																	className="md-text-button flex items-center gap-1 text-sm"
 																	title="Odswiez dane"
@@ -408,23 +458,17 @@ export default function BrowsePage() {
 																	{syncing ? (
 																		<div className="w-4 h-4 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
 																	) : (
-																		<RefreshIcon
-																			sx={{ fontSize: 18 }}
-																		/>
+																		<RefreshIcon sx={{ fontSize: 18 }} />
 																	)}
-																	Odswiez
+																	Odswież
 																</button>
 
 																<button
-																	onClick={() =>
-																		handleDelete(line.id)
-																	}
+																	onClick={() => handleDelete(line.id)}
 																	disabled={syncing}
 																	className="md-text-button flex items-center gap-1 text-sm text-[var(--md-sys-color-error)]"
 																>
-																	<DeleteOutlineIcon
-																		sx={{ fontSize: 18 }}
-																	/>
+																	<DeleteOutlineIcon sx={{ fontSize: 18 }} />
 																	Usun
 																</button>
 															</div>
@@ -437,9 +481,10 @@ export default function BrowsePage() {
 								)
 							)}
 						</div>
-					)}
-				</>
-			)}
+					</>
+				)}
+			</>
+		)}
 		</PageWrapper>
 	);
 }
