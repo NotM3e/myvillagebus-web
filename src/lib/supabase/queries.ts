@@ -467,3 +467,37 @@ export async function getScheduleNetScore(scheduleId: string): Promise<number> {
 
 	return data?.net_score ?? 0;
 }
+
+// ============================================================
+// UPDATE CHECKING (for offline sync)
+// ============================================================
+
+/**
+ * Fetches the maximum schedule version currently on the server for each given line.
+ * Returns a map of lineId -> maxVersion.
+ */
+export async function checkLineVersions(lineIds: string[]): Promise<Record<string, number>> {
+	if (lineIds.length === 0) return {};
+
+	const supabase = createClient();
+
+	const { data, error } = await supabase
+		.from("schedules")
+		.select("line_id, version")
+		.in("line_id", lineIds)
+		.in("status", ["active", "pending"]);
+
+	if (error || !data) {
+		console.error("Error checking line versions:", error?.message);
+		return {};
+	}
+
+	// Group by line_id and take the maximum version
+	const versions: Record<string, number> = {};
+	data.forEach((row) => {
+		const current = versions[row.line_id] ?? 0;
+		versions[row.line_id] = Math.max(current, row.version);
+	});
+
+	return versions;
+}

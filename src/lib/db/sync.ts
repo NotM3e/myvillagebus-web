@@ -1,5 +1,5 @@
 import { db } from "./index";
-import { getLineFullData } from "@/lib/supabase/queries";
+import { getLineFullData, checkLineVersions } from "@/lib/supabase/queries";
 import type {
 	OfflineLine,
 	OfflineSchedule,
@@ -86,7 +86,10 @@ export async function downloadLine(lineId: string): Promise<{ success: boolean; 
 		const syncMeta: SyncMeta = {
 			lineId: line.id,
 			lastSyncAt: new Date().toISOString(),
-			lastServerVersion: Math.max(...schedules.map((s) => s.version), 0),
+			lastCheckAt: new Date().toISOString(),
+			localVersion: Math.max(...schedules.map((s) => s.version), 0),
+			serverVersion: null,
+			hasUpdate: false,
 		};
 
 		// 3. Zapisz w transakcji (atomowo)
@@ -209,4 +212,91 @@ export async function getLineSyncMeta(lineId: string): Promise<SyncMeta | undefi
 
 export async function getDownloadedLinesCount(): Promise<number> {
 	return db.lines.count();
+}
+
+// ============================================================
+// UPDATE CHECKING
+// ============================================================
+
+/**
+ * Checks if newer schedule versions are available for all downloaded lines.
+ * Respects a cooldown to avoid excessive network requests.
+ */
+export async function checkForUpdates(
+	cooldownMinutes: number = 60
+): Promise<{ checked: boolean; updatesAvailable: number }> {
+	const allMeta = await db.syncMeta.toArray();
+
+	if (allMeta.length === 0) {
+		return { checked: false, updatesAvailable: 0 };
+	}
+
+	// Respect cooldown - find the most recent check timestamp
+	const lastCheck = allMeta
+		.map((m) => m.lastCheckAt)
+		.filter(Boolean)
+		.sort()
+		.pop();
+
+	if (lastCheck && cooldownMinutes > 0) {
+		const diffMinutes = (Date.now() - new Date(lastCheck).getTime()) / 60000;
+		if (diffMinutes < cooldownMinutes) {
+			const updatesAvailable = allMeta.filter((m) => m.hasUpdate).length;
+			return { checked: false, updatesAvailable };
+		}
+	}
+
+	// Fetch latest versions from server
+	const lineIds = allMeta.map((m) => m.lineId);
+	const serverVersions = await checkLineVersions(lineIds);
+
+	// Compare and update syncMeta records
+	const now = new Date().toISOString();
+	let updatesAvailable = 0;
+
+	await db.transaction("rw", db.syncMeta, async () => {
+		for (const meta of allMeta) {
+			const serverVersion = serverVersions[meta.lineId] ?? 0;
+			const hasUpdate = serverVersion > meta.localVersion;
+
+			if (hasUpdate) updatesAvailable++;
+
+			await db.syncMeta.update(meta.lineId, {
+				lastCheckAt: now,
+				serverVersion,
+				hasUpdate,
+			});
+		}
+	});
+
+	return { checked: true, updatesAvailable };
+}
+
+/**
+ * Forces an immediate update check regardless of cooldown.
+ */
+export async function forceCheckForUpdates(): Promise<{ updatesAvailable: number }> {
+	const result = await checkForUpdates(0);
+	return { updatesAvailable: result.updatesAvailable };
+}
+
+/**
+ * Returns the timestamp of the last update check and the number of pending updates.
+ */
+export async function getLastCheckInfo(): Promise<{
+	lastCheckAt: string | null;
+	updatesAvailable: number;
+}> {
+	const allMeta = await db.syncMeta.toArray();
+
+	const lastCheckAt =
+		allMeta
+			.map((m) => m.lastCheckAt)
+			.filter(Boolean)
+			.sort()
+			.pop() ?? null;
+
+	const updatesAvailable = allMeta.filter((m) => m.hasUpdate).length;
+
+	return { lastCheckAt, updatesAvailable };
 }

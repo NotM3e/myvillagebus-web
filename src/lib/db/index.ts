@@ -57,6 +57,36 @@ class WsiobusDatabase extends Dexie {
 			// Metadane synchronizacji per linia
 			syncMeta: "lineId",
 		});
+
+		// Migration v2: extend SyncMeta with update-checking fields
+		this.version(2)
+			.stores({
+				lines: "id, carrierName",
+				schedules: "id, lineId, [lineId+status]",
+				stops: "id, city, [city+name]",
+				routeStops: "id, scheduleId",
+				courses: "id, scheduleId",
+				courseTimes: "id, courseId",
+				savedFilters: "++id, name",
+				settings: "id",
+				syncMeta: "lineId",
+			})
+			.upgrade(async (tx) => {
+				// Backfill new SyncMeta fields for existing records
+				await tx
+					.table("syncMeta")
+					.toCollection()
+					.modify((meta: Record<string, unknown>) => {
+						if (meta.lastCheckAt === undefined) meta.lastCheckAt = null;
+						if (meta.localVersion === undefined) {
+							// lastServerVersion was the old field name
+							meta.localVersion = (meta.lastServerVersion as number) ?? 0;
+						}
+						if (meta.serverVersion === undefined) meta.serverVersion = null;
+						if (meta.hasUpdate === undefined) meta.hasUpdate = false;
+						delete meta.lastServerVersion;
+					});
+			});
 	}
 }
 
@@ -83,6 +113,8 @@ export async function initializeSettings(): Promise<AppSettings> {
 		defaultFilterId: null,
 		syncOnlyWifi: true,
 		syncCooldownMinutes: 60,
+		autoCheckUpdates: true,
+		checkCooldownMinutes: 60,
 	};
 
 	await db.settings.add(defaultSettings);

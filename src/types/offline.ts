@@ -86,11 +86,16 @@ export interface AppSettings {
 	defaultFilterId: number | null;
 	syncOnlyWifi: boolean;
 	syncCooldownMinutes: number;
+	autoCheckUpdates: boolean; // Automatically check for updates on app start
+	checkCooldownMinutes: number; // Minimum minutes between update checks
 }
 
 // Metadane synchronizacji per linia
 export interface SyncMeta {
 	lineId: string;
-	lastSyncAt: string; // ISO timestamp
-	lastServerVersion: number; // wersja z serwera
+	lastSyncAt: string; // When data was downloaded
+	lastCheckAt: string | null; // When update check was last performed
+	localVersion: number; // Max version among downloaded schedules
+	serverVersion: number | null; // Latest version on server (after check)
+	hasUpdate: boolean; // Whether a newer version is available
 }
