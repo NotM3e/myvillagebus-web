@@ -501,3 +501,138 @@ export async function checkLineVersions(lineIds: string[]): Promise<Record<strin
 
 	return versions;
 }
+
+// ============================================================
+// COPY FROM SCHEDULE (dla kreatora)
+// ============================================================
+
+export interface ScheduleForCopy {
+	id: string;
+	direction: string;
+	version: number;
+	status: string;
+	days: string[];
+	lineNumber: string;
+	lineDescription: string | null;
+	stops: {
+		id: string;
+		city: string;
+		name: string;
+		orderIndex: number;
+		offsetMinutes: number;
+	}[];
+	departureTimes: string[];
+}
+
+export async function getSchedulesForCopy(
+	carrierId: string,
+	lineId?: string
+): Promise<ScheduleForCopy[]> {
+	const supabase = createClient();
+
+	// 1. Pobierz schedules z joinem na lines
+	let query = supabase
+		.from("schedules")
+		.select(
+			`
+			id,
+			direction,
+			version,
+			status,
+			days,
+			line_id,
+			line:lines!inner(id, number, description, carrier_id)
+		`
+		)
+		.in("status", ["active", "pending"]);
+
+	if (lineId) {
+		query = query.eq("line_id", lineId);
+	} else {
+		query = query.eq("line.carrier_id", carrierId);
+	}
+
+	const { data: schedulesRaw, error: schedulesError } = await query;
+
+	if (schedulesError || !schedulesRaw || schedulesRaw.length === 0) {
+		if (schedulesError) {
+			console.error("Error fetching schedules for copy:", schedulesError.message);
+		}
+		return [];
+	}
+
+	const scheduleIds = schedulesRaw.map((s) => s.id);
+
+	// 2. Pobierz route_stops z joinem na stops
+	const { data: routeStopsRaw } = await supabase
+		.from("route_stops")
+		.select(
+			`
+			id,
+			schedule_id,
+			order_index,
+			offset_minutes,
+			stop:stops(id, city, name)
+		`
+		)
+		.in("schedule_id", scheduleIds)
+		.order("order_index", { ascending: true });
+
+	// 3. Pobierz courses (departure_time)
+	const { data: coursesRaw } = await supabase
+		.from("courses")
+		.select("id, schedule_id, departure_time")
+		.in("schedule_id", scheduleIds)
+		.order("departure_time", { ascending: true });
+
+	// 4. Zgrupuj dane
+	const stopsMap: Record<string, ScheduleForCopy["stops"]> = {};
+	for (const rs of routeStopsRaw ?? []) {
+		if (!stopsMap[rs.schedule_id]) stopsMap[rs.schedule_id] = [];
+		const stop = Array.isArray(rs.stop) ? rs.stop[0] : rs.stop;
+		if (stop) {
+			stopsMap[rs.schedule_id].push({
+				id: stop.id,
+				city: stop.city,
+				name: stop.name,
+				orderIndex: rs.order_index,
+				offsetMinutes: rs.offset_minutes,
+			});
+		}
+	}
+
+	const timesMap: Record<string, string[]> = {};
+	for (const c of coursesRaw ?? []) {
+		if (!timesMap[c.schedule_id]) timesMap[c.schedule_id] = [];
+		timesMap[c.schedule_id].push(c.departure_time.slice(0, 5)); // "HH:MM:SS" -> "HH:MM"
+	}
+
+	// 5. Złóż wyniki
+	const results: ScheduleForCopy[] = schedulesRaw.map((s) => {
+		const line = Array.isArray(s.line) ? s.line[0] : s.line;
+		return {
+			id: s.id,
+			direction: s.direction,
+			version: s.version,
+			status: s.status,
+			days: s.days,
+			lineNumber: line?.number ?? "?",
+			lineDescription: line?.description ?? null,
+			stops: stopsMap[s.id] ?? [],
+			departureTimes: timesMap[s.id] ?? [],
+		};
+	});
+
+	// 6. Sortuj: lineNumber -> direction -> first departure
+	results.sort((a, b) => {
+		const lineCmp = a.lineNumber.localeCompare(b.lineNumber, "pl", { numeric: true });
+		if (lineCmp !== 0) return lineCmp;
+		const dirCmp = a.direction.localeCompare(b.direction, "pl");
+		if (dirCmp !== 0) return dirCmp;
+		const timeA = a.departureTimes[0] ?? "";
+		const timeB = b.departureTimes[0] ?? "";
+		return timeA.localeCompare(timeB);
+	});
+
+	return results;
+}

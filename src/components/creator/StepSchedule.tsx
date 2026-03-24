@@ -2,10 +2,12 @@
 
 import { useState, useMemo } from "react";
 import type { CreatorData } from "./ScheduleCreator";
+import CopyFromScheduleModal from "./CopyFromScheduleModal";
 import CheckIcon from "@mui/icons-material/Check";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 interface StepScheduleProps {
 	data: CreatorData;
@@ -36,6 +38,7 @@ interface ParsedCourse {
 
 export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 	const [bulkText, setBulkText] = useState(data.departures);
+	const [showCopyModal, setShowCopyModal] = useState(false);
 
 	// Parse bulk entry text
 	const parsedCourses = useMemo((): ParsedCourse[] => {
@@ -48,22 +51,17 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 		const timeRegex = /^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$/;
 
 		return lines.map((line) => {
-			// Try to extract time from various formats
 			let time = line;
 
-			// Remove common prefixes/suffixes
-			time = time.replace(/^[-•*]\s*/, ""); // bullet points
-			time = time.replace(/\s*[-–—]\s*.*$/, ""); // trailing notes
+			time = time.replace(/^[-•*]\s*/, "");
+			time = time.replace(/\s*[-–—]\s*.*$/, "");
 
-			// Check if it's a valid time
 			if (timeRegex.test(time)) {
-				// Normalize to HH:MM format
 				const [hours, minutes] = time.split(":");
 				const normalizedTime = `${hours.padStart(2, "0")}:${minutes}`;
 				return { time: normalizedTime, isValid: true };
 			}
 
-			// Try to find time pattern in the line
 			const timeMatch = line.match(/([0-1]?[0-9]|2[0-3]):([0-5][0-9])/);
 			if (timeMatch) {
 				const [hours, minutes] = timeMatch[0].split(":");
@@ -83,7 +81,6 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 			? data.days.filter((d) => d !== day)
 			: [...data.days, day];
 
-		// Keep at least one day
 		if (newDays.length > 0) {
 			updateData({ days: newDays });
 		}
@@ -106,6 +103,15 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 14:45
 16:20`;
 		handleBulkChange(example);
+	};
+
+	// Handle copied times - append to existing text
+	const handleCopyTimes = (departures: string) => {
+		if (bulkText.trim()) {
+			handleBulkChange(bulkText.trimEnd() + "\n" + departures);
+		} else {
+			handleBulkChange(departures);
+		}
 	};
 
 	return (
@@ -213,11 +219,23 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 
 			{/* Section 2: Departures (Bulk Entry) */}
 			<div>
+				{/* Header with copy and example buttons */}
 				<div className="flex items-center justify-between mb-4">
 					<h2 className="md-title-large">Godziny odjazdów</h2>
-					<button onClick={handleExampleInsert} className="md-text-button text-sm">
-						Wstaw przykład
-					</button>
+					<div className="flex items-center gap-1">
+						{data.carrier?.id && data.line && (
+							<button
+								onClick={() => setShowCopyModal(true)}
+								className="md-text-button text-sm flex items-center gap-1"
+							>
+								<ContentCopyIcon sx={{ fontSize: 16 }} />
+								Kopiuj
+							</button>
+						)}
+						<button onClick={handleExampleInsert} className="md-text-button text-sm">
+							Wstaw przykład
+						</button>
+					</div>
 				</div>
 
 				<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-3">
@@ -237,7 +255,6 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 				{/* Parse results */}
 				{parsedCourses.length > 0 && (
 					<div className="mt-4 space-y-3">
-						{/* Valid courses */}
 						{validCourses.length > 0 && (
 							<div className="p-3 rounded-xl bg-[var(--md-sys-color-primary-container)]">
 								<div className="flex items-center gap-2 mb-2">
@@ -269,7 +286,6 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 							</div>
 						)}
 
-						{/* Invalid lines */}
 						{invalidCourses.length > 0 && (
 							<div className="p-3 rounded-xl bg-[var(--md-sys-color-error-container)]">
 								<div className="flex items-center gap-2 mb-2">
@@ -299,7 +315,6 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 					</div>
 				)}
 
-				{/* Help */}
 				{parsedCourses.length === 0 && (
 					<p className="mt-3 md-body-small text-[var(--md-sys-color-on-surface-variant)] text-center">
 						Wpisz co najmniej jedną godzinę, aby kontynuować
@@ -334,6 +349,17 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 					</ul>
 				</div>
 			)}
+
+			{/* Copy modal for times */}
+			<CopyFromScheduleModal
+				isOpen={showCopyModal}
+				onClose={() => setShowCopyModal(false)}
+				carrierId={data.carrier?.id || ""}
+				lineId={data.line?.id || null}
+				mode="times"
+				onCopyStops={() => {}}
+				onCopyTimes={handleCopyTimes}
+			/>
 		</div>
 	);
 }

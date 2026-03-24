@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { getLinesByCarrier, searchStops } from "@/lib/supabase/queries";
 import type { CreatorData } from "./ScheduleCreator";
+import CopyFromScheduleModal from "./CopyFromScheduleModal";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
@@ -12,6 +13,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 interface StepLineProps {
 	data: CreatorData;
@@ -47,6 +49,9 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 	const [newStopCity, setNewStopCity] = useState("");
 	const [newStopName, setNewStopName] = useState("");
 
+	// Copy modal
+	const [showCopyModal, setShowCopyModal] = useState(false);
+
 	// Load lines for carrier
 	useEffect(() => {
 		if (data.carrier?.id) {
@@ -71,7 +76,6 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 		setSearchingStops(true);
 		const timeout = setTimeout(() => {
 			searchStops(stopQuery).then((results) => {
-				// Filter out already added stops
 				const addedIds = data.stops.map((s) => s.id);
 				setStopResults(results.filter((r) => !addedIds.includes(r.id)));
 				setSearchingStops(false);
@@ -179,6 +183,14 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 		updateData({ stops: [...data.stops].reverse() });
 	};
 
+	// Handle copied stops from modal
+	const handleCopyStops = (stops: CreatorData["stops"], direction: string) => {
+		if (data.stops.length > 0) {
+			if (!confirm(`Masz już ${data.stops.length} przystanków. Nadpisać?`)) return;
+		}
+		updateData({ stops, direction });
+	};
+
 	return (
 		<div className="space-y-8">
 			{/* Section 1: Line */}
@@ -218,7 +230,6 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 						/>
 					</div>
 				) : showNewLineForm ? (
-					// New line form
 					<div className="md-card md-elevation-1 p-4 space-y-4">
 						<div>
 							<label className="block md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-2">
@@ -264,7 +275,6 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 						</div>
 					</div>
 				) : (
-					// Line selection
 					<div className="space-y-3">
 						{loadingLines ? (
 							<div className="text-center py-4">
@@ -325,18 +335,31 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 
 			{/* Section 2: Stops */}
 			<div>
+				{/* NEW: Header with copy and reverse buttons */}
 				<div className="flex items-center justify-between mb-4">
 					<h2 className="md-title-large">Przystanki na trasie</h2>
-					{data.stops.length >= 2 && (
-						<button
-							onClick={handleReverseStops}
-							className="md-text-button flex items-center gap-1"
-							title="Odwróć kolejność"
-						>
-							<SwapVertIcon sx={{ fontSize: 18 }} />
-							<span className="hidden sm:inline">Odwróć</span>
-						</button>
-					)}
+					<div className="flex items-center gap-2">
+						{data.carrier?.id && (
+							<button
+								onClick={() => setShowCopyModal(true)}
+								className="md-text-button flex items-center gap-1 text-sm"
+							>
+								<ContentCopyIcon sx={{ fontSize: 16 }} />
+								<span className="hidden sm:inline">Kopiuj z kursu</span>
+								<span className="sm:hidden">Kopiuj</span>
+							</button>
+						)}
+						{data.stops.length >= 2 && (
+							<button
+								onClick={handleReverseStops}
+								className="md-text-button flex items-center gap-1"
+								title="Odwróć kolejność"
+							>
+								<SwapVertIcon sx={{ fontSize: 18 }} />
+								<span className="hidden sm:inline">Odwróć</span>
+							</button>
+						)}
+					</div>
 				</div>
 
 				{/* Added stops */}
@@ -365,7 +388,6 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 									)}
 								</div>
 
-								{/* Move buttons */}
 								<div className="flex gap-1">
 									<button
 										onClick={() => handleMoveStop(index, "up")}
@@ -383,7 +405,6 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 									</button>
 								</div>
 
-								{/* Delete button */}
 								<button
 									onClick={() => handleRemoveStop(index)}
 									className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-error-container)] text-[var(--md-sys-color-error)]"
@@ -415,7 +436,6 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 							className="w-full pl-10 pr-4 py-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
 						/>
 
-						{/* Search results */}
 						{stopResults.length > 0 && (
 							<div className="absolute z-10 left-0 right-0 mt-2 rounded-xl bg-[var(--md-sys-color-surface)] border border-[var(--md-sys-color-outline-variant)] shadow-lg overflow-hidden">
 								{stopResults.map((stop) => (
@@ -516,13 +536,23 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 					</div>
 				)}
 
-				{/* Help text */}
 				{data.stops.length < 2 && (
 					<p className="mt-4 md-body-small text-[var(--md-sys-color-on-surface-variant)] text-center">
 						Dodaj co najmniej 2 przystanki, aby kontynuować
 					</p>
 				)}
 			</div>
+
+			{/* Copy modal */}
+			<CopyFromScheduleModal
+				isOpen={showCopyModal}
+				onClose={() => setShowCopyModal(false)}
+				carrierId={data.carrier?.id || ""}
+				lineId={data.line?.id || null}
+				mode="stops"
+				onCopyStops={handleCopyStops}
+				onCopyTimes={() => {}}
+			/>
 		</div>
 	);
 }
