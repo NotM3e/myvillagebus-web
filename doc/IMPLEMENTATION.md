@@ -20,11 +20,13 @@
 
 ## Placeholder / TODO
 
-- Edycja rozkładów (nie w MVP)
+- Edycja rozkładów
 - Kalendarz (sezonowość)
-- System reputacji (user_activities)
-
 - Kartoteka użytkownika (/manage/users/[id])
+- System reputacji: Tabela user_activities istnieje, ale brak triggerów/logiki przyznającej punkty
+- Wagi głosów: Kolumna verifications.weight istnieje, ale nie jest automatycznie ustawiana (0.5/1.0/1.5)
+- Auto-rollback: Mechanizm przywracania poprzedniej wersji przy net_score < -10 nie jest zaimplementowany
+- Shadow ban: Flaga profiles.status='shadow_banned' istnieje, ale brak logiki filtrującej dane shadow-banned użytkowników
 
 ## Opcjonalne rozbudowy
 

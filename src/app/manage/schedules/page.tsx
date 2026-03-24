@@ -86,6 +86,13 @@ export default function ManaSchedulesPage() {
 
 		const { data, error } = await query.limit(50);
 
+		console.log("Raw data count:", data?.length);
+		console.log("Unique IDs:", new Set(data?.map((s) => s.id)).size);
+		console.log(
+			"IDs:",
+			data?.map((s) => s.id)
+		);
+
 		if (error) {
 			console.error("Error fetching schedules:", error);
 			setSchedules([]);
