@@ -1,5 +1,5 @@
 import { db } from "./index";
-import { getLineFullData, checkLineVersions } from "@/lib/supabase/queries";
+import { getLineFullData, checkLineVersions, getScheduleScoresBatch } from "@/lib/supabase/queries";
 import type {
 	OfflineLine,
 	OfflineSchedule,
@@ -299,4 +299,43 @@ export async function getLastCheckInfo(): Promise<{
 	const updatesAvailable = allMeta.filter((m) => m.hasUpdate).length;
 
 	return { lastCheckAt, updatesAvailable };
+}
+
+// ============================================================
+// SCORE REFRESH
+// ============================================================
+
+/**
+ * Fetches fresh net_scores from Supabase and updates IndexedDB.
+ * Only runs when device is online.
+ * Returns map of scheduleId -> fresh score.
+ */
+export async function refreshScores(): Promise<Record<string, number>> {
+	if (typeof navigator !== "undefined" && !navigator.onLine) {
+		return {};
+	}
+
+	try {
+		const allSchedules = await db.schedules.toArray();
+
+		if (allSchedules.length === 0) return {};
+
+		const scheduleIds = allSchedules.map((s) => s.id);
+		const freshScores = await getScheduleScoresBatch(scheduleIds);
+
+		// Update IndexedDB with fresh scores
+		await db.transaction("rw", db.schedules, async () => {
+			for (const [scheduleId, newScore] of Object.entries(freshScores)) {
+				const existing = allSchedules.find((s) => s.id === scheduleId);
+				if (existing && existing.netScore !== newScore) {
+					await db.schedules.update(scheduleId, { netScore: newScore });
+				}
+			}
+		});
+
+		return freshScores;
+	} catch (error) {
+		console.error("Error refreshing scores:", error);
+		return {};
+	}
 }

@@ -53,22 +53,26 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 	const [voteLoading, setVoteLoading] = useState(false);
 	const [showReportModal, setShowReportModal] = useState(false);
 
-	// Auth and load existing vote with fresh score
+	// Auth and load existing vote + fresh score
 	useEffect(() => {
 		const supabase = createClient();
 		supabase.auth.getSession().then(({ data: { session } }) => {
 			setUser(session?.user ?? null);
 
+			// Always fetch fresh score when online (regardless of login)
+			if (typeof navigator !== "undefined" && navigator.onLine) {
+				getScheduleNetScore(scheduleId).then((netScore) => {
+					setLocalScore(netScore);
+				});
+			}
+
+			// Fetch existing vote only for logged-in users
 			if (session?.user) {
-				// Fetch vote and fresh score from Supabase
-				Promise.all([getUserVote(scheduleId), getScheduleNetScore(scheduleId)]).then(
-					([vote, netScore]) => {
-						setLocalScore(netScore);
-						if (vote) {
-							setVoteState(vote.vote_type === "positive" ? "up" : "down");
-						}
+				getUserVote(scheduleId).then((vote) => {
+					if (vote) {
+						setVoteState(vote.vote_type === "positive" ? "up" : "down");
 					}
-				);
+				});
 			}
 		});
 	}, [scheduleId]);

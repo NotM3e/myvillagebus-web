@@ -2,8 +2,15 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { db, initializeSettings } from "./index";
-import { downloadLine, deleteLine, isLineDownloaded, checkForUpdates, forceCheckForUpdates, getLastCheckInfo } from "./sync";
-
+import {
+	downloadLine,
+	deleteLine,
+	isLineDownloaded,
+	checkForUpdates,
+	forceCheckForUpdates,
+	getLastCheckInfo,
+	refreshScores,
+} from "./sync";
 import type {
 	AppSettings,
 	OfflineSchedule,
@@ -217,6 +224,27 @@ export function useOfflineSchedules(options: UseOfflineSchedulesOptions = {}) {
 			setSchedules(schedulesWithDetails);
 			setIsEmpty(false);
 			setLoading(false);
+
+			// Refresh scores from Supabase when online
+			if (
+				typeof navigator !== "undefined" &&
+				navigator.onLine &&
+				schedulesWithDetails.length > 0
+			) {
+				refreshScores().then((freshScores) => {
+					if (Object.keys(freshScores).length === 0) return;
+
+					setSchedules((prev) =>
+						prev.map((schedule) => {
+							const freshScore = freshScores[schedule.id];
+							if (freshScore !== undefined && freshScore !== schedule.netScore) {
+								return { ...schedule, netScore: freshScore };
+							}
+							return schedule;
+						})
+					);
+				});
+			}
 		}
 
 		fetchData();
@@ -279,6 +307,27 @@ export function useOfflineSchedules(options: UseOfflineSchedulesOptions = {}) {
 		setSchedules(schedulesWithDetails);
 		setIsEmpty(false);
 		setLoading(false);
+
+		// Refresh scores from Supabase when online
+		if (
+			typeof navigator !== "undefined" &&
+			navigator.onLine &&
+			schedulesWithDetails.length > 0
+		) {
+			refreshScores().then((freshScores) => {
+				if (Object.keys(freshScores).length === 0) return;
+
+				setSchedules((prev) =>
+					prev.map((schedule) => {
+						const freshScore = freshScores[schedule.id];
+						if (freshScore !== undefined && freshScore !== schedule.netScore) {
+							return { ...schedule, netScore: freshScore };
+						}
+						return schedule;
+					})
+				);
+			});
+		}
 	};
 
 	return {

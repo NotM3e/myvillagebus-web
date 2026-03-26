@@ -636,3 +636,50 @@ export async function getSchedulesForCopy(
 
 	return results;
 }
+
+// ============================================================
+// BATCH SCORE REFRESH (for offline sync)
+// ============================================================
+
+/**
+ * Fetches fresh net_scores for multiple schedules at once.
+ * Supabase .in() has ~300 element limit, so we batch if needed.
+ */
+export async function getScheduleScoresBatch(
+	scheduleIds: string[]
+): Promise<Record<string, number>> {
+	if (scheduleIds.length === 0) return {};
+
+	const supabase = createClient();
+	const result: Record<string, number> = {};
+	const BATCH_SIZE = 250;
+
+	for (let i = 0; i < scheduleIds.length; i += BATCH_SIZE) {
+		const batch = scheduleIds.slice(i, i + BATCH_SIZE);
+
+		const { data, error } = await supabase
+			.from("verification_stats_view")
+			.select("schedule_id, net_score")
+			.in("schedule_id", batch);
+
+		if (error) {
+			console.error("Error fetching scores batch:", error.message);
+			continue;
+		}
+
+		if (data) {
+			data.forEach((row) => {
+				result[row.schedule_id] = row.net_score;
+			});
+		}
+	}
+
+	// Set 0 for schedules without any votes
+	scheduleIds.forEach((id) => {
+		if (result[id] === undefined) {
+			result[id] = 0;
+		}
+	});
+
+	return result;
+}
