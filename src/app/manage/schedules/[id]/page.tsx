@@ -22,7 +22,7 @@ interface ScheduleDetails {
 		number: string;
 		carrier: {
 			name: string;
-			is_verified: boolean;
+			status: string;
 		};
 	};
 	creator: {
@@ -75,7 +75,7 @@ export default function ManaScheduleDetailPage({ params }: PageProps) {
             number,
             carrier:carriers (
               name,
-              is_verified
+              status
             )
           ),
           creator:profiles!created_by (
@@ -112,7 +112,7 @@ export default function ManaScheduleDetailPage({ params }: PageProps) {
 					number: lineData?.number || "",
 					carrier: {
 						name: carrierData?.name || "",
-						is_verified: carrierData?.is_verified || false,
+						status: carrierData?.status || "unverified",
 					},
 				},
 				creator: Array.isArray(scheduleData.creator)
@@ -260,7 +260,7 @@ export default function ManaScheduleDetailPage({ params }: PageProps) {
 						<div>
 							<div className="flex items-center gap-2">
 								<p className="md-title-medium">{schedule.line.carrier.name}</p>
-								{schedule.line.carrier.is_verified && (
+								{schedule.line.carrier.status !== "unverified" && (
 									<VerifiedIcon
 										sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }}
 									/>
