@@ -14,6 +14,7 @@ import {
 	getSchedulesByStops,
 	type ScheduleStopMatch,
 } from "@/lib/db/hooks";
+import { getUserVotesBatch } from "@/lib/supabase/queries";
 import type { OfflineStop } from "@/types/offline";
 import AddIcon from "@mui/icons-material/Add";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
@@ -37,6 +38,8 @@ function AppContent() {
 	const [showSaveDialog, setShowSaveDialog] = useState(false);
 	const [stopMatches, setStopMatches] = useState<ScheduleStopMatch[]>([]);
 	const [filteringByStops, setFilteringByStops] = useState(false);
+	// Batch-loaded votes for all visible schedules
+	const [userVotes, setUserVotes] = useState<Record<string, "up" | "down">>({});
 
 	// Load filter from URL
 	useEffect(() => {
@@ -74,14 +77,6 @@ function AppContent() {
 		loadFilter();
 	}, [filterId]);
 
-	// Hide success message after 5 seconds
-	useEffect(() => {
-		if (showSuccess) {
-			const timeout = setTimeout(() => setShowSuccess(false), 5000);
-			return () => clearTimeout(timeout);
-		}
-	}, [showSuccess]);
-
 	const {
 		schedules: allSchedules,
 		loading,
@@ -90,6 +85,24 @@ function AppContent() {
 		searchQuery: "",
 		showPending,
 	});
+
+	// Batch-load user votes when schedules change
+	useEffect(() => {
+		if (allSchedules.length === 0) return;
+
+		const scheduleIds = allSchedules.map((s) => s.id);
+		getUserVotesBatch(scheduleIds).then((votes) => {
+			setUserVotes(votes);
+		});
+	}, [allSchedules]);
+
+	// Hide success message after 5 seconds
+	useEffect(() => {
+		if (showSuccess) {
+			const timeout = setTimeout(() => setShowSuccess(false), 5000);
+			return () => clearTimeout(timeout);
+		}
+	}, [showSuccess]);
 
 	// Filtrowanie po przystankach (async)
 	useEffect(() => {
@@ -294,6 +307,7 @@ function AppContent() {
 								schedule={schedule}
 								displayTime={getDisplayTime(schedule.id, schedule.firstDeparture)}
 								fromStopId={fromStop?.id ?? null}
+								initialVoteState={userVotes[schedule.id] || "none"}
 							/>
 						))}
 

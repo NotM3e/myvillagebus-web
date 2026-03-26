@@ -5,7 +5,7 @@ import Link from "next/link";
 import type { OfflineScheduleWithDetails } from "@/lib/db/hooks";
 import { db } from "@/lib/db";
 import { getTodayHolidayInfo } from "@/lib/holidays";
-import { getUserVote, voteOnSchedule, removeVote } from "@/lib/supabase/queries";
+import { voteOnSchedule, removeVote } from "@/lib/supabase/queries";
 import { createClient } from "@/lib/supabase/client";
 import { submitReport } from "@/lib/supabase/mutations";
 import { User } from "@supabase/supabase-js";
@@ -28,6 +28,7 @@ interface OfflineScheduleCardProps {
 	schedule: OfflineScheduleWithDetails;
 	displayTime?: string | null;
 	fromStopId?: string | null;
+	initialVoteState?: "none" | "up" | "down";
 }
 
 type VoteState = "none" | "up" | "down";
@@ -36,29 +37,26 @@ export default function OfflineScheduleCard({
 	schedule,
 	displayTime,
 	fromStopId,
+	initialVoteState = "none",
 }: OfflineScheduleCardProps) {
 	const [user, setUser] = useState<User | null>(null);
-	const [voteState, setVoteState] = useState<VoteState>("none");
+	const [voteState, setVoteState] = useState<VoteState>(initialVoteState);
 	const [localScore, setLocalScore] = useState(schedule.netScore);
 	const [voteLoading, setVoteLoading] = useState(false);
 	const [showReportModal, setShowReportModal] = useState(false);
 
-	// Check auth status and load existing vote
+	// Sync score when schedule data changes (after refresh from Supabase)
+	useEffect(() => {
+		setLocalScore(schedule.netScore);
+	}, [schedule.netScore]);
+
+	// Check auth status (no individual vote loading - parent handles it)
 	useEffect(() => {
 		const supabase = createClient();
 		supabase.auth.getSession().then(({ data: { session } }) => {
 			setUser(session?.user ?? null);
-
-			// Load existing vote if logged in
-			if (session?.user) {
-				getUserVote(schedule.id).then((vote) => {
-					if (vote) {
-						setVoteState(vote.vote_type === "positive" ? "up" : "down");
-					}
-				});
-			}
 		});
-	}, [schedule.id]);
+	}, []);
 
 	// Holiday warning
 	const holidayInfo = getTodayHolidayInfo();

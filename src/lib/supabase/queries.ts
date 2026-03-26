@@ -91,31 +91,33 @@ export async function getCarriers(): Promise<Carrier[]> {
 // VOTING
 // ============================================================
 
+// Helper: get current user ID from session (no network request, no lock)
+async function getCurrentUserId(): Promise<string | null> {
+	const supabase = createClient();
+	const {
+		data: { session },
+	} = await supabase.auth.getSession();
+	return session?.user?.id ?? null;
+}
+
 export async function voteOnSchedule(
 	scheduleId: string,
 	voteType: VoteType,
 	negativeReason?: NegativeReason
 ): Promise<{ success: boolean; error?: string }> {
+	const userId = await getCurrentUserId();
+	if (!userId) return { success: false, error: "Musisz być zalogowany" };
+
 	const supabase = createClient();
-
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
-
-	if (!user) {
-		return { success: false, error: "Musisz być zalogowany" };
-	}
 
 	const { error } = await supabase.from("verifications").upsert(
 		{
 			schedule_id: scheduleId,
-			user_id: user.id,
+			user_id: userId,
 			vote_type: voteType,
 			negative_reason: voteType === "negative" ? negativeReason : null,
 		},
-		{
-			onConflict: "schedule_id,user_id",
-		}
+		{ onConflict: "schedule_id,user_id" }
 	);
 
 	if (error) {
@@ -127,38 +129,67 @@ export async function voteOnSchedule(
 }
 
 export async function getUserVote(scheduleId: string): Promise<Verification | null> {
+	const userId = await getCurrentUserId();
+	if (!userId) return null;
+
 	const supabase = createClient();
-
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
-
-	if (!user) return null;
 
 	const { data } = await supabase
 		.from("verifications")
 		.select("*")
 		.eq("schedule_id", scheduleId)
-		.eq("user_id", user.id)
+		.eq("user_id", userId)
 		.single();
 
 	return data;
 }
 
-export async function removeVote(scheduleId: string): Promise<{ success: boolean }> {
+/**
+ * Fetch all votes by current user for given schedule IDs in one query.
+ * Returns map: scheduleId -> "up" | "down"
+ */
+export async function getUserVotesBatch(
+	scheduleIds: string[]
+): Promise<Record<string, "up" | "down">> {
+	if (scheduleIds.length === 0) return {};
+
+	const userId = await getCurrentUserId();
+	if (!userId) return {};
+
 	const supabase = createClient();
+	const result: Record<string, "up" | "down"> = {};
+	const BATCH_SIZE = 250;
 
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
+	for (let i = 0; i < scheduleIds.length; i += BATCH_SIZE) {
+		const batch = scheduleIds.slice(i, i + BATCH_SIZE);
 
-	if (!user) return { success: false };
+		const { data } = await supabase
+			.from("verifications")
+			.select("schedule_id, vote_type")
+			.eq("user_id", userId)
+			.in("schedule_id", batch);
+
+		if (data) {
+			data.forEach((v) => {
+				result[v.schedule_id] = v.vote_type === "positive" ? "up" : "down";
+			});
+		}
+	}
+
+	return result;
+}
+
+export async function removeVote(scheduleId: string): Promise<{ success: boolean }> {
+	const userId = await getCurrentUserId();
+	if (!userId) return { success: false };
+
+	const supabase = createClient();
 
 	const { error } = await supabase
 		.from("verifications")
 		.delete()
 		.eq("schedule_id", scheduleId)
-		.eq("user_id", user.id);
+		.eq("user_id", userId);
 
 	return { success: !error };
 }
