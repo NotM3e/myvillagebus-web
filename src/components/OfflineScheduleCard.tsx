@@ -159,9 +159,9 @@ export default function OfflineScheduleCard({
 	const getStatusStyle = () => {
 		if (schedule.status === "pending") {
 			return {
-				borderColor: "var(--md-sys-color-tertiary)",
-				badgeBg: "var(--md-sys-color-tertiary-container)",
-				badgeText: "var(--md-sys-color-on-tertiary-container)",
+				borderColor: "var(--md-sys-color-tertiary)]",
+				badgeBg: "var(--md-sys-color-tertiary-container)]",
+				badgeText: "var(--md-sys-color-on-tertiary-container)]",
 				label: "Oczekuje",
 				icon: <PendingIcon sx={{ fontSize: 14 }} />,
 			};
@@ -169,18 +169,18 @@ export default function OfflineScheduleCard({
 
 		if (schedule.isVerified) {
 			return {
-				borderColor: "var(--md-sys-color-primary)",
-				badgeBg: "var(--md-sys-color-primary-container)",
-				badgeText: "var(--md-sys-color-on-primary-container)",
+				borderColor: "var(--md-sys-color-primary)]",
+				badgeBg: "var(--md-sys-color-primary-container)]",
+				badgeText: "var(--md-sys-color-on-primary-container)]",
 				label: "Zweryfikowany",
 				icon: <VerifiedIcon sx={{ fontSize: 14 }} />,
 			};
 		}
 
 		return {
-			borderColor: "var(--md-sys-color-secondary)",
-			badgeBg: "var(--md-sys-color-secondary-container)",
-			badgeText: "var(--md-sys-color-on-secondary-container)",
+			borderColor: "var(--md-sys-color-secondary)]",
+			badgeBg: "var(--md-sys-color-secondary-container)]",
+			badgeText: "var(--md-sys-color-on-secondary-container)]",
 			label: "Społecznościowy",
 			icon: <PersonOutlineIcon sx={{ fontSize: 14 }} />,
 		};
@@ -198,11 +198,11 @@ export default function OfflineScheduleCard({
 				<Link href={detailsUrl} className="block p-4 pb-2">
 					{/* Header */}
 					<div className="flex items-center gap-3">
-						<div className="w-10 h-10 rounded-full bg-[var(--md-sys-color-primary-container)] flex items-center justify-center">
+						<div className="w-10 h-10 rounded-full bg-(--md-sys-color-primary-container) flex items-center justify-center">
 							<DirectionsBusIcon
 								sx={{
 									fontSize: 24,
-									color: "var(--md-sys-color-on-primary-container)",
+									color: "var(--md-sys-color-on-primary-container)]",
 								}}
 							/>
 						</div>
@@ -211,20 +211,20 @@ export default function OfflineScheduleCard({
 								<p className="md-title-medium">{schedule.carrierName}</p>
 								<CarrierBadge status={schedule.carrierStatus} />
 							</div>
-							<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+							<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 								Linia {schedule.lineNumber}
 							</p>
 						</div>
 
 						{/* Departure time */}
-						<div className="flex items-center gap-1 px-3 py-2 rounded-lg bg-[var(--md-sys-color-primary-container)]">
+						<div className="flex items-center gap-1 px-3 py-2 rounded-lg bg-(--md-sys-color-primary-container)">
 							<AccessTimeIcon
 								sx={{
 									fontSize: 18,
-									color: "var(--md-sys-color-on-primary-container)",
+									color: "var(--md-sys-color-on-primary-container)]",
 								}}
 							/>
-							<span className="md-title-medium text-[var(--md-sys-color-on-primary-container)]">
+							<span className="md-title-medium text-(--md-sys-color-on-primary-container)">
 								{displayTime ?? formatTime(schedule.firstDeparture)}
 							</span>
 						</div>
@@ -252,14 +252,14 @@ export default function OfflineScheduleCard({
 
 					{/* Holiday warning */}
 					{showHolidayWarning && (
-						<div className="flex items-center gap-2 p-2 mb-2 rounded-lg bg-[var(--md-sys-color-error-container)]">
+						<div className="flex items-center gap-2 p-2 mb-2 rounded-lg bg-(--md-sys-color-error-container)">
 							<WarningAmberIcon
 								sx={{
 									fontSize: 18,
-									color: "var(--md-sys-color-on-error-container)",
+									color: "var(--md-sys-color-on-error-container)]",
 								}}
 							/>
-							<p className="md-body-small text-[var(--md-sys-color-on-error-container)]">
+							<p className="md-body-small text-(--md-sys-color-on-error-container)">
 								Prawdopodobnie nie kursuje - {holidayInfo.name}
 							</p>
 						</div>
@@ -268,22 +268,22 @@ export default function OfflineScheduleCard({
 
 				{/* Footer: Score + Actions - NOT clickable for navigation */}
 				<div className="px-4">
-					<div className="flex items-center justify-between border-t border-[var(--md-sys-color-outline-variant)]">
+					<div className="flex items-center justify-between border-t border-(--md-sys-color-outline-variant)">
 						{/* Score */}
 						<div className="flex items-center gap-1">
 							<span
 								className={`md-label-large ${
 									localScore > 0
-										? "text-[var(--md-sys-color-primary)]"
+										? "text-(--md-sys-color-primary)"
 										: localScore < 0
-											? "text-[var(--md-sys-color-error)]"
-											: "text-[var(--md-sys-color-on-surface-variant)]"
+											? "text-(--md-sys-color-error)"
+											: "text-(--md-sys-color-on-surface-variant)"
 								}`}
 							>
 								{localScore > 0 ? "+" : ""}
 								{localScore}
 							</span>
-							<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+							<span className="md-body-small text-(--md-sys-color-on-surface-variant)">
 								pkt
 							</span>
 						</div>
@@ -294,18 +294,18 @@ export default function OfflineScheduleCard({
 							<button
 								onClick={(e) => handleVote("up", e)}
 								disabled={voteLoading}
-								className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors disabled:opacity-50"
+								className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors disabled:opacity-50"
 								title="Aktualny"
 							>
 								{voteState === "up" ? (
 									<ThumbUpIcon
-										sx={{ fontSize: 20, color: "var(--md-sys-color-primary)" }}
+										sx={{ fontSize: 20, color: "var(--md-sys-color-primary)]" }}
 									/>
 								) : (
 									<ThumbUpOutlinedIcon
 										sx={{
 											fontSize: 20,
-											color: "var(--md-sys-color-on-surface-variant)",
+											color: "var(--md-sys-color-on-surface-variant)]",
 										}}
 									/>
 								)}
@@ -315,18 +315,18 @@ export default function OfflineScheduleCard({
 							<button
 								onClick={(e) => handleVote("down", e)}
 								disabled={voteLoading}
-								className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors disabled:opacity-50"
+								className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors disabled:opacity-50"
 								title="Nieaktualny"
 							>
 								{voteState === "down" ? (
 									<ThumbDownIcon
-										sx={{ fontSize: 20, color: "var(--md-sys-color-error)" }}
+										sx={{ fontSize: 20, color: "var(--md-sys-color-error)]" }}
 									/>
 								) : (
 									<ThumbDownOutlinedIcon
 										sx={{
 											fontSize: 20,
-											color: "var(--md-sys-color-on-surface-variant)",
+											color: "var(--md-sys-color-on-surface-variant)]",
 										}}
 									/>
 								)}
@@ -335,13 +335,13 @@ export default function OfflineScheduleCard({
 							{/* Report */}
 							<button
 								onClick={handleReportClick}
-								className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+								className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 								title="Zgłoś problem"
 							>
 								<FlagOutlinedIcon
 									sx={{
 										fontSize: 20,
-										color: "var(--md-sys-color-on-surface-variant)",
+										color: "var(--md-sys-color-on-surface-variant)]",
 									}}
 								/>
 							</button>

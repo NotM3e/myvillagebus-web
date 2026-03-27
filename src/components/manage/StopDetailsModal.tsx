@@ -226,15 +226,15 @@ export default function StopDetailsModal({
 
 			{/* Modal */}
 			<div className="fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-lg max-h-[90vh] overflow-hidden">
-				<div className="bg-[var(--md-sys-color-surface)] rounded-3xl shadow-xl flex flex-col max-h-[90vh]">
+				<div className="bg-(--md-sys-color-surface) rounded-3xl shadow-xl flex flex-col max-h-[90vh]">
 					{/* Header */}
-					<div className="flex items-center justify-between p-4 border-b border-[var(--md-sys-color-outline-variant)]">
+					<div className="flex items-center justify-between p-4 border-b border-(--md-sys-color-outline-variant)">
 						<div className="flex items-center gap-3">
-							<div className="w-10 h-10 rounded-full bg-[var(--md-sys-color-primary-container)] flex items-center justify-center">
+							<div className="w-10 h-10 rounded-full bg-(--md-sys-color-primary-container) flex items-center justify-center">
 								<PlaceIcon
 									sx={{
 										fontSize: 20,
-										color: "var(--md-sys-color-on-primary-container)",
+										color: "var(--md-sys-color-on-primary-container)]",
 									}}
 								/>
 							</div>
@@ -242,9 +242,9 @@ export default function StopDetailsModal({
 						</div>
 						<button
 							onClick={onClose}
-							className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+							className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 						>
-							<CloseIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+							<CloseIcon sx={{ color: "var(--md-sys-color-on-surface)]" }} />
 						</button>
 					</div>
 
@@ -253,26 +253,26 @@ export default function StopDetailsModal({
 						{/* Form */}
 						<div className="space-y-4">
 							<div>
-								<label className="block md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-2">
+								<label className="block md-body-small text-(--md-sys-color-on-surface-variant) mb-2">
 									Miejscowość *
 								</label>
 								<input
 									type="text"
 									value={city}
 									onChange={(e) => setCity(e.target.value)}
-									className="w-full px-4 py-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+									className="w-full px-4 py-3 rounded-xl bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 								/>
 							</div>
 
 							<div>
-								<label className="block md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-2">
+								<label className="block md-body-small text-(--md-sys-color-on-surface-variant) mb-2">
 									Nazwa przystanku
 								</label>
 								<input
 									type="text"
 									value={name}
 									onChange={(e) => setName(e.target.value)}
-									className="w-full px-4 py-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+									className="w-full px-4 py-3 rounded-xl bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 								/>
 							</div>
 
@@ -281,23 +281,23 @@ export default function StopDetailsModal({
 								onClick={() => setIsVerified(!isVerified)}
 								className={`w-full p-3 rounded-xl flex items-center gap-3 transition-colors ${
 									isVerified
-										? "bg-[var(--md-sys-color-primary-container)]"
-										: "bg-[var(--md-sys-color-surface-variant)]"
+										? "bg-(--md-sys-color-primary-container)"
+										: "bg-(--md-sys-color-surface-variant)"
 								}`}
 							>
 								<VerifiedIcon
 									sx={{
 										fontSize: 24,
 										color: isVerified
-											? "var(--md-sys-color-on-primary-container)"
-											: "var(--md-sys-color-on-surface-variant)",
+											? "var(--md-sys-color-on-primary-container)]"
+											: "var(--md-sys-color-on-surface-variant)]",
 									}}
 								/>
 								<span
 									className={`md-body-large ${
 										isVerified
-											? "text-[var(--md-sys-color-on-primary-container)]"
-											: "text-[var(--md-sys-color-on-surface)]"
+											? "text-(--md-sys-color-on-primary-container)"
+											: "text-(--md-sys-color-on-surface)"
 									}`}
 								>
 									Zweryfikowany
@@ -313,10 +313,10 @@ export default function StopDetailsModal({
 
 							{loadingUsages ? (
 								<div className="flex items-center justify-center py-4">
-									<div className="w-6 h-6 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
+									<div className="w-6 h-6 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
 								</div>
 							) : usages.length === 0 ? (
-								<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)] text-center py-4">
+								<p className="md-body-medium text-(--md-sys-color-on-surface-variant) text-center py-4">
 									Przystanek nie jest używany w żadnym rozkładzie
 								</p>
 							) : (
@@ -324,19 +324,19 @@ export default function StopDetailsModal({
 									{usages.map((usage, index) => (
 										<div
 											key={`${usage.scheduleId}-${index}`}
-											className="p-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] flex items-center gap-3"
+											className="p-3 rounded-xl bg-(--md-sys-color-surface-variant) flex items-center gap-3"
 										>
 											<DirectionsBusIcon
 												sx={{
 													fontSize: 20,
-													color: "var(--md-sys-color-primary)",
+													color: "var(--md-sys-color-primary)]",
 												}}
 											/>
 											<div className="flex-1 min-w-0">
 												<p className="md-body-medium truncate">
 													{usage.carrierName} - Linia {usage.lineNumber}
 												</p>
-												<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] truncate">
+												<p className="md-body-small text-(--md-sys-color-on-surface-variant) truncate">
 													{usage.direction} (pozycja {usage.orderIndex})
 												</p>
 											</div>
@@ -348,8 +348,8 @@ export default function StopDetailsModal({
 
 						{/* Error */}
 						{error && (
-							<div className="p-3 rounded-xl bg-[var(--md-sys-color-error-container)]">
-								<p className="md-body-medium text-[var(--md-sys-color-on-error-container)]">
+							<div className="p-3 rounded-xl bg-(--md-sys-color-error-container)">
+								<p className="md-body-medium text-(--md-sys-color-on-error-container)">
 									{error}
 								</p>
 							</div>
@@ -357,20 +357,20 @@ export default function StopDetailsModal({
 
 						{/* Delete confirmation */}
 						{showDeleteConfirm && (
-							<div className="p-4 rounded-xl bg-[var(--md-sys-color-error-container)]">
+							<div className="p-4 rounded-xl bg-(--md-sys-color-error-container)">
 								<div className="flex items-start gap-3 mb-3">
 									<WarningAmberIcon
 										sx={{
 											fontSize: 24,
-											color: "var(--md-sys-color-on-error-container)",
+											color: "var(--md-sys-color-on-error-container)]",
 										}}
 									/>
 									<div>
-										<p className="md-body-large text-[var(--md-sys-color-on-error-container)]">
+										<p className="md-body-large text-(--md-sys-color-on-error-container)">
 											Czy na pewno usunąć ten przystanek?
 										</p>
 										{usages.length > 0 && (
-											<p className="md-body-medium text-[var(--md-sys-color-on-error-container)]">
+											<p className="md-body-medium text-(--md-sys-color-on-error-container)">
 												Zostanie usunięty z {usages.length} rozkładów!
 											</p>
 										)}
@@ -386,7 +386,7 @@ export default function StopDetailsModal({
 									<button
 										onClick={handleDelete}
 										disabled={deleting}
-										className="md-filled-button bg-[var(--md-sys-color-error)] flex items-center gap-2"
+										className="md-filled-button bg-(--md-sys-color-error) flex items-center gap-2"
 									>
 										{deleting ? (
 											<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -401,11 +401,11 @@ export default function StopDetailsModal({
 					</div>
 
 					{/* Footer */}
-					<div className="flex items-center justify-between p-4 border-t border-[var(--md-sys-color-outline-variant)]">
+					<div className="flex items-center justify-between p-4 border-t border-(--md-sys-color-outline-variant)">
 						{!showDeleteConfirm && (
 							<button
 								onClick={() => setShowDeleteConfirm(true)}
-								className="md-text-button text-[var(--md-sys-color-error)] flex items-center gap-2"
+								className="md-text-button text-(--md-sys-color-error) flex items-center gap-2"
 							>
 								<DeleteOutlineIcon sx={{ fontSize: 18 }} />
 								Usuń

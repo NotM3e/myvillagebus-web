@@ -232,8 +232,8 @@ export default function ManageDataPage() {
 					onClick={() => setActiveTab("stops")}
 					className={`flex items-center gap-2 px-4 py-2 rounded-full transition-colors ${
 						activeTab === "stops"
-							? "bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)]"
-							: "bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)]"
+							? "bg-(--md-sys-color-primary) text-(--md-sys-color-on-primary)"
+							: "bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant)"
 					}`}
 				>
 					<PlaceIcon sx={{ fontSize: 20 }} />
@@ -243,8 +243,8 @@ export default function ManageDataPage() {
 					onClick={() => setActiveTab("carriers")}
 					className={`flex items-center gap-2 px-4 py-2 rounded-full transition-colors ${
 						activeTab === "carriers"
-							? "bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)]"
-							: "bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)]"
+							? "bg-(--md-sys-color-primary) text-(--md-sys-color-on-primary)"
+							: "bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant)"
 					}`}
 				>
 					<DirectionsBusIcon sx={{ fontSize: 20 }} />
@@ -262,7 +262,7 @@ export default function ManageDataPage() {
 							top: "50%",
 							transform: "translateY(-50%)",
 							fontSize: 20,
-							color: "var(--md-sys-color-on-surface-variant)",
+							color: "var(--md-sys-color-on-surface-variant)]",
 						}}
 					/>
 					<input
@@ -272,7 +272,7 @@ export default function ManageDataPage() {
 						}
 						value={searchQuery}
 						onChange={(e) => setSearchQuery(e.target.value)}
-						className="w-full pl-10 pr-4 py-2 rounded-lg bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+						className="w-full pl-10 pr-4 py-2 rounded-lg bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 					/>
 				</div>
 
@@ -317,14 +317,14 @@ export default function ManageDataPage() {
 			{/* Content */}
 			{loading ? (
 				<div className="flex items-center justify-center h-64">
-					<div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
+					<div className="w-8 h-8 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
 				</div>
 			) : activeTab === "stops" ? (
 				/* Stops list */
 				<div className="space-y-2">
 					{filteredStops.length === 0 ? (
 						<div className="md-card md-elevation-1 p-8 text-center">
-							<p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
+							<p className="md-body-large text-(--md-sys-color-on-surface-variant)">
 								Brak przystanków
 							</p>
 						</div>
@@ -338,8 +338,8 @@ export default function ManageDataPage() {
 									onClick={() => setSelectedStop(stop)}
 									className={`md-card md-elevation-1 p-3 flex items-center gap-3 cursor-pointer transition-colors ${
 										isSelected
-											? "ring-2 ring-[var(--md-sys-color-primary)] bg-[var(--md-sys-color-primary-container)]"
-											: "hover:bg-[var(--md-sys-color-surface-variant)]"
+											? "ring-2 ring-(--md-sys-color-primary) bg-(--md-sys-color-primary-container)"
+											: "hover:bg-(--md-sys-color-surface-variant)"
 									}`}
 								>
 									{/* Checkbox */}
@@ -350,8 +350,8 @@ export default function ManageDataPage() {
 										}}
 										className={`w-6 h-6 rounded border-2 flex items-center justify-center cursor-pointer ${
 											isSelected
-												? "bg-[var(--md-sys-color-primary)] border-[var(--md-sys-color-primary)]"
-												: "border-[var(--md-sys-color-outline)]"
+												? "bg-(--md-sys-color-primary) border-(--md-sys-color-primary)"
+												: "border-(--md-sys-color-outline)"
 										}`}
 									>
 										{isSelected && (
@@ -372,7 +372,7 @@ export default function ManageDataPage() {
 												<VerifiedIcon
 													sx={{
 														fontSize: 16,
-														color: "var(--md-sys-color-primary)",
+														color: "var(--md-sys-color-primary)]",
 													}}
 												/>
 											)}
@@ -381,7 +381,7 @@ export default function ManageDataPage() {
 
 									{/* Selection order */}
 									{isSelected && (
-										<span className="w-6 h-6 rounded-full bg-[var(--md-sys-color-primary)] text-white text-xs flex items-center justify-center">
+										<span className="w-6 h-6 rounded-full bg-(--md-sys-color-primary) text-white text-xs flex items-center justify-center">
 											{Array.from(selectedStops).indexOf(stop.id) + 1}
 										</span>
 									)}
@@ -395,7 +395,7 @@ export default function ManageDataPage() {
 				<div className="space-y-2">
 					{filteredCarriers.length === 0 ? (
 						<div className="md-card md-elevation-1 p-8 text-center">
-							<p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
+							<p className="md-body-large text-(--md-sys-color-on-surface-variant)">
 								Brak przewoźników
 							</p>
 						</div>
@@ -404,12 +404,12 @@ export default function ManageDataPage() {
 							<div
 								key={carrier.id}
 								onClick={() => setSelectedCarrier(carrier)}
-								className="md-card md-elevation-1 p-4 flex items-center gap-4 cursor-pointer hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+								className="md-card md-elevation-1 p-4 flex items-center gap-4 cursor-pointer hover:bg-(--md-sys-color-surface-variant) transition-colors"
 							>
 								<DirectionsBusIcon
 									sx={{
 										fontSize: 24,
-										color: "var(--md-sys-color-on-surface-variant)",
+										color: "var(--md-sys-color-on-surface-variant)]",
 									}}
 								/>
 

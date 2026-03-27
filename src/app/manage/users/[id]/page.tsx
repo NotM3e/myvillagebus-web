@@ -32,11 +32,11 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
 };
 
 const ROLE_CONFIG: Record<UserRole, { label: string; color: string }> = {
-	viewer: { label: "Viewer", color: "var(--md-sys-color-outline)" },
-	contributor: { label: "Contributor", color: "var(--md-sys-color-secondary)" },
-	trusted_editor: { label: "Trusted Editor", color: "var(--md-sys-color-primary)" },
-	super_editor: { label: "Super Editor", color: "var(--md-sys-color-tertiary)" },
-	admin: { label: "Admin", color: "var(--md-sys-color-error)" },
+	viewer: { label: "Viewer", color: "var(--md-sys-color-outline)]" },
+	contributor: { label: "Contributor", color: "var(--md-sys-color-secondary)]" },
+	trusted_editor: { label: "Trusted Editor", color: "var(--md-sys-color-primary)]" },
+	super_editor: { label: "Super Editor", color: "var(--md-sys-color-tertiary)]" },
+	admin: { label: "Admin", color: "var(--md-sys-color-error)]" },
 };
 
 const ROLE_OPTIONS: UserRole[] = [
@@ -48,9 +48,9 @@ const ROLE_OPTIONS: UserRole[] = [
 ];
 
 const STATUS_CONFIG: Record<UserStatus, { label: string; color: string }> = {
-	active: { label: "Aktywny", color: "var(--md-sys-color-primary)" },
-	shadow_banned: { label: "Shadow Ban", color: "var(--md-sys-color-tertiary)" },
-	banned: { label: "Zbanowany", color: "var(--md-sys-color-error)" },
+	active: { label: "Aktywny", color: "var(--md-sys-color-primary)]" },
+	shadow_banned: { label: "Shadow Ban", color: "var(--md-sys-color-tertiary)]" },
+	banned: { label: "Zbanowany", color: "var(--md-sys-color-error)]" },
 };
 
 interface UserProfile {
@@ -387,13 +387,13 @@ export default function ManageUserDetailPage({ params }: PageProps) {
 	const getScheduleStatusColor = (status: string) => {
 		switch (status) {
 			case "active":
-				return "var(--md-sys-color-primary)";
+				return "var(--md-sys-color-primary)]";
 			case "pending":
-				return "var(--md-sys-color-tertiary)";
+				return "var(--md-sys-color-tertiary)]";
 			case "flagged":
-				return "var(--md-sys-color-error)";
+				return "var(--md-sys-color-error)]";
 			default:
-				return "var(--md-sys-color-outline)";
+				return "var(--md-sys-color-outline)]";
 		}
 	};
 
@@ -408,9 +408,9 @@ export default function ManageUserDetailPage({ params }: PageProps) {
 	};
 
 	const getActionColor = (action: string) => {
-		if (action.includes("BAN") && !action.includes("UNBAN")) return "var(--md-sys-color-error)";
-		if (action.includes("UNBAN")) return "var(--md-sys-color-primary)";
-		return "var(--md-sys-color-secondary)";
+		if (action.includes("BAN") && !action.includes("UNBAN")) return "var(--md-sys-color-error)]";
+		if (action.includes("UNBAN")) return "var(--md-sys-color-primary)]";
+		return "var(--md-sys-color-secondary)]";
 	};
 
 	const isSelf = userId === currentUserId;
@@ -427,14 +427,14 @@ export default function ManageUserDetailPage({ params }: PageProps) {
 				<div className="flex items-center gap-4 mb-6">
 					<Link
 						href="/manage/users"
-						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 					>
-						<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+						<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)]" }} />
 					</Link>
 					<h1 className="md-title-large">Kartoteka użytkownika</h1>
 				</div>
 				<div className="flex items-center justify-center h-64">
-					<div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
+					<div className="w-8 h-8 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
 				</div>
 			</div>
 		);
@@ -447,14 +447,14 @@ export default function ManageUserDetailPage({ params }: PageProps) {
 				<div className="flex items-center gap-4 mb-6">
 					<Link
 						href="/manage/users"
-						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 					>
-						<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+						<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)]" }} />
 					</Link>
 					<h1 className="md-title-large">Kartoteka użytkownika</h1>
 				</div>
 				<div className="md-card md-elevation-1 p-8 text-center">
-					<p className="md-body-large text-[var(--md-sys-color-error)]">{error}</p>
+					<p className="md-body-large text-(--md-sys-color-error)">{error}</p>
 				</div>
 			</div>
 		);
@@ -469,9 +469,9 @@ export default function ManageUserDetailPage({ params }: PageProps) {
 			<div className="flex items-center gap-4 mb-6">
 				<Link
 					href="/manage/users"
-					className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+					className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 				>
-					<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+					<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)]" }} />
 				</Link>
 				<h1 className="md-title-large">Kartoteka użytkownika</h1>
 			</div>
@@ -505,7 +505,7 @@ export default function ManageUserDetailPage({ params }: PageProps) {
 								{profile.display_name || "Bez nazwy"}
 							</h2>
 							{isSelf && (
-								<span className="px-2 py-0.5 rounded-full text-xs bg-[var(--md-sys-color-primary-container)] text-[var(--md-sys-color-on-primary-container)]">
+								<span className="px-2 py-0.5 rounded-full text-xs bg-(--md-sys-color-primary-container) text-(--md-sys-color-on-primary-container)">
 									Ty
 								</span>
 							)}
@@ -545,13 +545,13 @@ export default function ManageUserDetailPage({ params }: PageProps) {
 							<p className="md-body-medium">
 								Reputacja: <strong>{profile.reputation} pkt</strong>
 							</p>
-							<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+							<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 								Dołączył: {formatDate(profile.created_at)}
 							</p>
-							<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+							<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 								Ostatnia aktywność: {formatDate(profile.last_active_at)}
 							</p>
-							<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] font-mono truncate">
+							<p className="md-body-small text-(--md-sys-color-on-surface-variant) font-mono truncate">
 								ID: {profile.id}
 							</p>
 						</div>
@@ -560,17 +560,17 @@ export default function ManageUserDetailPage({ params }: PageProps) {
 
 				{/* Actions */}
 				{canModify && (
-					<div className="mt-4 pt-4 border-t border-[var(--md-sys-color-outline-variant)] flex flex-wrap items-center gap-3">
+					<div className="mt-4 pt-4 border-t border-(--md-sys-color-outline-variant) flex flex-wrap items-center gap-3">
 						{/* Role selector */}
 						<div className="flex items-center gap-2">
-							<span className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+							<span className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 								Rola:
 							</span>
 							<select
 								value={profile.role}
 								onChange={(e) => handleRoleChange(e.target.value as UserRole)}
 								disabled={actionLoading || currentUserRole !== "admin"}
-								className="px-3 py-2 rounded-lg bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] text-sm border-none focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)] disabled:opacity-50"
+								className="px-3 py-2 rounded-lg bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) text-sm border-none focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary) disabled:opacity-50"
 							>
 								{ROLE_OPTIONS.map((role) => (
 									<option key={role} value={role}>
@@ -588,8 +588,8 @@ export default function ManageUserDetailPage({ params }: PageProps) {
 									disabled={actionLoading}
 									className="md-outlined-button text-sm flex items-center gap-1 disabled:opacity-50"
 									style={{
-										color: "var(--md-sys-color-tertiary)",
-										borderColor: "var(--md-sys-color-tertiary)",
+										color: "var(--md-sys-color-tertiary)]",
+										borderColor: "var(--md-sys-color-tertiary)]",
 									}}
 								>
 									<VisibilityOffIcon sx={{ fontSize: 16 }} />
@@ -600,8 +600,8 @@ export default function ManageUserDetailPage({ params }: PageProps) {
 									disabled={actionLoading}
 									className="md-outlined-button text-sm flex items-center gap-1 disabled:opacity-50"
 									style={{
-										color: "var(--md-sys-color-error)",
-										borderColor: "var(--md-sys-color-error)",
+										color: "var(--md-sys-color-error)]",
+										borderColor: "var(--md-sys-color-error)]",
 									}}
 								>
 									<BlockIcon sx={{ fontSize: 16 }} />
@@ -634,39 +634,39 @@ export default function ManageUserDetailPage({ params }: PageProps) {
 						label="Rozkłady"
 						value={stats.schedulesTotal}
 						subValue={`${stats.schedulesActive} aktywnych`}
-						color="var(--md-sys-color-primary)"
+						color="var(--md-sys-color-primary)]"
 					/>
 					<StatCard
 						icon={ScheduleIcon}
 						label="Odrzucone"
 						value={stats.schedulesRejected}
-						color="var(--md-sys-color-error)"
+						color="var(--md-sys-color-error)]"
 					/>
 					<StatCard
 						icon={ThumbUpIcon}
 						label="Głosy oddane"
 						value={stats.votesGivenPositive}
 						subValue={`${stats.votesGivenNegative} negatywnych`}
-						color="var(--md-sys-color-primary)"
+						color="var(--md-sys-color-primary)]"
 					/>
 					<StatCard
 						icon={ThumbUpIcon}
 						label="Głosy otrzymane"
 						value={stats.votesReceivedPositive}
 						subValue={`${stats.votesReceivedNegative} negatywnych`}
-						color="var(--md-sys-color-secondary)"
+						color="var(--md-sys-color-secondary)]"
 					/>
 					<StatCard
 						icon={FlagIcon}
 						label="Zgłoszenia wysłane"
 						value={stats.reportsSent}
-						color="var(--md-sys-color-tertiary)"
+						color="var(--md-sys-color-tertiary)]"
 					/>
 					<StatCard
 						icon={FlagIcon}
 						label="Zgłoszenia otrzymane"
 						value={stats.reportsReceived}
-						color="var(--md-sys-color-error)"
+						color="var(--md-sys-color-error)]"
 					/>
 				</div>
 			)}
@@ -674,13 +674,13 @@ export default function ManageUserDetailPage({ params }: PageProps) {
 			{/* Schedules section */}
 			<div className="mb-6">
 				<h3 className="md-title-medium mb-3 flex items-center gap-2">
-					<ScheduleIcon sx={{ fontSize: 20, color: "var(--md-sys-color-primary)" }} />
+					<ScheduleIcon sx={{ fontSize: 20, color: "var(--md-sys-color-primary)]" }} />
 					Utworzone rozkłady ({schedules.length})
 				</h3>
 
 				{schedules.length === 0 ? (
 					<div className="md-card md-elevation-1 p-6 text-center">
-						<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+						<p className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 							Użytkownik nie utworzył jeszcze żadnych rozkładów
 						</p>
 					</div>
@@ -703,7 +703,7 @@ export default function ManageUserDetailPage({ params }: PageProps) {
 										>
 											{schedule.status}
 										</span>
-										<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+										<span className="md-body-small text-(--md-sys-color-on-surface-variant)">
 											v{schedule.version}
 										</span>
 									</div>
@@ -711,19 +711,19 @@ export default function ManageUserDetailPage({ params }: PageProps) {
 										<strong>{schedule.carrierName}</strong> - Linia{" "}
 										{schedule.lineNumber}
 									</p>
-									<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] truncate">
+									<p className="md-body-small text-(--md-sys-color-on-surface-variant) truncate">
 										{schedule.direction}
 									</p>
 								</div>
 
 								<Link
 									href={`/manage/schedules/${schedule.id}`}
-									className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors shrink-0"
+									className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors shrink-0"
 								>
 									<OpenInNewIcon
 										sx={{
 											fontSize: 18,
-											color: "var(--md-sys-color-on-surface-variant)",
+											color: "var(--md-sys-color-on-surface-variant)]",
 										}}
 									/>
 								</Link>
@@ -736,13 +736,13 @@ export default function ManageUserDetailPage({ params }: PageProps) {
 			{/* Moderation history */}
 			<div className="mb-6">
 				<h3 className="md-title-medium mb-3 flex items-center gap-2">
-					<HistoryIcon sx={{ fontSize: 20, color: "var(--md-sys-color-secondary)" }} />
+					<HistoryIcon sx={{ fontSize: 20, color: "var(--md-sys-color-secondary)]" }} />
 					Historia moderacji ({moderationHistory.length})
 				</h3>
 
 				{moderationHistory.length === 0 ? (
 					<div className="md-card md-elevation-1 p-6 text-center">
-						<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+						<p className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 							Brak historii moderacji dla tego użytkownika
 						</p>
 					</div>
@@ -761,18 +761,18 @@ export default function ManageUserDetailPage({ params }: PageProps) {
 									>
 										{getActionLabel(entry.action)}
 									</span>
-									<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+									<span className="md-body-small text-(--md-sys-color-on-surface-variant)">
 										{formatDate(entry.created_at)}
 									</span>
 								</div>
 
-								<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+								<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 									Moderator: {entry.moderatorName || "Nieznany"}
 								</p>
 
 								{/* Show payload details */}
 								{entry.payload && (
-									<div className="mt-2 p-2 rounded-lg bg-[var(--md-sys-color-surface-variant)]">
+									<div className="mt-2 p-2 rounded-lg bg-(--md-sys-color-surface-variant)">
 										{entry.payload.reason && (
 											<p className="md-body-small">
 												Powód:{" "}
@@ -780,13 +780,13 @@ export default function ManageUserDetailPage({ params }: PageProps) {
 											</p>
 										)}
 										{entry.payload.oldRole && (
-											<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+											<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 												{entry.payload.oldRole as string} →{" "}
 												{entry.payload.newRole as string}
 											</p>
 										)}
 										{entry.payload.oldStatus && (
-											<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+											<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 												{entry.payload.oldStatus as string} →{" "}
 												{entry.payload.newStatus as string}
 											</p>
@@ -832,7 +832,7 @@ function StatCard({
 		<div className="md-card md-elevation-1 p-3">
 			<div className="flex items-center gap-2 mb-1">
 				<Icon sx={{ fontSize: 18, color }} />
-				<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+				<span className="md-body-small text-(--md-sys-color-on-surface-variant)">
 					{label}
 				</span>
 			</div>
@@ -840,7 +840,7 @@ function StatCard({
 				{value}
 			</p>
 			{subValue && (
-				<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+				<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 					{subValue}
 				</p>
 			)}

@@ -15,19 +15,19 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 
 // Human-readable labels for each audit action
 const ACTION_LABELS: Record<AuditAction, { label: string; color: string }> = {
-	REPORT_RESOLVE: { label: "Rozwiązanie zgłoszenia", color: "var(--md-sys-color-primary)" },
-	REPORT_DISMISS: { label: "Odrzucenie zgłoszenia", color: "var(--md-sys-color-tertiary)" },
-	SCHEDULE_APPROVE: { label: "Zatwierdzenie rozkładu", color: "var(--md-sys-color-primary)" },
-	SCHEDULE_REJECT: { label: "Odrzucenie rozkładu", color: "var(--md-sys-color-error)" },
-	SCHEDULE_ARCHIVE: { label: "Archiwizacja rozkładu", color: "var(--md-sys-color-tertiary)" },
-	USER_ROLE_CHANGE: { label: "Zmiana roli użytkownika", color: "var(--md-sys-color-secondary)" },
-	USER_SHADOW_BAN: { label: "Shadow ban", color: "var(--md-sys-color-tertiary)" },
-	USER_BAN: { label: "Ban użytkownika", color: "var(--md-sys-color-error)" },
-	USER_UNBAN: { label: "Odbanowanie", color: "var(--md-sys-color-primary)" },
-	STOP_MERGE: { label: "Scalenie przystanków", color: "var(--md-sys-color-secondary)" },
-	STOP_VERIFY: { label: "Weryfikacja przystanku", color: "var(--md-sys-color-primary)" },
-	CARRIER_VERIFY: { label: "Weryfikacja przewoźnika", color: "var(--md-sys-color-primary)" },
-	SETTINGS_CHANGE: { label: "Zmiana ustawień", color: "var(--md-sys-color-outline)" },
+	REPORT_RESOLVE: { label: "Rozwiązanie zgłoszenia", color: "var(--md-sys-color-primary)]" },
+	REPORT_DISMISS: { label: "Odrzucenie zgłoszenia", color: "var(--md-sys-color-tertiary)]" },
+	SCHEDULE_APPROVE: { label: "Zatwierdzenie rozkładu", color: "var(--md-sys-color-primary)]" },
+	SCHEDULE_REJECT: { label: "Odrzucenie rozkładu", color: "var(--md-sys-color-error)]" },
+	SCHEDULE_ARCHIVE: { label: "Archiwizacja rozkładu", color: "var(--md-sys-color-tertiary)]" },
+	USER_ROLE_CHANGE: { label: "Zmiana roli użytkownika", color: "var(--md-sys-color-secondary)]" },
+	USER_SHADOW_BAN: { label: "Shadow ban", color: "var(--md-sys-color-tertiary)]" },
+	USER_BAN: { label: "Ban użytkownika", color: "var(--md-sys-color-error)]" },
+	USER_UNBAN: { label: "Odbanowanie", color: "var(--md-sys-color-primary)]" },
+	STOP_MERGE: { label: "Scalenie przystanków", color: "var(--md-sys-color-secondary)]" },
+	STOP_VERIFY: { label: "Weryfikacja przystanku", color: "var(--md-sys-color-primary)]" },
+	CARRIER_VERIFY: { label: "Weryfikacja przewoźnika", color: "var(--md-sys-color-primary)]" },
+	SETTINGS_CHANGE: { label: "Zmiana ustawień", color: "var(--md-sys-color-outline)]" },
 };
 
 // Grouping for filter dropdown
@@ -73,15 +73,15 @@ function PayloadExplorer({ payload }: { payload: Record<string, unknown> }) {
 	};
 
 	return (
-		<div className="mt-3 rounded-lg overflow-hidden border border-[var(--md-sys-color-outline-variant)]">
+		<div className="mt-3 rounded-lg overflow-hidden border border-(--md-sys-color-outline-variant)">
 			{/* Header with copy button */}
-			<div className="flex items-center justify-between px-3 py-1.5 bg-[var(--md-sys-color-surface-variant)]">
-				<span className="md-label-small text-[var(--md-sys-color-on-surface-variant)]">
+			<div className="flex items-center justify-between px-3 py-1.5 bg-(--md-sys-color-surface-variant)">
+				<span className="md-label-small text-(--md-sys-color-on-surface-variant)">
 					Payload
 				</span>
 				<button
 					onClick={handleCopy}
-					className="flex items-center gap-1 px-2 py-0.5 rounded text-xs hover:bg-[var(--md-sys-color-surface)] transition-colors text-[var(--md-sys-color-on-surface-variant)]"
+					className="flex items-center gap-1 px-2 py-0.5 rounded text-xs hover:bg-(--md-sys-color-surface) transition-colors text-(--md-sys-color-on-surface-variant)"
 					title="Kopiuj JSON"
 				>
 					<ContentCopyIcon sx={{ fontSize: 14 }} />
@@ -90,7 +90,7 @@ function PayloadExplorer({ payload }: { payload: Record<string, unknown> }) {
 			</div>
 
 			{/* Key-value pairs */}
-			<div className="px-3 py-2 space-y-1 bg-[var(--md-sys-color-surface)]">
+			<div className="px-3 py-2 space-y-1 bg-(--md-sys-color-surface)">
 				{Object.entries(payload).map(([key, value]) => (
 					<PayloadField key={key} fieldKey={key} value={value} />
 				))}
@@ -116,26 +116,26 @@ function PayloadField({ fieldKey, value }: { fieldKey: string; value: unknown })
 			<div>
 				<button
 					onClick={() => setExpanded(!expanded)}
-					className="flex items-center gap-1 w-full text-left hover:bg-[var(--md-sys-color-surface-variant)] rounded px-1 -mx-1 transition-colors"
+					className="flex items-center gap-1 w-full text-left hover:bg-(--md-sys-color-surface-variant) rounded px-1 -mx-1 transition-colors"
 				>
 					{expanded ? (
 						<ExpandLessIcon
-							sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }}
+							sx={{ fontSize: 16, color: "var(--md-sys-color-primary)]" }}
 						/>
 					) : (
 						<ExpandMoreIcon
-							sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }}
+							sx={{ fontSize: 16, color: "var(--md-sys-color-primary)]" }}
 						/>
 					)}
-					<span className="md-label-medium text-[var(--md-sys-color-primary)]">
+					<span className="md-label-medium text-(--md-sys-color-primary)">
 						{fieldKey}
 					</span>
-					<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)] ml-1">
+					<span className="md-body-small text-(--md-sys-color-on-surface-variant) ml-1">
 						{isArray ? `[${entries.length}]` : `{${entries.length}}`}
 					</span>
 				</button>
 				{expanded && (
-					<div className="ml-4 pl-3 border-l-2 border-[var(--md-sys-color-outline-variant)] mt-1 space-y-1">
+					<div className="ml-4 pl-3 border-l-2 border-(--md-sys-color-outline-variant) mt-1 space-y-1">
 						{entries.map(([k, v]) => (
 							<PayloadField key={k} fieldKey={k} value={v} />
 						))}
@@ -148,22 +148,22 @@ function PayloadField({ fieldKey, value }: { fieldKey: string; value: unknown })
 	// Primitive value
 	return (
 		<div className="flex items-baseline gap-2 px-1">
-			<span className="md-label-medium text-[var(--md-sys-color-on-surface-variant)] shrink-0">
+			<span className="md-label-medium text-(--md-sys-color-on-surface-variant) shrink-0">
 				{fieldKey}:
 			</span>
-			<span className="md-body-small text-[var(--md-sys-color-on-surface)] break-all">
+			<span className="md-body-small text-(--md-sys-color-on-surface) break-all">
 				{value === null ? (
-					<span className="italic text-[var(--md-sys-color-outline)]">null</span>
+					<span className="italic text-(--md-sys-color-outline)">null</span>
 				) : typeof value === "boolean" ? (
 					<span
 						className="px-1.5 py-0.5 rounded text-xs"
 						style={{
 							backgroundColor: value
-								? "var(--md-sys-color-primary-container)"
-								: "var(--md-sys-color-error-container)",
+								? "var(--md-sys-color-primary-container)]"
+								: "var(--md-sys-color-error-container)]",
 							color: value
-								? "var(--md-sys-color-on-primary-container)"
-								: "var(--md-sys-color-on-error-container)",
+								? "var(--md-sys-color-on-primary-container)]"
+								: "var(--md-sys-color-on-error-container)]",
 						}}
 					>
 						{String(value)}
@@ -298,7 +298,7 @@ export default function ManaLogsPage() {
 				<button
 					onClick={() => fetchLogs()}
 					disabled={loading}
-					className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)] hover:bg-[var(--md-sys-color-outline-variant)] transition-colors disabled:opacity-50"
+					className="flex items-center gap-2 px-4 py-2 rounded-full bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant) hover:bg-(--md-sys-color-outline-variant) transition-colors disabled:opacity-50"
 					title="Odśwież"
 				>
 					<RefreshIcon sx={{ fontSize: 20 }} className={loading ? "animate-spin" : ""} />
@@ -317,7 +317,7 @@ export default function ManaLogsPage() {
 							top: "50%",
 							transform: "translateY(-50%)",
 							fontSize: 20,
-							color: "var(--md-sys-color-on-surface-variant)",
+							color: "var(--md-sys-color-on-surface-variant)]",
 						}}
 					/>
 					<input
@@ -325,19 +325,19 @@ export default function ManaLogsPage() {
 						placeholder="Szukaj po użytkowniku, akcji, ID..."
 						value={searchQuery}
 						onChange={(e) => setSearchQuery(e.target.value)}
-						className="w-full pl-10 pr-4 py-2 rounded-lg bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+						className="w-full pl-10 pr-4 py-2 rounded-lg bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 					/>
 				</div>
 
 				{/* Action type filter */}
 				<div className="flex items-center gap-2">
 					<FilterListIcon
-						sx={{ fontSize: 20, color: "var(--md-sys-color-on-surface-variant)" }}
+						sx={{ fontSize: 20, color: "var(--md-sys-color-on-surface-variant)]" }}
 					/>
 					<select
 						value={actionFilter}
 						onChange={(e) => setActionFilter(e.target.value as AuditAction | "all")}
-						className="px-3 py-2 rounded-lg bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] border-none focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+						className="px-3 py-2 rounded-lg bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) border-none focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 					>
 						<option value="all">Wszystkie akcje</option>
 						{ACTION_GROUPS.map((group) => (
@@ -359,14 +359,14 @@ export default function ManaLogsPage() {
 						placeholder="Filtruj po ID obiektu..."
 						value={targetIdFilter}
 						onChange={(e) => setTargetIdFilter(e.target.value)}
-						className="w-full px-4 py-2 rounded-lg bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)] text-sm"
+						className="w-full px-4 py-2 rounded-lg bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary) text-sm"
 					/>
 				</div>
 			</div>
 
 			{/* Results count */}
 			{!loading && totalCount !== null && (
-				<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-4">
+				<p className="md-body-small text-(--md-sys-color-on-surface-variant) mb-4">
 					Wyświetlono {filteredLogs.length} z {totalCount} zdarzeń
 					{actionFilter !== "all" && ` (filtr: ${ACTION_LABELS[actionFilter].label})`}
 				</p>
@@ -375,21 +375,21 @@ export default function ManaLogsPage() {
 			{/* Log entries */}
 			{loading ? (
 				<div className="flex items-center justify-center h-64">
-					<div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
+					<div className="w-8 h-8 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
 				</div>
 			) : filteredLogs.length === 0 ? (
 				<div className="md-card md-elevation-1 p-8 text-center">
 					<HistoryIcon
 						sx={{
 							fontSize: 48,
-							color: "var(--md-sys-color-on-surface-variant)",
+							color: "var(--md-sys-color-on-surface-variant)]",
 							mb: 2,
 						}}
 					/>
-					<p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
+					<p className="md-body-large text-(--md-sys-color-on-surface-variant)">
 						Brak zdarzeń do wyświetlenia
 					</p>
-					<p className="md-body-small text-[var(--md-sys-color-outline)] mt-1">
+					<p className="md-body-small text-(--md-sys-color-outline) mt-1">
 						Zmień filtry lub poczekaj na nowe zdarzenia
 					</p>
 				</div>
@@ -398,7 +398,7 @@ export default function ManaLogsPage() {
 					{filteredLogs.map((log) => {
 						const actionConfig = ACTION_LABELS[log.action] || {
 							label: log.action,
-							color: "var(--md-sys-color-outline)",
+							color: "var(--md-sys-color-outline)]",
 						};
 						const isExpanded = expandedIds.has(log.id);
 						const relativeTime = formatRelativeTime(log.created_at);
@@ -432,11 +432,11 @@ export default function ManaLogsPage() {
 											</span>
 											<div className="flex items-center gap-2 shrink-0">
 												{relativeTime && (
-													<span className="md-label-small text-[var(--md-sys-color-primary)] bg-[var(--md-sys-color-primary-container)] px-2 py-0.5 rounded-full">
+													<span className="md-label-small text-(--md-sys-color-primary) bg-(--md-sys-color-primary-container) px-2 py-0.5 rounded-full">
 														{relativeTime}
 													</span>
 												)}
-												<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+												<span className="md-body-small text-(--md-sys-color-on-surface-variant)">
 													{formatDateTime(log.created_at)}
 												</span>
 											</div>
@@ -444,25 +444,25 @@ export default function ManaLogsPage() {
 
 										{/* User + target info */}
 										<div className="flex items-center gap-4 flex-wrap">
-											<span className="flex items-center gap-1 md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+											<span className="flex items-center gap-1 md-body-small text-(--md-sys-color-on-surface-variant)">
 												<PersonIcon sx={{ fontSize: 14 }} />
 												{log.profiles?.display_name ||
 													"Nieznany użytkownik"}
 											</span>
 
 											{log.target_table && (
-												<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+												<span className="md-body-small text-(--md-sys-color-on-surface-variant)">
 													Tabela:{" "}
-													<span className="font-mono text-[var(--md-sys-color-on-surface)]">
+													<span className="font-mono text-(--md-sys-color-on-surface)">
 														{log.target_table}
 													</span>
 												</span>
 											)}
 
 											{log.target_id && (
-												<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+												<span className="md-body-small text-(--md-sys-color-on-surface-variant)">
 													ID:{" "}
-													<span className="font-mono text-[var(--md-sys-color-on-surface)] text-xs">
+													<span className="font-mono text-(--md-sys-color-on-surface) text-xs">
 														{log.target_id.length > 42
 															? `${log.target_id.slice(0, 42)}...`
 															: log.target_id}
@@ -476,7 +476,7 @@ export default function ManaLogsPage() {
 											<>
 												<button
 													onClick={() => toggleExpand(log.id)}
-													className="flex items-center gap-1 mt-2 text-[var(--md-sys-color-primary)] hover:text-[var(--md-sys-color-on-primary-container)] transition-colors"
+													className="flex items-center gap-1 mt-2 text-(--md-sys-color-primary) hover:text-(--md-sys-color-on-primary-container) transition-colors"
 												>
 													{isExpanded ? (
 														<ExpandLessIcon sx={{ fontSize: 18 }} />
@@ -514,7 +514,7 @@ export default function ManaLogsPage() {
 						Poprzednia
 					</button>
 
-					<span className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+					<span className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 						Strona {page + 1} z {Math.ceil(totalCount / PAGE_SIZE)}
 					</span>
 

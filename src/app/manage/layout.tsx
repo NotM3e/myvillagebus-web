@@ -75,10 +75,10 @@ export default function ManaLayout({ children }: { children: React.ReactNode }) 
 
 	if (authorized === null) {
 		return (
-			<div className="min-h-screen bg-[var(--md-sys-color-background)] flex items-center justify-center">
+			<div className="min-h-screen bg-(--md-sys-color-background) flex items-center justify-center">
 				<div className="text-center">
-					<div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-					<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+					<div className="w-8 h-8 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+					<p className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 						Sprawdzanie uprawnień...
 					</p>
 				</div>
@@ -91,7 +91,7 @@ export default function ManaLayout({ children }: { children: React.ReactNode }) 
 	}
 
 	return (
-		<div className="h-[100dvh] bg-[var(--md-sys-color-background)] flex overflow-hidden">
+		<div className="h-[100dvh] bg-(--md-sys-color-background) flex overflow-hidden">
 			{/* Mobile Backdrop */}
 			{sidebarOpen && (
 				<div 
@@ -102,17 +102,17 @@ export default function ManaLayout({ children }: { children: React.ReactNode }) 
 
 			{/* Sidebar */}
 			<aside 
-				className={`fixed md:relative inset-y-0 left-0 z-50 w-64 h-full bg-[var(--md-sys-color-surface)] border-r border-[var(--md-sys-color-outline-variant)] flex flex-col shrink-0 transition-transform duration-300 ease-in-out md:translate-x-0 ${
+				className={`fixed md:relative inset-y-0 left-0 z-50 w-64 h-full bg-(--md-sys-color-surface) border-r border-(--md-sys-color-outline-variant) flex flex-col shrink-0 transition-transform duration-300 ease-in-out md:translate-x-0 ${
 					sidebarOpen ? "translate-x-0" : "-translate-x-full"
 				}`}
 			>
 				{/* Header */}
-				<div className="p-4 border-b border-[var(--md-sys-color-outline-variant)] flex items-center justify-between">
-					<h1 className="md-title-large text-[var(--md-sys-color-primary)]">
+				<div className="p-4 border-b border-(--md-sys-color-outline-variant) flex items-center justify-between">
+					<h1 className="md-title-large text-(--md-sys-color-primary)">
 						Panel Zarządzania
 					</h1>
 					<button 
-						className="md:hidden p-1 rounded-full hover:bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)]"
+						className="md:hidden p-1 rounded-full hover:bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant)"
 						onClick={() => setSidebarOpen(false)}
 					>
 						<CloseIcon sx={{ fontSize: 24 }} />
@@ -131,8 +131,8 @@ export default function ManaLayout({ children }: { children: React.ReactNode }) 
 								href={item.href}
 								className={`flex items-center gap-3 px-4 py-3 rounded-xl mb-1 transition-colors ${
 									isActive
-										? "bg-[var(--md-sys-color-primary-container)] text-[var(--md-sys-color-on-primary-container)]"
-										: "hover:bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)]"
+										? "bg-(--md-sys-color-primary-container) text-(--md-sys-color-on-primary-container)"
+										: "hover:bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface)"
 								}`}
 							>
 								<Icon sx={{ fontSize: 20 }} />
@@ -143,10 +143,10 @@ export default function ManaLayout({ children }: { children: React.ReactNode }) 
 				</nav>
 
 				{/* Footer */}
-				<div className="p-2 border-t border-[var(--md-sys-color-outline-variant)]">
+				<div className="p-2 border-t border-(--md-sys-color-outline-variant)">
 					<Link
 						href="/app"
-						className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)] transition-colors"
+						className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant) transition-colors"
 					>
 						<ArrowBackIcon sx={{ fontSize: 20 }} />
 						<span className="md-body-medium">Wróć do aplikacji</span>
@@ -157,14 +157,14 @@ export default function ManaLayout({ children }: { children: React.ReactNode }) 
 			{/* Main content + Mobile Header */}
 			<div className="flex-1 flex flex-col min-w-0">
 				{/* Mobile Header (visible only on small screens) */}
-				<header className="md:hidden flex items-center p-4 border-b border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface)] shrink-0">
+				<header className="md:hidden flex items-center p-4 border-b border-(--md-sys-color-outline-variant) bg-(--md-sys-color-surface) shrink-0">
 					<button 
-						className="p-1 -ml-1 mr-3 rounded-full hover:bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)]"
+						className="p-1 -ml-1 mr-3 rounded-full hover:bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface)"
 						onClick={() => setSidebarOpen(true)}
 					>
 						<MenuIcon sx={{ fontSize: 24 }} />
 					</button>
-					<h2 className="md-title-medium text-[var(--md-sys-color-on-surface)] truncate">
+					<h2 className="md-title-medium text-(--md-sys-color-on-surface) truncate">
 						{NAV_ITEMS.find(i => i.href === currentPath)?.label || "Panel Zarządzania"}
 					</h2>
 				</header>

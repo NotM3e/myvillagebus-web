@@ -39,15 +39,15 @@ export default function ContactPage() {
 		<PageWrapper maxWidth="max-w-2xl">
 			{/* Header */}
 			<div className="text-center mb-12">
-				<div className="inline-flex items-center justify-center w-24 h-24 mb-6 rounded-full bg-[var(--md-sys-color-secondary-container)]">
+				<div className="inline-flex items-center justify-center w-24 h-24 mb-6 rounded-full bg-(--md-sys-color-secondary-container)">
 					<EmailIcon
-						sx={{ fontSize: 48, color: "var(--md-sys-color-on-secondary-container)" }}
+						sx={{ fontSize: 48, color: "var(--md-sys-color-on-secondary-container)]" }}
 					/>
 				</div>
 
 				<h1 className="md-headline-large mb-4">Kontakt</h1>
 
-				<p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
+				<p className="md-body-large text-(--md-sys-color-on-surface-variant)">
 					Masz pytania? Napisz do mnie!
 				</p>
 			</div>
@@ -65,7 +65,7 @@ export default function ContactPage() {
 					<div>
 						<label
 							htmlFor="name"
-							className="block md-body-medium text-[var(--md-sys-color-on-surface)] mb-2"
+							className="block md-body-medium text-(--md-sys-color-on-surface) mb-2"
 						>
 							Imię
 						</label>
@@ -74,7 +74,7 @@ export default function ContactPage() {
 							id="name"
 							name="name"
 							required
-							className="w-full px-4 py-3 rounded-lg bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] border border-[var(--md-sys-color-outline)] focus:border-[var(--md-sys-color-primary)] focus:outline-none transition"
+							className="w-full px-4 py-3 rounded-lg bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) border border-(--md-sys-color-outline) focus:border-(--md-sys-color-primary) focus:outline-none transition"
 						/>
 					</div>
 
@@ -82,7 +82,7 @@ export default function ContactPage() {
 					<div>
 						<label
 							htmlFor="email"
-							className="block md-body-medium text-[var(--md-sys-color-on-surface)] mb-2"
+							className="block md-body-medium text-(--md-sys-color-on-surface) mb-2"
 						>
 							Email
 						</label>
@@ -91,7 +91,7 @@ export default function ContactPage() {
 							id="email"
 							name="email"
 							required
-							className="w-full px-4 py-3 rounded-lg bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] border border-[var(--md-sys-color-outline)] focus:border-[var(--md-sys-color-primary)] focus:outline-none transition"
+							className="w-full px-4 py-3 rounded-lg bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) border border-(--md-sys-color-outline) focus:border-(--md-sys-color-primary) focus:outline-none transition"
 						/>
 					</div>
 
@@ -99,7 +99,7 @@ export default function ContactPage() {
 					<div>
 						<label
 							htmlFor="message"
-							className="block md-body-medium text-[var(--md-sys-color-on-surface)] mb-2"
+							className="block md-body-medium text-(--md-sys-color-on-surface) mb-2"
 						>
 							Wiadomość
 						</label>
@@ -108,7 +108,7 @@ export default function ContactPage() {
 							name="message"
 							required
 							rows={6}
-							className="w-full px-4 py-3 rounded-lg bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] border border-[var(--md-sys-color-outline)] focus:border-[var(--md-sys-color-primary)] focus:outline-none transition resize-none"
+							className="w-full px-4 py-3 rounded-lg bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) border border-(--md-sys-color-outline) focus:border-(--md-sys-color-primary) focus:outline-none transition resize-none"
 						></textarea>
 					</div>
 
@@ -124,7 +124,7 @@ export default function ContactPage() {
 
 					{/* Success Message */}
 					{status === "success" && (
-						<div className="flex items-center gap-3 p-4 rounded-lg bg-[var(--md-sys-color-tertiary-container)] text-[var(--md-sys-color-on-tertiary-container)]">
+						<div className="flex items-center gap-3 p-4 rounded-lg bg-(--md-sys-color-tertiary-container) text-(--md-sys-color-on-tertiary-container)">
 							<CheckCircleIcon />
 							<span className="md-body-medium">Wiadomość wysłana pomyślnie!</span>
 						</div>
@@ -132,7 +132,7 @@ export default function ContactPage() {
 
 					{/* Error Message */}
 					{status === "error" && (
-						<div className="flex items-center gap-3 p-4 rounded-lg bg-[var(--md-sys-color-error-container)] text-[var(--md-sys-color-on-error-container)]">
+						<div className="flex items-center gap-3 p-4 rounded-lg bg-(--md-sys-color-error-container) text-(--md-sys-color-on-error-container)">
 							<ErrorIcon />
 							<span className="md-body-medium">Wystąpił błąd. Spróbuj ponownie.</span>
 						</div>

@@ -205,26 +205,26 @@ export default function ScheduleCompare({
 
 			{/* Modal */}
 			<div className="fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-4xl max-h-[90vh] flex flex-col">
-				<div className="bg-[var(--md-sys-color-surface)] rounded-3xl shadow-xl flex flex-col h-full overflow-hidden">
+				<div className="bg-(--md-sys-color-surface) rounded-3xl shadow-xl flex flex-col h-full overflow-hidden">
 					{" "}
 					{/* Header */}
-					<div className="flex items-center justify-between p-4 border-b border-[var(--md-sys-color-outline-variant)]">
+					<div className="flex items-center justify-between p-4 border-b border-(--md-sys-color-outline-variant)">
 						<h2 className="md-title-large">Porównanie wersji</h2>
 						<button
 							onClick={onClose}
-							className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+							className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 						>
-							<CloseIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+							<CloseIcon sx={{ color: "var(--md-sys-color-on-surface)]" }} />
 						</button>
 					</div>
 					{/* Content */}
 					<div className="flex-1 overflow-y-auto p-4">
 						{fetchLoading ? (
 							<div className="flex items-center justify-center h-64">
-								<div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
+								<div className="w-8 h-8 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
 							</div>
 						) : !current || !parent ? (
-							<p className="text-center text-[var(--md-sys-color-error)]">
+							<p className="text-center text-(--md-sys-color-error)">
 								Nie udało się załadować danych
 							</p>
 						) : (
@@ -234,20 +234,20 @@ export default function ScheduleCompare({
 									<p className="md-title-medium">
 										{current.line.carrier.name} - Linia {current.line.number}
 									</p>
-									<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+									<p className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 										{current.direction}
 									</p>
 									<div className="flex items-center justify-center gap-2 mt-2">
-										<span className="px-3 py-1 rounded-full text-sm bg-[var(--md-sys-color-surface-variant)]">
+										<span className="px-3 py-1 rounded-full text-sm bg-(--md-sys-color-surface-variant)">
 											v{parent.version}
 										</span>
 										<ArrowForwardIcon
 											sx={{
 												fontSize: 20,
-												color: "var(--md-sys-color-primary)",
+												color: "var(--md-sys-color-primary)]",
 											}}
 										/>
-										<span className="px-3 py-1 rounded-full text-sm bg-[var(--md-sys-color-primary-container)] text-[var(--md-sys-color-on-primary-container)]">
+										<span className="px-3 py-1 rounded-full text-sm bg-(--md-sys-color-primary-container) text-(--md-sys-color-on-primary-container)">
 											v{current.version}
 										</span>
 									</div>
@@ -260,7 +260,7 @@ export default function ScheduleCompare({
 										{daysDiff.same.map((day) => (
 											<span
 												key={day}
-												className="px-3 py-1 rounded-full text-sm bg-[var(--md-sys-color-surface-variant)]"
+												className="px-3 py-1 rounded-full text-sm bg-(--md-sys-color-surface-variant)"
 											>
 												{day}
 											</span>
@@ -268,7 +268,7 @@ export default function ScheduleCompare({
 										{daysDiff.added.map((day) => (
 											<span
 												key={day}
-												className="px-3 py-1 rounded-full text-sm bg-[var(--md-sys-color-primary-container)] text-[var(--md-sys-color-on-primary-container)] flex items-center gap-1"
+												className="px-3 py-1 rounded-full text-sm bg-(--md-sys-color-primary-container) text-(--md-sys-color-on-primary-container) flex items-center gap-1"
 											>
 												<AddIcon sx={{ fontSize: 14 }} />
 												{day}
@@ -277,7 +277,7 @@ export default function ScheduleCompare({
 										{daysDiff.removed.map((day) => (
 											<span
 												key={day}
-												className="px-3 py-1 rounded-full text-sm bg-[var(--md-sys-color-error-container)] text-[var(--md-sys-color-on-error-container)] flex items-center gap-1 line-through"
+												className="px-3 py-1 rounded-full text-sm bg-(--md-sys-color-error-container) text-(--md-sys-color-on-error-container) flex items-center gap-1 line-through"
 											>
 												<RemoveIcon sx={{ fontSize: 14 }} />
 												{day}
@@ -292,16 +292,16 @@ export default function ScheduleCompare({
 									<div className="md-card md-elevation-1 p-4">
 										<h3 className="md-title-small mb-3">Godzina odjazdu</h3>
 										<div className="flex items-center gap-4">
-											<span className="px-3 py-2 rounded-lg bg-[var(--md-sys-color-error-container)] text-[var(--md-sys-color-on-error-container)] line-through">
+											<span className="px-3 py-2 rounded-lg bg-(--md-sys-color-error-container) text-(--md-sys-color-on-error-container) line-through">
 												{formatTime(parent.course?.departure_time || "")}
 											</span>
 											<ArrowForwardIcon
 												sx={{
 													fontSize: 20,
-													color: "var(--md-sys-color-primary)",
+													color: "var(--md-sys-color-primary)]",
 												}}
 											/>
-											<span className="px-3 py-2 rounded-lg bg-[var(--md-sys-color-primary-container)] text-[var(--md-sys-color-on-primary-container)]">
+											<span className="px-3 py-2 rounded-lg bg-(--md-sys-color-primary-container) text-(--md-sys-color-on-primary-container)">
 												{formatTime(current.course?.departure_time || "")}
 											</span>
 										</div>
@@ -324,32 +324,32 @@ export default function ScheduleCompare({
 													key={stop.index}
 													className={`flex items-center gap-4 p-2 rounded-lg ${
 														hasChanges
-															? "bg-[var(--md-sys-color-surface-variant)]"
+															? "bg-(--md-sys-color-surface-variant)"
 															: ""
 													}`}
 												>
-													<span className="w-6 text-center md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+													<span className="w-6 text-center md-body-small text-(--md-sys-color-on-surface-variant)">
 														{stop.index}.
 													</span>
 
 													<div className="flex-1 min-w-0">
 														{stop.removed ? (
-															<span className="text-[var(--md-sys-color-error)] line-through">
+															<span className="text-(--md-sys-color-error) line-through">
 																{stop.oldName}
 															</span>
 														) : stop.added ? (
-															<span className="text-[var(--md-sys-color-primary)]">
+															<span className="text-(--md-sys-color-primary)">
 																{stop.newName}
 															</span>
 														) : stop.nameChanged ? (
 															<div className="flex items-center gap-2">
-																<span className="text-[var(--md-sys-color-error)] line-through">
+																<span className="text-(--md-sys-color-error) line-through">
 																	{stop.oldName}
 																</span>
 																<ArrowForwardIcon
 																	sx={{ fontSize: 16 }}
 																/>
-																<span className="text-[var(--md-sys-color-primary)]">
+																<span className="text-(--md-sys-color-primary)">
 																	{stop.newName}
 																</span>
 															</div>
@@ -362,13 +362,13 @@ export default function ScheduleCompare({
 														!stop.added &&
 														!stop.removed && (
 															<div className="flex items-center gap-2 text-sm">
-																<span className="text-[var(--md-sys-color-on-surface-variant)]">
+																<span className="text-(--md-sys-color-on-surface-variant)">
 																	+{stop.oldOffset}min
 																</span>
 																<ArrowForwardIcon
 																	sx={{ fontSize: 14 }}
 																/>
-																<span className="text-[var(--md-sys-color-primary)]">
+																<span className="text-(--md-sys-color-primary)">
 																	+{stop.newOffset}min
 																</span>
 															</div>
@@ -378,7 +378,7 @@ export default function ScheduleCompare({
 														<EditIcon
 															sx={{
 																fontSize: 16,
-																color: "var(--md-sys-color-tertiary)",
+																color: "var(--md-sys-color-tertiary)]",
 															}}
 														/>
 													)}
@@ -391,14 +391,14 @@ export default function ScheduleCompare({
 						)}
 					</div>
 					{/* Footer */}
-					<div className="flex items-center justify-end gap-3 p-4 border-t border-[var(--md-sys-color-outline-variant)]">
+					<div className="flex items-center justify-end gap-3 p-4 border-t border-(--md-sys-color-outline-variant)">
 						<button onClick={onClose} className="md-text-button">
 							Anuluj
 						</button>
 						<button
 							onClick={onReject}
 							disabled={loading || fetchLoading}
-							className="md-outlined-button flex items-center gap-2 text-[var(--md-sys-color-error)] border-[var(--md-sys-color-error)] disabled:opacity-50"
+							className="md-outlined-button flex items-center gap-2 text-(--md-sys-color-error) border-(--md-sys-color-error) disabled:opacity-50"
 						>
 							<CancelIcon sx={{ fontSize: 18 }} />
 							Odrzuć

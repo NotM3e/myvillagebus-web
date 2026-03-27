@@ -110,15 +110,15 @@ export default function CopyFromScheduleModal({
 
 			{/* Modal */}
 			<div className="fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-2xl max-h-[90vh] overflow-hidden">
-				<div className="bg-[var(--md-sys-color-surface)] rounded-3xl shadow-xl flex flex-col max-h-[90vh]">
+				<div className="bg-(--md-sys-color-surface) rounded-3xl shadow-xl flex flex-col max-h-[90vh]">
 					{/* Header */}
-					<div className="flex items-center justify-between p-4 border-b border-[var(--md-sys-color-outline-variant)]">
+					<div className="flex items-center justify-between p-4 border-b border-(--md-sys-color-outline-variant)">
 						<div className="flex items-center gap-3">
-							<div className="w-10 h-10 rounded-full bg-[var(--md-sys-color-secondary-container)] flex items-center justify-center">
+							<div className="w-10 h-10 rounded-full bg-(--md-sys-color-secondary-container) flex items-center justify-center">
 								<ContentCopyIcon
 									sx={{
 										fontSize: 20,
-										color: "var(--md-sys-color-on-secondary-container)",
+										color: "var(--md-sys-color-on-secondary-container)]",
 									}}
 								/>
 							</div>
@@ -128,9 +128,9 @@ export default function CopyFromScheduleModal({
 						</div>
 						<button
 							onClick={onClose}
-							className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+							className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 						>
-							<CloseIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+							<CloseIcon sx={{ color: "var(--md-sys-color-on-surface)]" }} />
 						</button>
 					</div>
 
@@ -138,14 +138,14 @@ export default function CopyFromScheduleModal({
 					<div className="flex-1 overflow-y-auto p-4">
 						{loading ? (
 							<div className="flex items-center justify-center py-12">
-								<div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
+								<div className="w-8 h-8 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
 							</div>
 						) : schedules.length === 0 ? (
 							<div className="text-center py-12">
-								<p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
+								<p className="md-body-large text-(--md-sys-color-on-surface-variant)">
 									Brak rozkładów do skopiowania.
 								</p>
-								<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)] mt-2">
+								<p className="md-body-medium text-(--md-sys-color-on-surface-variant) mt-2">
 									Utwórz pierwszy kurs dla tej linii.
 								</p>
 							</div>
@@ -153,7 +153,7 @@ export default function CopyFromScheduleModal({
 							<div className="space-y-6">
 								{/* Schedule list */}
 								<div>
-									<p className="md-label-large text-[var(--md-sys-color-on-surface-variant)] mb-3">
+									<p className="md-label-large text-(--md-sys-color-on-surface-variant) mb-3">
 										Wybierz kurs do skopiowania
 									</p>
 									<div className="space-y-2 max-h-60 overflow-y-auto">
@@ -170,8 +170,8 @@ export default function CopyFromScheduleModal({
 													}
 													className={`w-full p-3 rounded-xl text-left transition-colors ${
 														isSelected
-															? "ring-2 ring-[var(--md-sys-color-primary)] bg-[var(--md-sys-color-primary-container)]"
-															: "bg-[var(--md-sys-color-surface-variant)] hover:bg-[var(--md-sys-color-outline-variant)]"
+															? "ring-2 ring-(--md-sys-color-primary) bg-(--md-sys-color-primary-container)"
+															: "bg-(--md-sys-color-surface-variant) hover:bg-(--md-sys-color-outline-variant)"
 													}`}
 												>
 													{/* Line + status */}
@@ -183,8 +183,8 @@ export default function CopyFromScheduleModal({
 															<span
 																className={`px-2 py-0.5 rounded-full text-xs ${
 																	schedule.status === "active"
-																		? "bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)]"
-																		: "bg-[var(--md-sys-color-tertiary-container)] text-[var(--md-sys-color-on-tertiary-container)]"
+																		? "bg-(--md-sys-color-primary) text-(--md-sys-color-on-primary)"
+																		: "bg-(--md-sys-color-tertiary-container) text-(--md-sys-color-on-tertiary-container)"
 																}`}
 															>
 																{schedule.status === "active"
@@ -197,10 +197,10 @@ export default function CopyFromScheduleModal({
 																<AccessTimeIcon
 																	sx={{
 																		fontSize: 14,
-																		color: "var(--md-sys-color-on-surface-variant)",
+																		color: "var(--md-sys-color-on-surface-variant)]",
 																	}}
 																/>
-																<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+																<span className="md-body-small text-(--md-sys-color-on-surface-variant)">
 																	{schedule.departureTimes
 																		.slice(0, 3)
 																		.join(", ")}
@@ -213,7 +213,7 @@ export default function CopyFromScheduleModal({
 													</div>
 
 													{/* Direction */}
-													<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+													<p className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 														{schedule.direction}
 													</p>
 
@@ -222,7 +222,7 @@ export default function CopyFromScheduleModal({
 														{schedule.days.map((day) => (
 															<span
 																key={day}
-																className="px-1.5 py-0.5 text-xs rounded bg-[var(--md-sys-color-surface)] text-[var(--md-sys-color-on-surface-variant)]"
+																className="px-1.5 py-0.5 text-xs rounded bg-(--md-sys-color-surface) text-(--md-sys-color-on-surface-variant)"
 															>
 																{day}
 															</span>
@@ -230,7 +230,7 @@ export default function CopyFromScheduleModal({
 													</div>
 
 													{/* Stop count */}
-													<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] mt-1">
+													<p className="md-body-small text-(--md-sys-color-on-surface-variant) mt-1">
 														{schedule.stops.length} przystanków
 													</p>
 												</button>
@@ -241,7 +241,7 @@ export default function CopyFromScheduleModal({
 
 								{/* Preview (visible when schedule selected) */}
 								{selected && (
-									<div className="border-t border-[var(--md-sys-color-outline-variant)] pt-4">
+									<div className="border-t border-(--md-sys-color-outline-variant) pt-4">
 										<div className="flex items-center justify-between mb-3">
 											<p className="md-title-medium">Podgląd</p>
 											{mode === "stops" && (
@@ -249,8 +249,8 @@ export default function CopyFromScheduleModal({
 													onClick={() => setReverseStops(!reverseStops)}
 													className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition-colors ${
 														reverseStops
-															? "bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)]"
-															: "bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)]"
+															? "bg-(--md-sys-color-primary) text-(--md-sys-color-on-primary)"
+															: "bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant)"
 													}`}
 												>
 													<SwapVertIcon sx={{ fontSize: 16 }} />
@@ -260,8 +260,8 @@ export default function CopyFromScheduleModal({
 										</div>
 
 										{/* Direction */}
-										<div className="p-2 rounded-lg bg-[var(--md-sys-color-primary-container)] mb-3">
-											<p className="md-body-medium text-[var(--md-sys-color-on-primary-container)]">
+										<div className="p-2 rounded-lg bg-(--md-sys-color-primary-container) mb-3">
+											<p className="md-body-medium text-(--md-sys-color-on-primary-container)">
 												Kierunek: <strong>{previewDirection}</strong>
 											</p>
 										</div>
@@ -281,22 +281,22 @@ export default function CopyFromScheduleModal({
 														>
 															{/* Timeline connector */}
 															{!isLast && (
-																<div className="absolute left-[11px] top-6 w-0.5 h-[calc(100%-12px)] bg-[var(--md-sys-color-primary)]" />
+																<div className="absolute left-[11px] top-6 w-0.5 h-[calc(100%-12px)] bg-(--md-sys-color-primary)" />
 															)}
 
 															{/* Dot */}
 															<div className="relative z-10 flex-shrink-0">
 																{isFirst || isLast ? (
-																	<div className="w-6 h-6 rounded-full bg-[var(--md-sys-color-primary)] flex items-center justify-center">
+																	<div className="w-6 h-6 rounded-full bg-(--md-sys-color-primary) flex items-center justify-center">
 																		<FiberManualRecordIcon
 																			sx={{
 																				fontSize: 12,
-																				color: "var(--md-sys-color-on-primary)",
+																				color: "var(--md-sys-color-on-primary)]",
 																			}}
 																		/>
 																	</div>
 																) : (
-																	<div className="w-6 h-6 rounded-full border-2 border-[var(--md-sys-color-primary)] bg-[var(--md-sys-color-surface)]" />
+																	<div className="w-6 h-6 rounded-full border-2 border-(--md-sys-color-primary) bg-(--md-sys-color-surface)" />
 																)}
 															</div>
 
@@ -306,14 +306,14 @@ export default function CopyFromScheduleModal({
 																	{stop.city}
 																</p>
 																{stop.name && (
-																	<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+																	<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 																		{stop.name}
 																	</p>
 																)}
 															</div>
 
 															{/* Offset or placeholder */}
-															<span className="px-2 py-1 rounded-lg bg-[var(--md-sys-color-surface-variant)] md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+															<span className="px-2 py-1 rounded-lg bg-(--md-sys-color-surface-variant) md-body-small text-(--md-sys-color-on-surface-variant)">
 																{reverseStops
 																	? "--:--"
 																	: `+${stop.offsetMinutes}min`}
@@ -328,13 +328,13 @@ export default function CopyFromScheduleModal({
 												{selected.departureTimes.map((time, i) => (
 													<span
 														key={i}
-														className="px-3 py-1.5 rounded-full bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)] text-sm font-mono"
+														className="px-3 py-1.5 rounded-full bg-(--md-sys-color-primary) text-(--md-sys-color-on-primary) text-sm font-mono"
 													>
 														{time}
 													</span>
 												))}
 												{selected.departureTimes.length === 0 && (
-													<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+													<p className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 														Brak godzin do skopiowania
 													</p>
 												)}
@@ -347,7 +347,7 @@ export default function CopyFromScheduleModal({
 					</div>
 
 					{/* Footer */}
-					<div className="flex items-center justify-end gap-2 p-4 border-t border-[var(--md-sys-color-outline-variant)]">
+					<div className="flex items-center justify-end gap-2 p-4 border-t border-(--md-sys-color-outline-variant)">
 						<button onClick={onClose} className="md-text-button">
 							Anuluj
 						</button>

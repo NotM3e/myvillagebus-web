@@ -47,13 +47,13 @@ interface Report {
 }
 
 const REASON_CONFIG: Record<ReportReason, { label: string; priority: number; color: string }> = {
-	VANDALISM: { label: "Trolling / Wandalizm", priority: 1, color: "var(--md-sys-color-error)" },
-	NOT_EXIST: { label: "Przejazd nie istnieje", priority: 1, color: "var(--md-sys-color-error)" },
-	WRONG_TIME: { label: "Błędna godzina", priority: 2, color: "var(--md-sys-color-tertiary)" },
-	WRONG_ROUTE: { label: "Błędna trasa", priority: 2, color: "var(--md-sys-color-tertiary)" },
-	OUTDATED: { label: "Nieaktualny rozkład", priority: 3, color: "var(--md-sys-color-secondary)" },
-	DUPLICATE: { label: "Duplikat", priority: 3, color: "var(--md-sys-color-secondary)" },
-	OTHER: { label: "Inny problem", priority: 3, color: "var(--md-sys-color-outline)" },
+	VANDALISM: { label: "Trolling / Wandalizm", priority: 1, color: "var(--md-sys-color-error)]" },
+	NOT_EXIST: { label: "Przejazd nie istnieje", priority: 1, color: "var(--md-sys-color-error)]" },
+	WRONG_TIME: { label: "Błędna godzina", priority: 2, color: "var(--md-sys-color-tertiary)]" },
+	WRONG_ROUTE: { label: "Błędna trasa", priority: 2, color: "var(--md-sys-color-tertiary)]" },
+	OUTDATED: { label: "Nieaktualny rozkład", priority: 3, color: "var(--md-sys-color-secondary)]" },
+	DUPLICATE: { label: "Duplikat", priority: 3, color: "var(--md-sys-color-secondary)]" },
+	OTHER: { label: "Inny problem", priority: 3, color: "var(--md-sys-color-outline)]" },
 };
 
 const STATUS_LABELS: Record<ReportStatus, string> = {
@@ -174,12 +174,12 @@ export default function ManaReportsPage() {
 	const getPriorityIcon = (reason: ReportReason) => {
 		const priority = REASON_CONFIG[reason]?.priority ?? 3;
 		if (priority === 1)
-			return <ErrorIcon sx={{ fontSize: 20, color: "var(--md-sys-color-error)" }} />;
+			return <ErrorIcon sx={{ fontSize: 20, color: "var(--md-sys-color-error)]" }} />;
 		if (priority === 2)
 			return (
-				<WarningAmberIcon sx={{ fontSize: 20, color: "var(--md-sys-color-tertiary)" }} />
+				<WarningAmberIcon sx={{ fontSize: 20, color: "var(--md-sys-color-tertiary)]" }} />
 			);
-		return <InfoIcon sx={{ fontSize: 20, color: "var(--md-sys-color-outline)" }} />;
+		return <InfoIcon sx={{ fontSize: 20, color: "var(--md-sys-color-outline)]" }} />;
 	};
 
 	return (
@@ -190,12 +190,12 @@ export default function ManaReportsPage() {
 				{/* Filter */}
 				<div className="flex items-center gap-2">
 					<FilterListIcon
-						sx={{ fontSize: 20, color: "var(--md-sys-color-on-surface-variant)" }}
+						sx={{ fontSize: 20, color: "var(--md-sys-color-on-surface-variant)]" }}
 					/>
 					<select
 						value={filter}
 						onChange={(e) => setFilter(e.target.value as ReportStatus | "all")}
-						className="px-3 py-2 rounded-lg bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] border-none focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+						className="px-3 py-2 rounded-lg bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) border-none focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 					>
 						<option value="pending">Oczekujące</option>
 						<option value="resolved">Rozwiązane</option>
@@ -207,11 +207,11 @@ export default function ManaReportsPage() {
 
 			{loading ? (
 				<div className="flex items-center justify-center h-64">
-					<div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
+					<div className="w-8 h-8 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
 				</div>
 			) : reports.length === 0 ? (
 				<div className="md-card md-elevation-1 p-8 text-center">
-					<p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
+					<p className="md-body-large text-(--md-sys-color-on-surface-variant)">
 						Brak zgłoszeń
 						{filter !== "all"
 							? ` o statusie "${STATUS_LABELS[filter as ReportStatus]}"`
@@ -247,7 +247,7 @@ export default function ManaReportsPage() {
 											>
 												{config?.label}
 											</span>
-											<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+											<span className="md-body-small text-(--md-sys-color-on-surface-variant)">
 												{formatDate(report.created_at)}
 											</span>
 										</div>
@@ -265,13 +265,13 @@ export default function ManaReportsPage() {
 
 										{/* Description */}
 										{report.description && (
-											<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-2">
+											<p className="md-body-small text-(--md-sys-color-on-surface-variant) mb-2">
 												"{report.description}"
 											</p>
 										)}
 
 										{/* Reporter */}
-										<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+										<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 											Zgłosił: {report.reporter?.display_name || "Nieznany"}
 										</p>
 									</div>
@@ -282,13 +282,13 @@ export default function ManaReportsPage() {
 											<Link
 												href={`/app/schedule/${report.schedule_id}`}
 												target="_blank"
-												className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+												className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 												title="Zobacz rozkład"
 											>
 												<OpenInNewIcon
 													sx={{
 														fontSize: 20,
-														color: "var(--md-sys-color-on-surface-variant)",
+														color: "var(--md-sys-color-on-surface-variant)]",
 													}}
 												/>
 											</Link>
@@ -301,16 +301,16 @@ export default function ManaReportsPage() {
 														handleAction(report.id, "resolve")
 													}
 													disabled={isLoading}
-													className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-primary-container)] transition-colors disabled:opacity-50"
+													className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-primary-container) transition-colors disabled:opacity-50"
 													title="Rozwiąż"
 												>
 													{isLoading ? (
-														<div className="w-5 h-5 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
+														<div className="w-5 h-5 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
 													) : (
 														<CheckCircleIcon
 															sx={{
 																fontSize: 20,
-																color: "var(--md-sys-color-primary)",
+																color: "var(--md-sys-color-primary)]",
 															}}
 														/>
 													)}
@@ -321,13 +321,13 @@ export default function ManaReportsPage() {
 														handleAction(report.id, "dismiss")
 													}
 													disabled={isLoading}
-													className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-error-container)] transition-colors disabled:opacity-50"
+													className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-error-container) transition-colors disabled:opacity-50"
 													title="Odrzuć"
 												>
 													<CancelIcon
 														sx={{
 															fontSize: 20,
-															color: "var(--md-sys-color-error)",
+															color: "var(--md-sys-color-error)]",
 														}}
 													/>
 												</button>
@@ -338,8 +338,8 @@ export default function ManaReportsPage() {
 											<span
 												className={`px-3 py-1 rounded-full text-xs ${
 													report.status === "resolved"
-														? "bg-[var(--md-sys-color-primary-container)] text-[var(--md-sys-color-on-primary-container)]"
-														: "bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)]"
+														? "bg-(--md-sys-color-primary-container) text-(--md-sys-color-on-primary-container)"
+														: "bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant)"
 												}`}
 											>
 												{STATUS_LABELS[report.status]}

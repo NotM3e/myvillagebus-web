@@ -57,7 +57,7 @@ export default function SettingsPage() {
 		return (
 			<PageWrapper maxWidth="max-w-2xl">
 				<div className="text-center py-12">
-					<div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin mx-auto" />
+					<div className="w-8 h-8 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin mx-auto" />
 				</div>
 			</PageWrapper>
 		);
@@ -69,9 +69,9 @@ export default function SettingsPage() {
 			<div className="flex items-center gap-4 mb-6">
 				<Link
 					href="/app"
-					className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+					className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 				>
-					<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+					<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)]" }} />
 				</Link>
 				<h1 className="md-title-large">Ustawienia</h1>
 			</div>
@@ -79,17 +79,17 @@ export default function SettingsPage() {
 			<div className="space-y-6">
 				{/* Section: Data Management */}
 				<section>
-					<h2 className="md-title-medium text-[var(--md-sys-color-primary)] mb-3 flex items-center gap-2">
+					<h2 className="md-title-medium text-(--md-sys-color-primary) mb-3 flex items-center gap-2">
 						<StorageIcon sx={{ fontSize: 20 }} />
 						Dane lokalne
 					</h2>
 
-					<div className="md-card md-elevation-1 divide-y divide-[var(--md-sys-color-outline-variant)]">
+					<div className="md-card md-elevation-1 divide-y divide-(--md-sys-color-outline-variant)">
 						{/* Downloaded lines */}
 						<div className="p-4 flex items-center justify-between">
 							<div>
 								<p className="md-body-large">Pobrane linie</p>
-								<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+								<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 									{lines.length}{" "}
 									{lines.length === 1
 										? "linia"
@@ -109,7 +109,7 @@ export default function SettingsPage() {
 									<button
 										onClick={handleClearLines}
 										disabled={clearing === "lines"}
-										className="md-filled-button bg-[var(--md-sys-color-error)] text-sm flex items-center gap-1"
+										className="md-filled-button bg-(--md-sys-color-error) text-sm flex items-center gap-1"
 									>
 										{clearing === "lines" ? (
 											<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -135,7 +135,7 @@ export default function SettingsPage() {
 						<div className="p-4 flex items-center justify-between">
 							<div>
 								<p className="md-body-large">Zapisane filtry</p>
-								<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+								<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 									{filters.length}{" "}
 									{filters.length === 1
 										? "filtr"
@@ -155,7 +155,7 @@ export default function SettingsPage() {
 									<button
 										onClick={handleClearFilters}
 										disabled={clearing === "filters"}
-										className="md-filled-button bg-[var(--md-sys-color-error)] text-sm flex items-center gap-1"
+										className="md-filled-button bg-(--md-sys-color-error) text-sm flex items-center gap-1"
 									>
 										{clearing === "filters" ? (
 											<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -181,12 +181,12 @@ export default function SettingsPage() {
 
 				{/* Section: Display */}
 				<section>
-					<h2 className="md-title-medium text-[var(--md-sys-color-primary)] mb-3 flex items-center gap-2">
+					<h2 className="md-title-medium text-(--md-sys-color-primary) mb-3 flex items-center gap-2">
 						<VisibilityIcon sx={{ fontSize: 20 }} />
 						Wyswietlanie
 					</h2>
 
-					<div className="md-card md-elevation-1 divide-y divide-[var(--md-sys-color-outline-variant)]">
+					<div className="md-card md-elevation-1 divide-y divide-(--md-sys-color-outline-variant)">
 						{/* Show pending */}
 						<button
 							onClick={() => updateSettings({ showPending: !settings?.showPending })}
@@ -196,12 +196,12 @@ export default function SettingsPage() {
 								<PendingActionsIcon
 									sx={{
 										fontSize: 24,
-										color: "var(--md-sys-color-on-surface-variant)",
+										color: "var(--md-sys-color-on-surface-variant)]",
 									}}
 								/>
 								<div>
 									<p className="md-body-large">Pokazuj oczekujace</p>
-									<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+									<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 										Rozklady przed weryfikacja
 									</p>
 								</div>
@@ -209,8 +209,8 @@ export default function SettingsPage() {
 							<div
 								className={`w-12 h-7 rounded-full transition-colors relative ${
 									settings?.showPending
-										? "bg-[var(--md-sys-color-primary)]"
-										: "bg-[var(--md-sys-color-outline)]"
+										? "bg-(--md-sys-color-primary)"
+										: "bg-(--md-sys-color-outline)"
 								}`}
 							>
 								<div
@@ -225,12 +225,12 @@ export default function SettingsPage() {
 
 				{/* Section: Network */}
 				<section>
-					<h2 className="md-title-medium text-[var(--md-sys-color-primary)] mb-3 flex items-center gap-2">
+					<h2 className="md-title-medium text-(--md-sys-color-primary) mb-3 flex items-center gap-2">
 						<WifiIcon sx={{ fontSize: 20 }} />
 						Siec
 					</h2>
 
-					<div className="md-card md-elevation-1 divide-y divide-[var(--md-sys-color-outline-variant)]">
+					<div className="md-card md-elevation-1 divide-y divide-(--md-sys-color-outline-variant)">
 						{/* Sync only WiFi */}
 						<button
 							onClick={() =>
@@ -240,15 +240,15 @@ export default function SettingsPage() {
 						>
 							<div>
 								<p className="md-body-large">Tylko przez Wi-Fi</p>
-								<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+								<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 									Synchronizuj dane tylko przez Wi-Fi
 								</p>
 							</div>
 							<div
 								className={`w-12 h-7 rounded-full transition-colors relative ${
 									settings?.syncOnlyWifi
-										? "bg-[var(--md-sys-color-primary)]"
-										: "bg-[var(--md-sys-color-outline)]"
+										? "bg-(--md-sys-color-primary)"
+										: "bg-(--md-sys-color-outline)"
 								}`}
 							>
 								<div
@@ -263,20 +263,20 @@ export default function SettingsPage() {
 
 				{/* Section: Install */}
 				<section>
-					<h2 className="md-title-medium text-[var(--md-sys-color-primary)] mb-3 flex items-center gap-2">
+					<h2 className="md-title-medium text-(--md-sys-color-primary) mb-3 flex items-center gap-2">
 						<InstallMobileIcon sx={{ fontSize: 20 }} />
 						Instalacja
 					</h2>
 
-					<div className="md-card md-elevation-1 divide-y divide-[var(--md-sys-color-outline-variant)]">
+					<div className="md-card md-elevation-1 divide-y divide-(--md-sys-color-outline-variant)">
 						{isInstalled ? (
 							<div className="p-4 flex items-center gap-3">
 								<CheckCircleIcon
-									sx={{ fontSize: 24, color: "var(--md-sys-color-primary)" }}
+									sx={{ fontSize: 24, color: "var(--md-sys-color-primary)]" }}
 								/>
 								<div>
 									<p className="md-body-large">Aplikacja zainstalowana</p>
-									<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+									<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 										Wsiobus jest na Twoim ekranie glownym
 									</p>
 								</div>
@@ -288,12 +288,12 @@ export default function SettingsPage() {
 							>
 								<div>
 									<p className="md-body-large">Zainstaluj aplikacje</p>
-									<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+									<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 										Dodaj Wsiobus do ekranu glownego
 									</p>
 								</div>
 								<InstallMobileIcon
-									sx={{ fontSize: 24, color: "var(--md-sys-color-primary)" }}
+									sx={{ fontSize: 24, color: "var(--md-sys-color-primary)]" }}
 								/>
 							</button>
 						) : isIOS ? (
@@ -304,21 +304,21 @@ export default function SettingsPage() {
 								>
 									<div>
 										<p className="md-body-large">Zainstaluj aplikacje</p>
-										<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+										<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 											Instrukcja dla iOS
 										</p>
 									</div>
 									<IosShareIcon
-										sx={{ fontSize: 24, color: "var(--md-sys-color-primary)" }}
+										sx={{ fontSize: 24, color: "var(--md-sys-color-primary)]" }}
 									/>
 								</button>
 
 								{showIOSInstructions && (
-									<div className="p-4 bg-[var(--md-sys-color-surface-variant)]">
+									<div className="p-4 bg-(--md-sys-color-surface-variant)">
 										<p className="md-body-medium mb-3">
 											Jak zainstalowac na iOS:
 										</p>
-										<ol className="space-y-2 md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+										<ol className="space-y-2 md-body-small text-(--md-sys-color-on-surface-variant)">
 											<li className="flex gap-2">
 												<span>1.</span>
 												<span>
@@ -347,7 +347,7 @@ export default function SettingsPage() {
 						) : (
 							<div className="p-4">
 								<p className="md-body-large mb-2">Zainstaluj aplikacje</p>
-								<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+								<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 									Uzyj menu przegladarki (trzy kropki) i wybierz "Zainstaluj
 									aplikacje" lub "Dodaj do ekranu glownego".
 								</p>
@@ -358,12 +358,12 @@ export default function SettingsPage() {
 
 				{/* Section: Info */}
 				<section>
-					<h2 className="md-title-medium text-[var(--md-sys-color-primary)] mb-3 flex items-center gap-2">
+					<h2 className="md-title-medium text-(--md-sys-color-primary) mb-3 flex items-center gap-2">
 						<InfoOutlinedIcon sx={{ fontSize: 20 }} />
 						Informacje
 					</h2>
 
-					<div className="md-card md-elevation-1 divide-y divide-[var(--md-sys-color-outline-variant)]">
+					<div className="md-card md-elevation-1 divide-y divide-(--md-sys-color-outline-variant)">
 						<a
 							href="https://wsiobus.pl"
 							target="_blank"
@@ -374,7 +374,7 @@ export default function SettingsPage() {
 							<OpenInNewIcon
 								sx={{
 									fontSize: 20,
-									color: "var(--md-sys-color-on-surface-variant)",
+									color: "var(--md-sys-color-on-surface-variant)]",
 								}}
 							/>
 						</a>
@@ -389,14 +389,14 @@ export default function SettingsPage() {
 							<OpenInNewIcon
 								sx={{
 									fontSize: 20,
-									color: "var(--md-sys-color-on-surface-variant)",
+									color: "var(--md-sys-color-on-surface-variant)]",
 								}}
 							/>
 						</a>
 
 						<div className="p-4 flex items-center justify-between">
 							<p className="md-body-large">Wersja aplikacji</p>
-							<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+							<p className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 								0.1.0 BETA
 							</p>
 						</div>

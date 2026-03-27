@@ -76,9 +76,9 @@ export default function StepCarrier({ data, updateData }: StepCarrierProps) {
 				<h2 className="md-title-large mb-4">Przewoźnik</h2>
 
 				<div className="md-card md-elevation-1 p-4 flex items-center gap-4">
-					<div className="w-12 h-12 rounded-full bg-[var(--md-sys-color-primary-container)] flex items-center justify-center">
+					<div className="w-12 h-12 rounded-full bg-(--md-sys-color-primary-container) flex items-center justify-center">
 						<BusinessIcon
-							sx={{ fontSize: 24, color: "var(--md-sys-color-on-primary-container)" }}
+							sx={{ fontSize: 24, color: "var(--md-sys-color-on-primary-container)]" }}
 						/>
 					</div>
 
@@ -86,24 +86,24 @@ export default function StepCarrier({ data, updateData }: StepCarrierProps) {
 						<div className="flex items-center gap-2">
 							<p className="md-title-medium">{data.carrier.name}</p>
 							{data.carrier.isNew && (
-								<span className="px-2 py-0.5 text-xs rounded-full bg-[var(--md-sys-color-tertiary-container)] text-[var(--md-sys-color-on-tertiary-container)]">
+								<span className="px-2 py-0.5 text-xs rounded-full bg-(--md-sys-color-tertiary-container) text-(--md-sys-color-on-tertiary-container)">
 									Nowy
 								</span>
 							)}
 						</div>
-						<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+						<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 							{data.carrier.isNew
 								? "Zostanie utworzony przy zapisie"
 								: "Wybrany przewoźnik"}
 						</p>
 					</div>
 
-					<CheckCircleIcon sx={{ fontSize: 24, color: "var(--md-sys-color-primary)" }} />
+					<CheckCircleIcon sx={{ fontSize: 24, color: "var(--md-sys-color-primary)]" }} />
 				</div>
 
 				<button
 					onClick={handleClear}
-					className="mt-4 md-text-button text-[var(--md-sys-color-error)]"
+					className="mt-4 md-text-button text-(--md-sys-color-error)"
 				>
 					Zmień przewoźnika
 				</button>
@@ -119,7 +119,7 @@ export default function StepCarrier({ data, updateData }: StepCarrierProps) {
 
 				<div className="space-y-4">
 					<div>
-						<label className="block md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-2">
+						<label className="block md-body-small text-(--md-sys-color-on-surface-variant) mb-2">
 							Nazwa przewoźnika
 						</label>
 						<input
@@ -127,7 +127,7 @@ export default function StepCarrier({ data, updateData }: StepCarrierProps) {
 							value={newCarrierName}
 							onChange={(e) => setNewCarrierName(e.target.value)}
 							placeholder="np. PKS Grudziądz"
-							className="w-full px-4 py-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] placeholder:text-[var(--md-sys-color-on-surface-variant)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+							className="w-full px-4 py-3 rounded-xl bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) placeholder:text-(--md-sys-color-on-surface-variant) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 							autoFocus
 						/>
 					</div>
@@ -165,7 +165,7 @@ export default function StepCarrier({ data, updateData }: StepCarrierProps) {
 						left: 12,
 						top: "50%",
 						transform: "translateY(-50%)",
-						color: "var(--md-sys-color-on-surface-variant)",
+						color: "var(--md-sys-color-on-surface-variant)]",
 						fontSize: 20,
 					}}
 				/>
@@ -174,14 +174,14 @@ export default function StepCarrier({ data, updateData }: StepCarrierProps) {
 					placeholder="Szukaj przewoźnika..."
 					value={query}
 					onChange={(e) => setQuery(e.target.value)}
-					className="w-full pl-10 pr-4 py-3 rounded-full bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] placeholder:text-[var(--md-sys-color-on-surface-variant)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+					className="w-full pl-10 pr-4 py-3 rounded-full bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) placeholder:text-(--md-sys-color-on-surface-variant) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 				/>
 			</div>
 
 			{/* Loading */}
 			{loading && (
 				<div className="text-center py-8">
-					<div className="w-6 h-6 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin mx-auto" />
+					<div className="w-6 h-6 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin mx-auto" />
 				</div>
 			)}
 
@@ -192,13 +192,13 @@ export default function StepCarrier({ data, updateData }: StepCarrierProps) {
 						<button
 							key={carrier.id}
 							onClick={() => handleSelectCarrier(carrier)}
-							className="w-full md-card md-elevation-1 p-4 flex items-center gap-4 hover:bg-[var(--md-sys-color-surface-variant)] transition-colors text-left"
+							className="w-full md-card md-elevation-1 p-4 flex items-center gap-4 hover:bg-(--md-sys-color-surface-variant) transition-colors text-left"
 						>
-							<div className="w-10 h-10 rounded-full bg-[var(--md-sys-color-secondary-container)] flex items-center justify-center">
+							<div className="w-10 h-10 rounded-full bg-(--md-sys-color-secondary-container) flex items-center justify-center">
 								<BusinessIcon
 									sx={{
 										fontSize: 20,
-										color: "var(--md-sys-color-on-secondary-container)",
+										color: "var(--md-sys-color-on-secondary-container)]",
 									}}
 								/>
 							</div>
@@ -214,7 +214,7 @@ export default function StepCarrier({ data, updateData }: StepCarrierProps) {
 
 					{filteredCarriers.length === 0 && query && (
 						<div className="text-center py-8">
-							<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)] mb-4">
+							<p className="md-body-medium text-(--md-sys-color-on-surface-variant) mb-4">
 								Brak wyników dla "{query}"
 							</p>
 						</div>
@@ -225,7 +225,7 @@ export default function StepCarrier({ data, updateData }: StepCarrierProps) {
 			{/* Add new carrier button */}
 			<button
 				onClick={() => setShowNewForm(true)}
-				className="w-full mt-4 p-4 rounded-xl border-2 border-dashed border-[var(--md-sys-color-outline)] flex items-center justify-center gap-2 text-[var(--md-sys-color-primary)] hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+				className="w-full mt-4 p-4 rounded-xl border-2 border-dashed border-(--md-sys-color-outline) flex items-center justify-center gap-2 text-(--md-sys-color-primary) hover:bg-(--md-sys-color-surface-variant) transition-colors"
 			>
 				<AddIcon sx={{ fontSize: 20 }} />
 				<span className="md-label-large">Dodaj nowego przewoźnika</span>

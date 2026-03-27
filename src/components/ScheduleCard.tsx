@@ -20,9 +20,9 @@ export default function ScheduleCard({ schedule }: ScheduleCardProps) {
 		<div className="md-card md-elevation-1 p-4 mb-4">
 			{/* Header */}
 			<div className="flex items-center gap-3">
-				<div className="w-10 h-10 rounded-full bg-[var(--md-sys-color-primary-container)] flex items-center justify-center">
+				<div className="w-10 h-10 rounded-full bg-(--md-sys-color-primary-container) flex items-center justify-center">
 					<DirectionsBusIcon
-						sx={{ fontSize: 24, color: "var(--md-sys-color-on-primary-container)" }}
+						sx={{ fontSize: 24, color: "var(--md-sys-color-on-primary-container)]" }}
 					/>
 				</div>
 				<div className="flex-1">
@@ -30,21 +30,21 @@ export default function ScheduleCard({ schedule }: ScheduleCardProps) {
 						<p className="md-title-medium">{schedule.carrier_name}</p>
 						{schedule.carrier_status && (
 							<VerifiedIcon
-								sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }}
+								sx={{ fontSize: 16, color: "var(--md-sys-color-primary)]" }}
 							/>
 						)}
 					</div>
-					<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+					<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 						Linia {schedule.line_number}
 					</p>
 				</div>
 
 				{/* Departure time */}
-				<div className="flex items-center gap-1 px-3 py-2 rounded-lg bg-[var(--md-sys-color-primary-container)]">
+				<div className="flex items-center gap-1 px-3 py-2 rounded-lg bg-(--md-sys-color-primary-container)">
 					<AccessTimeIcon
-						sx={{ fontSize: 18, color: "var(--md-sys-color-on-primary-container)" }}
+						sx={{ fontSize: 18, color: "var(--md-sys-color-on-primary-container)]" }}
 					/>
-					<span className="md-title-medium text-[var(--md-sys-color-on-primary-container)]">
+					<span className="md-title-medium text-(--md-sys-color-on-primary-container)">
 						{formatTime(schedule.first_departure)}
 					</span>
 				</div>
@@ -58,13 +58,13 @@ export default function ScheduleCard({ schedule }: ScheduleCardProps) {
 				{schedule.days.map((day) => (
 					<span
 						key={day}
-						className="px-2 py-1 text-xs rounded-full bg-[var(--md-sys-color-secondary-container)] text-[var(--md-sys-color-on-secondary-container)]"
+						className="px-2 py-1 text-xs rounded-full bg-(--md-sys-color-secondary-container) text-(--md-sys-color-on-secondary-container)"
 					>
 						{day}
 					</span>
 				))}
 				{schedule.excludes_holidays && (
-					<span className="px-2 py-1 text-xs rounded-full bg-[var(--md-sys-color-error-container)] text-[var(--md-sys-color-on-error-container)]">
+					<span className="px-2 py-1 text-xs rounded-full bg-(--md-sys-color-error-container) text-(--md-sys-color-on-error-container)">
 						bez świąt
 					</span>
 				)}

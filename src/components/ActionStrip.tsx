@@ -140,8 +140,8 @@ export default function ActionStrip({
 					onClick={handleNowClick}
 					className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
 						timeFilter === "now"
-							? "bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)]"
-							: "bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)]"
+							? "bg-(--md-sys-color-primary) text-(--md-sys-color-on-primary)"
+							: "bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant)"
 					}`}
 				>
 					<AccessTimeIcon sx={{ fontSize: 18 }} />
@@ -156,8 +156,8 @@ export default function ActionStrip({
 					}}
 					className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
 						selectedTime
-							? "bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)]"
-							: "bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)]"
+							? "bg-(--md-sys-color-primary) text-(--md-sys-color-on-primary)"
+							: "bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant)"
 					}`}
 				>
 					<ScheduleIcon sx={{ fontSize: 18 }} />
@@ -172,8 +172,8 @@ export default function ActionStrip({
 					}}
 					className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
 						showDayPicker
-							? "bg-[var(--md-sys-color-secondary)] text-[var(--md-sys-color-on-secondary)]"
-							: "bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)]"
+							? "bg-(--md-sys-color-secondary) text-(--md-sys-color-on-secondary)"
+							: "bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant)"
 					}`}
 				>
 					<TodayIcon sx={{ fontSize: 18 }} />
@@ -183,7 +183,7 @@ export default function ActionStrip({
 				{/* Kalendarz - placeholder */}
 				<button
 					disabled
-					className="flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)] opacity-50"
+					className="flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant) opacity-50"
 				>
 					<CalendarMonthIcon sx={{ fontSize: 18 }} />
 					<span className="md-label-large">Kalendarz</span>
@@ -194,8 +194,8 @@ export default function ActionStrip({
 					onClick={() => onShowPendingChange(!showPending)}
 					className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
 						showPending
-							? "bg-[var(--md-sys-color-tertiary)] text-[var(--md-sys-color-on-tertiary)]"
-							: "bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)]"
+							? "bg-(--md-sys-color-tertiary) text-(--md-sys-color-on-tertiary)"
+							: "bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant)"
 					}`}
 				>
 					<PendingActionsIcon sx={{ fontSize: 18 }} />
@@ -205,27 +205,27 @@ export default function ActionStrip({
 
 			{/* Time picker dropdown */}
 			{showTimePicker && (
-				<div className="mt-3 p-4 rounded-xl bg-[var(--md-sys-color-surface-variant)]">
+				<div className="mt-3 p-4 rounded-xl bg-(--md-sys-color-surface-variant)">
 					<div className="flex items-center gap-3">
-						<label className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+						<label className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 							Pokaż odjazdy od:
 						</label>
 						<input
 							type="time"
 							value={selectedTime ?? ""}
 							onChange={(e) => handleTimeChange(e.target.value)}
-							className="px-3 py-2 rounded-lg bg-[var(--md-sys-color-surface)] text-[var(--md-sys-color-on-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+							className="px-3 py-2 rounded-lg bg-(--md-sys-color-surface) text-(--md-sys-color-on-surface) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 						/>
 						{selectedTime && (
 							<button
 								onClick={handleTimeClear}
-								className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface)] transition-colors"
+								className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface) transition-colors"
 								title="Wyczyść"
 							>
 								<CloseIcon
 									sx={{
 										fontSize: 18,
-										color: "var(--md-sys-color-on-surface-variant)",
+										color: "var(--md-sys-color-on-surface-variant)]",
 									}}
 								/>
 							</button>
@@ -236,24 +236,24 @@ export default function ActionStrip({
 
 			{/* Day picker dropdown */}
 			{showDayPicker && (
-				<div className="mt-3 p-4 rounded-xl bg-[var(--md-sys-color-surface-variant)]">
+				<div className="mt-3 p-4 rounded-xl bg-(--md-sys-color-surface-variant)">
 					{/* Quick presets */}
 					<div className="flex gap-2 mb-3">
 						<button
 							onClick={() => handleQuickDays("weekdays")}
-							className="px-3 py-1 rounded-full text-sm bg-[var(--md-sys-color-surface)] text-[var(--md-sys-color-on-surface)]"
+							className="px-3 py-1 rounded-full text-sm bg-(--md-sys-color-surface) text-(--md-sys-color-on-surface)"
 						>
 							Dni robocze
 						</button>
 						<button
 							onClick={() => handleQuickDays("weekend")}
-							className="px-3 py-1 rounded-full text-sm bg-[var(--md-sys-color-surface)] text-[var(--md-sys-color-on-surface)]"
+							className="px-3 py-1 rounded-full text-sm bg-(--md-sys-color-surface) text-(--md-sys-color-on-surface)"
 						>
 							Weekend
 						</button>
 						<button
 							onClick={() => handleQuickDays("all")}
-							className="px-3 py-1 rounded-full text-sm bg-[var(--md-sys-color-surface)] text-[var(--md-sys-color-on-surface)]"
+							className="px-3 py-1 rounded-full text-sm bg-(--md-sys-color-surface) text-(--md-sys-color-on-surface)"
 						>
 							Wszystkie
 						</button>
@@ -269,8 +269,8 @@ export default function ActionStrip({
 									onClick={() => handleDayToggle(day)}
 									className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${
 										isSelected
-											? "bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)]"
-											: "bg-[var(--md-sys-color-surface)] text-[var(--md-sys-color-on-surface)]"
+											? "bg-(--md-sys-color-primary) text-(--md-sys-color-on-primary)"
+											: "bg-(--md-sys-color-surface) text-(--md-sys-color-on-surface)"
 									}`}
 								>
 									{isSelected ? (

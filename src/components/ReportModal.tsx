@@ -92,15 +92,15 @@ export default function ReportModal({
 
 			{/* Modal */}
 			<div className="fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md max-h-[85vh] overflow-y-auto">
-				<div className="bg-[var(--md-sys-color-surface)] rounded-3xl shadow-xl">
+				<div className="bg-(--md-sys-color-surface) rounded-3xl shadow-xl">
 					{/* Header */}
-					<div className="flex items-center justify-between p-4 border-b border-[var(--md-sys-color-outline-variant)]">
+					<div className="flex items-center justify-between p-4 border-b border-(--md-sys-color-outline-variant)">
 						<div className="flex items-center gap-3">
-							<div className="w-10 h-10 rounded-full bg-[var(--md-sys-color-error-container)] flex items-center justify-center">
+							<div className="w-10 h-10 rounded-full bg-(--md-sys-color-error-container) flex items-center justify-center">
 								<FlagIcon
 									sx={{
 										fontSize: 20,
-										color: "var(--md-sys-color-on-error-container)",
+										color: "var(--md-sys-color-on-error-container)]",
 									}}
 								/>
 							</div>
@@ -108,9 +108,9 @@ export default function ReportModal({
 						</div>
 						<button
 							onClick={handleClose}
-							className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+							className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 						>
-							<CloseIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+							<CloseIcon sx={{ color: "var(--md-sys-color-on-surface)]" }} />
 						</button>
 					</div>
 
@@ -119,16 +119,16 @@ export default function ReportModal({
 						{submitted ? (
 							/* Success state */
 							<div className="text-center py-8">
-								<div className="w-16 h-16 rounded-full bg-[var(--md-sys-color-primary-container)] flex items-center justify-center mx-auto mb-4">
+								<div className="w-16 h-16 rounded-full bg-(--md-sys-color-primary-container) flex items-center justify-center mx-auto mb-4">
 									<CheckCircleIcon
 										sx={{
 											fontSize: 32,
-											color: "var(--md-sys-color-on-primary-container)",
+											color: "var(--md-sys-color-on-primary-container)]",
 										}}
 									/>
 								</div>
 								<h3 className="md-title-medium mb-2">Dziękujemy za zgłoszenie</h3>
-								<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)] mb-6">
+								<p className="md-body-medium text-(--md-sys-color-on-surface-variant) mb-6">
 									Twoje zgłoszenie zostało wysłane i zostanie rozpatrzone przez
 									moderatora.
 								</p>
@@ -140,13 +140,13 @@ export default function ReportModal({
 							<>
 								{/* Schedule info */}
 								{scheduleName && (
-									<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)] mb-4">
+									<p className="md-body-medium text-(--md-sys-color-on-surface-variant) mb-4">
 										Zgłaszasz: <strong>{scheduleName}</strong>
 									</p>
 								)}
 
 								{/* Reason selection */}
-								<p className="md-label-large text-[var(--md-sys-color-on-surface-variant)] mb-3">
+								<p className="md-label-large text-(--md-sys-color-on-surface-variant) mb-3">
 									Wybierz powód zgłoszenia
 								</p>
 
@@ -162,18 +162,18 @@ export default function ReportModal({
 												className={`p-3 rounded-xl text-left transition-colors border-2 ${
 													isSelected
 														? isCritical
-															? "border-[var(--md-sys-color-error)] bg-[var(--md-sys-color-error-container)]"
-															: "border-[var(--md-sys-color-primary)] bg-[var(--md-sys-color-primary-container)]"
-														: "border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface-variant)]"
+															? "border-(--md-sys-color-error) bg-(--md-sys-color-error-container)"
+															: "border-(--md-sys-color-primary) bg-(--md-sys-color-primary-container)"
+														: "border-(--md-sys-color-outline-variant) bg-(--md-sys-color-surface-variant)"
 												}`}
 											>
 												<span
 													className={`md-body-medium ${
 														isSelected
 															? isCritical
-																? "text-[var(--md-sys-color-on-error-container)]"
-																: "text-[var(--md-sys-color-on-primary-container)]"
-															: "text-[var(--md-sys-color-on-surface)]"
+																? "text-(--md-sys-color-on-error-container)"
+																: "text-(--md-sys-color-on-primary-container)"
+															: "text-(--md-sys-color-on-surface)"
 													}`}
 												>
 													{reason.label}
@@ -188,15 +188,15 @@ export default function ReportModal({
 									<div className="flex items-center justify-between mb-2">
 										<label
 											htmlFor="report-comment"
-											className="md-label-large text-[var(--md-sys-color-on-surface-variant)]"
+											className="md-label-large text-(--md-sys-color-on-surface-variant)"
 										>
 											Dodatkowy opis
 										</label>
 										<span
 											className={`md-body-small ${
 												comment.length > maxCommentLength
-													? "text-[var(--md-sys-color-error)]"
-													: "text-[var(--md-sys-color-on-surface-variant)]"
+													? "text-(--md-sys-color-error)"
+													: "text-(--md-sys-color-on-surface-variant)"
 											}`}
 										>
 											{comment.length}/{maxCommentLength}
@@ -209,14 +209,14 @@ export default function ReportModal({
 										placeholder="Opisz problem szczegółowo..."
 										maxLength={maxCommentLength + 10}
 										rows={3}
-										className="w-full px-4 py-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] placeholder:text-[var(--md-sys-color-on-surface-variant)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)] resize-none"
+										className="w-full px-4 py-3 rounded-xl bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) placeholder:text-(--md-sys-color-on-surface-variant) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary) resize-none"
 									/>
 								</div>
 
 								{/* Error message */}
 								{error && (
-									<div className="mb-4 p-3 rounded-xl bg-[var(--md-sys-color-error-container)]">
-										<p className="md-body-medium text-[var(--md-sys-color-on-error-container)]">
+									<div className="mb-4 p-3 rounded-xl bg-(--md-sys-color-error-container)">
+										<p className="md-body-medium text-(--md-sys-color-on-error-container)">
 											{error}
 										</p>
 									</div>
@@ -237,7 +237,7 @@ export default function ReportModal({
 										className="md-filled-button flex items-center gap-2 disabled:opacity-50"
 									>
 										{submitting ? (
-											<div className="w-5 h-5 border-2 border-[var(--md-sys-color-on-primary)] border-t-transparent rounded-full animate-spin" />
+											<div className="w-5 h-5 border-2 border-(--md-sys-color-on-primary) border-t-transparent rounded-full animate-spin" />
 										) : (
 											<SendIcon sx={{ fontSize: 18 }} />
 										)}

@@ -200,11 +200,11 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 				{/* Selected line */}
 				{data.line ? (
 					<div className="md-card md-elevation-1 p-4 flex items-center gap-4">
-						<div className="w-12 h-12 rounded-full bg-[var(--md-sys-color-primary-container)] flex items-center justify-center">
+						<div className="w-12 h-12 rounded-full bg-(--md-sys-color-primary-container) flex items-center justify-center">
 							<DirectionsBusIcon
 								sx={{
 									fontSize: 24,
-									color: "var(--md-sys-color-on-primary-container)",
+									color: "var(--md-sys-color-on-primary-container)]",
 								}}
 							/>
 						</div>
@@ -213,26 +213,26 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 							<div className="flex items-center gap-2">
 								<p className="md-title-medium">Linia {data.line.number}</p>
 								{data.line.isNew && (
-									<span className="px-2 py-0.5 text-xs rounded-full bg-[var(--md-sys-color-tertiary-container)] text-[var(--md-sys-color-on-tertiary-container)]">
+									<span className="px-2 py-0.5 text-xs rounded-full bg-(--md-sys-color-tertiary-container) text-(--md-sys-color-on-tertiary-container)">
 										Nowa
 									</span>
 								)}
 							</div>
 							{data.line.description && (
-								<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+								<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 									{data.line.description}
 								</p>
 							)}
 						</div>
 
 						<CheckCircleIcon
-							sx={{ fontSize: 24, color: "var(--md-sys-color-primary)" }}
+							sx={{ fontSize: 24, color: "var(--md-sys-color-primary)]" }}
 						/>
 					</div>
 				) : showNewLineForm ? (
 					<div className="md-card md-elevation-1 p-4 space-y-4">
 						<div>
-							<label className="block md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-2">
+							<label className="block md-body-small text-(--md-sys-color-on-surface-variant) mb-2">
 								Numer linii *
 							</label>
 							<input
@@ -240,13 +240,13 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 								value={newLineNumber}
 								onChange={(e) => setNewLineNumber(e.target.value)}
 								placeholder="np. 101"
-								className="w-full px-4 py-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+								className="w-full px-4 py-3 rounded-xl bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 								autoFocus
 							/>
 						</div>
 
 						<div>
-							<label className="block md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-2">
+							<label className="block md-body-small text-(--md-sys-color-on-surface-variant) mb-2">
 								Opis trasy (opcjonalnie)
 							</label>
 							<input
@@ -254,7 +254,7 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 								value={newLineDescription}
 								onChange={(e) => setNewLineDescription(e.target.value)}
 								placeholder="np. Nowe - Grudziądz"
-								className="w-full px-4 py-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+								className="w-full px-4 py-3 rounded-xl bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 							/>
 						</div>
 
@@ -278,7 +278,7 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 					<div className="space-y-3">
 						{loadingLines ? (
 							<div className="text-center py-4">
-								<div className="w-6 h-6 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin mx-auto" />
+								<div className="w-6 h-6 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin mx-auto" />
 							</div>
 						) : lines.length > 0 ? (
 							<div className="space-y-2 max-h-48 overflow-y-auto">
@@ -286,18 +286,18 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 									<button
 										key={line.id}
 										onClick={() => handleSelectLine(line)}
-										className="w-full md-card md-elevation-1 p-3 flex items-center gap-3 hover:bg-[var(--md-sys-color-surface-variant)] transition-colors text-left"
+										className="w-full md-card md-elevation-1 p-3 flex items-center gap-3 hover:bg-(--md-sys-color-surface-variant) transition-colors text-left"
 									>
 										<DirectionsBusIcon
 											sx={{
 												fontSize: 20,
-												color: "var(--md-sys-color-primary)",
+												color: "var(--md-sys-color-primary)]",
 											}}
 										/>
 										<div>
 											<p className="md-body-large">Linia {line.number}</p>
 											{line.description && (
-												<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+												<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 													{line.description}
 												</p>
 											)}
@@ -306,7 +306,7 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 								))}
 							</div>
 						) : (
-							<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)] text-center py-4">
+							<p className="md-body-medium text-(--md-sys-color-on-surface-variant) text-center py-4">
 								{data.carrier?.isNew
 									? "Nowy przewoźnik - utwórz pierwszą linię"
 									: "Brak linii dla tego przewoźnika"}
@@ -315,7 +315,7 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 
 						<button
 							onClick={() => setShowNewLineForm(true)}
-							className="w-full p-3 rounded-xl border-2 border-dashed border-[var(--md-sys-color-outline)] flex items-center justify-center gap-2 text-[var(--md-sys-color-primary)] hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+							className="w-full p-3 rounded-xl border-2 border-dashed border-(--md-sys-color-outline) flex items-center justify-center gap-2 text-(--md-sys-color-primary) hover:bg-(--md-sys-color-surface-variant) transition-colors"
 						>
 							<AddIcon sx={{ fontSize: 20 }} />
 							<span className="md-label-large">Utwórz nową linię</span>
@@ -326,7 +326,7 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 				{data.line && (
 					<button
 						onClick={handleClearLine}
-						className="mt-3 md-text-button text-[var(--md-sys-color-error)]"
+						className="mt-3 md-text-button text-(--md-sys-color-error)"
 					>
 						Zmień linię
 					</button>
@@ -370,8 +370,8 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 								key={`${stop.id ?? "new"}-${index}`}
 								className="md-card md-elevation-1 p-3 flex items-center gap-3"
 							>
-								<div className="w-8 h-8 rounded-full bg-[var(--md-sys-color-secondary-container)] flex items-center justify-center">
-									<span className="md-label-medium text-[var(--md-sys-color-on-secondary-container)]">
+								<div className="w-8 h-8 rounded-full bg-(--md-sys-color-secondary-container) flex items-center justify-center">
+									<span className="md-label-medium text-(--md-sys-color-on-secondary-container)">
 										{index + 1}
 									</span>
 								</div>
@@ -382,7 +382,7 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 										{stop.name && `, ${stop.name}`}
 									</p>
 									{stop.isNew && (
-										<span className="text-xs text-[var(--md-sys-color-tertiary)]">
+										<span className="text-xs text-(--md-sys-color-tertiary)">
 											Nowy przystanek
 										</span>
 									)}
@@ -392,14 +392,14 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 									<button
 										onClick={() => handleMoveStop(index, "up")}
 										disabled={index === 0}
-										className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] disabled:opacity-30"
+										className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) disabled:opacity-30"
 									>
 										<KeyboardArrowUpIcon sx={{ fontSize: 20 }} />
 									</button>
 									<button
 										onClick={() => handleMoveStop(index, "down")}
 										disabled={index === data.stops.length - 1}
-										className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] disabled:opacity-30"
+										className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) disabled:opacity-30"
 									>
 										<KeyboardArrowDownIcon sx={{ fontSize: 20 }} />
 									</button>
@@ -407,7 +407,7 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 
 								<button
 									onClick={() => handleRemoveStop(index)}
-									className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-error-container)] text-[var(--md-sys-color-error)]"
+									className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-error-container) text-(--md-sys-color-error)"
 								>
 									<DeleteIcon sx={{ fontSize: 18 }} />
 								</button>
@@ -424,7 +424,7 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 								position: "absolute",
 								left: 12,
 								top: 14,
-								color: "var(--md-sys-color-on-surface-variant)",
+								color: "var(--md-sys-color-on-surface-variant)]",
 								fontSize: 20,
 							}}
 						/>
@@ -433,27 +433,27 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 							placeholder="Szukaj przystanku..."
 							value={stopQuery}
 							onChange={(e) => setStopQuery(e.target.value)}
-							className="w-full pl-10 pr-4 py-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+							className="w-full pl-10 pr-4 py-3 rounded-xl bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 						/>
 
 						{stopResults.length > 0 && (
-							<div className="absolute z-10 left-0 right-0 mt-2 rounded-xl bg-[var(--md-sys-color-surface)] border border-[var(--md-sys-color-outline-variant)] shadow-lg overflow-hidden">
+							<div className="absolute z-10 left-0 right-0 mt-2 rounded-xl bg-(--md-sys-color-surface) border border-(--md-sys-color-outline-variant) shadow-lg overflow-hidden">
 								{stopResults.map((stop) => (
 									<button
 										key={stop.id}
 										onClick={() => handleAddStop(stop)}
-										className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[var(--md-sys-color-surface-variant)] transition-colors text-left"
+										className="w-full flex items-center gap-3 px-4 py-3 hover:bg-(--md-sys-color-surface-variant) transition-colors text-left"
 									>
 										<PlaceIcon
 											sx={{
 												fontSize: 20,
-												color: "var(--md-sys-color-primary)",
+												color: "var(--md-sys-color-primary)]",
 											}}
 										/>
 										<div>
 											<p className="md-body-medium">{stop.city}</p>
 											{stop.name && (
-												<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+												<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 													{stop.name}
 												</p>
 											)}
@@ -465,7 +465,7 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 
 						{searchingStops && (
 							<div className="absolute right-3 top-3">
-								<div className="w-5 h-5 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
+								<div className="w-5 h-5 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
 							</div>
 						)}
 					</div>
@@ -475,7 +475,7 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 				{showNewStopForm ? (
 					<div className="mt-4 md-card md-elevation-1 p-4 space-y-4">
 						<div>
-							<label className="block md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-2">
+							<label className="block md-body-small text-(--md-sys-color-on-surface-variant) mb-2">
 								Miejscowość *
 							</label>
 							<input
@@ -483,13 +483,13 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 								value={newStopCity}
 								onChange={(e) => setNewStopCity(e.target.value)}
 								placeholder="np. Grudziądz"
-								className="w-full px-4 py-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+								className="w-full px-4 py-3 rounded-xl bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 								autoFocus
 							/>
 						</div>
 
 						<div>
-							<label className="block md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-2">
+							<label className="block md-body-small text-(--md-sys-color-on-surface-variant) mb-2">
 								Nazwa przystanku (opcjonalnie)
 							</label>
 							<input
@@ -497,7 +497,7 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 								value={newStopName}
 								onChange={(e) => setNewStopName(e.target.value)}
 								placeholder="np. Dworzec PKS"
-								className="w-full px-4 py-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+								className="w-full px-4 py-3 rounded-xl bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 							/>
 						</div>
 
@@ -520,7 +520,7 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 				) : (
 					<button
 						onClick={() => setShowNewStopForm(true)}
-						className="w-full mt-3 p-3 rounded-xl border-2 border-dashed border-[var(--md-sys-color-outline)] flex items-center justify-center gap-2 text-[var(--md-sys-color-primary)] hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+						className="w-full mt-3 p-3 rounded-xl border-2 border-dashed border-(--md-sys-color-outline) flex items-center justify-center gap-2 text-(--md-sys-color-primary) hover:bg-(--md-sys-color-surface-variant) transition-colors"
 					>
 						<AddIcon sx={{ fontSize: 20 }} />
 						<span className="md-label-large">Dodaj nowy przystanek</span>
@@ -529,15 +529,15 @@ export default function StepLine({ data, updateData }: StepLineProps) {
 
 				{/* Direction preview */}
 				{data.stops.length >= 2 && (
-					<div className="mt-4 p-3 rounded-xl bg-[var(--md-sys-color-primary-container)]">
-						<p className="md-body-small text-[var(--md-sys-color-on-primary-container)]">
+					<div className="mt-4 p-3 rounded-xl bg-(--md-sys-color-primary-container)">
+						<p className="md-body-small text-(--md-sys-color-on-primary-container)">
 							Kierunek: <strong>{data.direction}</strong>
 						</p>
 					</div>
 				)}
 
 				{data.stops.length < 2 && (
-					<p className="mt-4 md-body-small text-[var(--md-sys-color-on-surface-variant)] text-center">
+					<p className="mt-4 md-body-small text-(--md-sys-color-on-surface-variant) text-center">
 						Dodaj co najmniej 2 przystanki, aby kontynuować
 					</p>
 				)}

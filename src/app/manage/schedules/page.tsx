@@ -37,10 +37,10 @@ interface PendingSchedule {
 }
 
 const STATUS_CONFIG: Record<ScheduleStatus, { label: string; color: string }> = {
-	pending: { label: "Oczekuje", color: "var(--md-sys-color-tertiary)" },
-	active: { label: "Aktywny", color: "var(--md-sys-color-primary)" },
-	flagged: { label: "Oflagowany", color: "var(--md-sys-color-error)" },
-	archived: { label: "Archiwum", color: "var(--md-sys-color-outline)" },
+	pending: { label: "Oczekuje", color: "var(--md-sys-color-tertiary)]" },
+	active: { label: "Aktywny", color: "var(--md-sys-color-primary)]" },
+	flagged: { label: "Oflagowany", color: "var(--md-sys-color-error)]" },
+	archived: { label: "Archiwum", color: "var(--md-sys-color-outline)]" },
 };
 
 export default function ManaSchedulesPage() {
@@ -178,12 +178,12 @@ export default function ManaSchedulesPage() {
 				{/* Filter */}
 				<div className="flex items-center gap-2">
 					<FilterListIcon
-						sx={{ fontSize: 20, color: "var(--md-sys-color-on-surface-variant)" }}
+						sx={{ fontSize: 20, color: "var(--md-sys-color-on-surface-variant)]" }}
 					/>
 					<select
 						value={filter}
 						onChange={(e) => setFilter(e.target.value as ScheduleStatus | "all")}
-						className="px-3 py-2 rounded-lg bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] border-none focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+						className="px-3 py-2 rounded-lg bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) border-none focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 					>
 						<option value="pending">Oczekujące</option>
 						<option value="active">Aktywne</option>
@@ -196,11 +196,11 @@ export default function ManaSchedulesPage() {
 
 			{loading ? (
 				<div className="flex items-center justify-center h-64">
-					<div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
+					<div className="w-8 h-8 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
 				</div>
 			) : schedules.length === 0 ? (
 				<div className="md-card md-elevation-1 p-8 text-center">
-					<p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
+					<p className="md-body-large text-(--md-sys-color-on-surface-variant)">
 						Brak rozkładów
 						{filter !== "all"
 							? ` o statusie "${STATUS_CONFIG[filter as ScheduleStatus]?.label}"`
@@ -227,7 +227,7 @@ export default function ManaSchedulesPage() {
 											<CompareArrowsIcon
 												sx={{
 													fontSize: 20,
-													color: "var(--md-sys-color-tertiary)",
+													color: "var(--md-sys-color-tertiary)]",
 												}}
 												titleAccess="Edycja istniejącego"
 											/>
@@ -235,7 +235,7 @@ export default function ManaSchedulesPage() {
 											<NewReleasesIcon
 												sx={{
 													fontSize: 20,
-													color: "var(--md-sys-color-primary)",
+													color: "var(--md-sys-color-primary)]",
 												}}
 												titleAccess="Nowy rozkład"
 											/>
@@ -256,11 +256,11 @@ export default function ManaSchedulesPage() {
 												{config?.label}
 											</span>
 											{hasParent && (
-												<span className="px-2 py-0.5 rounded-full text-xs bg-[var(--md-sys-color-tertiary-container)] text-[var(--md-sys-color-on-tertiary-container)]">
+												<span className="px-2 py-0.5 rounded-full text-xs bg-(--md-sys-color-tertiary-container) text-(--md-sys-color-on-tertiary-container)">
 													v{schedule.version}
 												</span>
 											)}
-											<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+											<span className="md-body-small text-(--md-sys-color-on-surface-variant)">
 												{formatDate(schedule.created_at)}
 											</span>
 										</div>
@@ -270,7 +270,7 @@ export default function ManaSchedulesPage() {
 											<strong>{schedule.line?.carrier?.name}</strong> - Linia{" "}
 											{schedule.line?.number}
 										</p>
-										<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)] mb-2">
+										<p className="md-body-medium text-(--md-sys-color-on-surface-variant) mb-2">
 											{schedule.direction}
 										</p>
 
@@ -279,20 +279,20 @@ export default function ManaSchedulesPage() {
 											{schedule.days.map((day) => (
 												<span
 													key={day}
-													className="px-2 py-0.5 text-xs rounded-full bg-[var(--md-sys-color-secondary-container)] text-[var(--md-sys-color-on-secondary-container)]"
+													className="px-2 py-0.5 text-xs rounded-full bg-(--md-sys-color-secondary-container) text-(--md-sys-color-on-secondary-container)"
 												>
 													{day}
 												</span>
 											))}
 											{schedule.excludes_holidays && (
-												<span className="px-2 py-0.5 text-xs rounded-full bg-[var(--md-sys-color-error-container)] text-[var(--md-sys-color-on-error-container)]">
+												<span className="px-2 py-0.5 text-xs rounded-full bg-(--md-sys-color-error-container) text-(--md-sys-color-on-error-container)">
 													bez świąt
 												</span>
 											)}
 										</div>
 
 										{/* Creator */}
-										<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+										<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 											Autor: {schedule.creator?.display_name || "Nieznany"}
 										</p>
 									</div>
@@ -302,13 +302,13 @@ export default function ManaSchedulesPage() {
 										{schedule.parent_id && schedule.status === "pending" && (
 											<button
 												onClick={() => setCompareSchedule(schedule)}
-												className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-tertiary-container)] transition-colors"
+												className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-tertiary-container) transition-colors"
 												title="Porównaj wersje"
 											>
 												<CompareArrowsIcon
 													sx={{
 														fontSize: 20,
-														color: "var(--md-sys-color-tertiary)",
+														color: "var(--md-sys-color-tertiary)]",
 													}}
 												/>
 											</button>
@@ -316,13 +316,13 @@ export default function ManaSchedulesPage() {
 
 										<Link
 											href={`/manage/schedules/${schedule.id}`}
-											className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+											className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 											title="Podgląd"
 										>
 											<VisibilityIcon
 												sx={{
 													fontSize: 20,
-													color: "var(--md-sys-color-on-surface-variant)",
+													color: "var(--md-sys-color-on-surface-variant)]",
 												}}
 											/>
 										</Link>
@@ -337,16 +337,16 @@ export default function ManaSchedulesPage() {
 														)
 													}
 													disabled={isLoading}
-													className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-primary-container)] transition-colors disabled:opacity-50"
+													className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-primary-container) transition-colors disabled:opacity-50"
 													title="Zatwierdź"
 												>
 													{isLoading ? (
-														<div className="w-5 h-5 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
+														<div className="w-5 h-5 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
 													) : (
 														<CheckCircleIcon
 															sx={{
 																fontSize: 20,
-																color: "var(--md-sys-color-primary)",
+																color: "var(--md-sys-color-primary)]",
 															}}
 														/>
 													)}
@@ -355,13 +355,13 @@ export default function ManaSchedulesPage() {
 												<button
 													onClick={() => handleReject(schedule.id)}
 													disabled={isLoading}
-													className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-error-container)] transition-colors disabled:opacity-50"
+													className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-error-container) transition-colors disabled:opacity-50"
 													title="Odrzuć"
 												>
 													<CancelIcon
 														sx={{
 															fontSize: 20,
-															color: "var(--md-sys-color-error)",
+															color: "var(--md-sys-color-error)]",
 														}}
 													/>
 												</button>

@@ -99,7 +99,7 @@ export default function StopSearch({
 							left: 12,
 							top: "50%",
 							transform: "translateY(-50%)",
-							color: "var(--md-sys-color-on-surface-variant)",
+							color: "var(--md-sys-color-on-surface-variant)]",
 							fontSize: 20,
 						}}
 					/>
@@ -109,34 +109,34 @@ export default function StopSearch({
 						placeholder={activeField === "from" ? "Skąd jedziesz?" : "Dokąd jedziesz?"}
 						value={query}
 						onChange={(e) => setQuery(e.target.value)}
-						className="w-full pl-10 pr-12 py-3 rounded-full bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] placeholder:text-[var(--md-sys-color-on-surface-variant)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+						className="w-full pl-10 pr-12 py-3 rounded-full bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) placeholder:text-(--md-sys-color-on-surface-variant) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 					/>
 					<button
 						onClick={handleClose}
-						className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface)] transition-colors"
+						className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface) transition-colors"
 					>
 						<CloseIcon
-							sx={{ fontSize: 20, color: "var(--md-sys-color-on-surface-variant)" }}
+							sx={{ fontSize: 20, color: "var(--md-sys-color-on-surface-variant)]" }}
 						/>
 					</button>
 				</div>
 
 				{/* Results */}
 				{results.length > 0 && (
-					<div className="mt-2 rounded-xl bg-[var(--md-sys-color-surface)] border border-[var(--md-sys-color-outline-variant)] overflow-hidden">
+					<div className="mt-2 rounded-xl bg-(--md-sys-color-surface) border border-(--md-sys-color-outline-variant) overflow-hidden">
 						{results.map((stop) => (
 							<button
 								key={stop.id}
 								onClick={() => handleStopSelect(stop)}
-								className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[var(--md-sys-color-surface-variant)] transition-colors text-left"
+								className="w-full flex items-center gap-3 px-4 py-3 hover:bg-(--md-sys-color-surface-variant) transition-colors text-left"
 							>
 								<PlaceIcon
-									sx={{ fontSize: 20, color: "var(--md-sys-color-primary)" }}
+									sx={{ fontSize: 20, color: "var(--md-sys-color-primary)]" }}
 								/>
 								<div>
 									<p className="md-body-large">{stop.city}</p>
 									{stop.name && (
-										<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+										<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 											{stop.name}
 										</p>
 									)}
@@ -148,11 +148,11 @@ export default function StopSearch({
 
 				{/* No results */}
 				{query.trim() && results.length === 0 && !loading && (
-					<div className="mt-2 p-4 rounded-xl bg-[var(--md-sys-color-surface-variant)] text-center">
-						<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+					<div className="mt-2 p-4 rounded-xl bg-(--md-sys-color-surface-variant) text-center">
+						<p className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 							Brak wyników dla "{query}"
 						</p>
-						<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] mt-1">
+						<p className="md-body-small text-(--md-sys-color-on-surface-variant) mt-1">
 							Przystanki pojawiają się po pobraniu linii
 						</p>
 					</div>
@@ -172,10 +172,10 @@ export default function StopSearch({
 					role="button"
 					tabIndex={0}
 					onKeyDown={(e) => e.key === "Enter" && handleFieldClick("from")}
-					className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] cursor-pointer"
+					className="flex items-center gap-3 px-4 py-3 rounded-xl bg-(--md-sys-color-surface-variant) cursor-pointer"
 				>
-					<div className="w-6 h-6 rounded-full bg-[var(--md-sys-color-primary)] flex items-center justify-center">
-						<span className="text-xs font-medium text-[var(--md-sys-color-on-primary)]">
+					<div className="w-6 h-6 rounded-full bg-(--md-sys-color-primary) flex items-center justify-center">
+						<span className="text-xs font-medium text-(--md-sys-color-on-primary)">
 							A
 						</span>
 					</div>
@@ -183,7 +183,7 @@ export default function StopSearch({
 						{fromStop ? (
 							<p className="md-body-large truncate">{formatStopName(fromStop)}</p>
 						) : (
-							<p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
+							<p className="md-body-large text-(--md-sys-color-on-surface-variant)">
 								Skąd?
 							</p>
 						)}
@@ -191,12 +191,12 @@ export default function StopSearch({
 					{fromStop && (
 						<button
 							onClick={(e) => handleClear("from", e)}
-							className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface)] transition-colors"
+							className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface) transition-colors"
 						>
 							<CloseIcon
 								sx={{
 									fontSize: 18,
-									color: "var(--md-sys-color-on-surface-variant)",
+									color: "var(--md-sys-color-on-surface-variant)]",
 								}}
 							/>
 						</button>
@@ -209,10 +209,10 @@ export default function StopSearch({
 					role="button"
 					tabIndex={0}
 					onKeyDown={(e) => e.key === "Enter" && handleFieldClick("to")}
-					className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] cursor-pointer"
+					className="flex items-center gap-3 px-4 py-3 rounded-xl bg-(--md-sys-color-surface-variant) cursor-pointer"
 				>
-					<div className="w-6 h-6 rounded-full bg-[var(--md-sys-color-secondary)] flex items-center justify-center">
-						<span className="text-xs font-medium text-[var(--md-sys-color-on-secondary)]">
+					<div className="w-6 h-6 rounded-full bg-(--md-sys-color-secondary) flex items-center justify-center">
+						<span className="text-xs font-medium text-(--md-sys-color-on-secondary)">
 							B
 						</span>
 					</div>
@@ -220,7 +220,7 @@ export default function StopSearch({
 						{toStop ? (
 							<p className="md-body-large truncate">{formatStopName(toStop)}</p>
 						) : (
-							<p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
+							<p className="md-body-large text-(--md-sys-color-on-surface-variant)">
 								Dokąd?
 							</p>
 						)}
@@ -228,12 +228,12 @@ export default function StopSearch({
 					{toStop && (
 						<button
 							onClick={(e) => handleClear("to", e)}
-							className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface)] transition-colors"
+							className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface) transition-colors"
 						>
 							<CloseIcon
 								sx={{
 									fontSize: 18,
-									color: "var(--md-sys-color-on-surface-variant)",
+									color: "var(--md-sys-color-on-surface-variant)]",
 								}}
 							/>
 						</button>
@@ -245,9 +245,9 @@ export default function StopSearch({
 			<button
 				onClick={handleSwap}
 				disabled={!fromStop && !toStop}
-				className="w-12 rounded-xl bg-[var(--md-sys-color-surface-variant)] flex items-center justify-center hover:bg-[var(--md-sys-color-surface)] transition-colors disabled:opacity-50"
+				className="w-12 rounded-xl bg-(--md-sys-color-surface-variant) flex items-center justify-center hover:bg-(--md-sys-color-surface) transition-colors disabled:opacity-50"
 			>
-				<SwapVertIcon sx={{ color: "var(--md-sys-color-on-surface-variant)" }} />
+				<SwapVertIcon sx={{ color: "var(--md-sys-color-on-surface-variant)]" }} />
 			</button>
 		</div>
 	);

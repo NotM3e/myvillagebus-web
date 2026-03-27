@@ -51,14 +51,14 @@ export default function AuthButton() {
 
 	if (loading) {
 		return (
-			<div className="w-10 h-10 rounded-full bg-[var(--md-sys-color-surface-variant)] animate-pulse" />
+			<div className="w-10 h-10 rounded-full bg-(--md-sys-color-surface-variant) animate-pulse" />
 		);
 	}
 
 	if (user) {
 		return (
 			<div className="flex items-center gap-2">
-				<div className="w-10 h-10 rounded-full bg-[var(--md-sys-color-primary-container)] flex items-center justify-center overflow-hidden">
+				<div className="w-10 h-10 rounded-full bg-(--md-sys-color-primary-container) flex items-center justify-center overflow-hidden">
 					{user.user_metadata?.avatar_url ? (
 						<img
 							src={user.user_metadata.avatar_url}
@@ -67,7 +67,7 @@ export default function AuthButton() {
 						/>
 					) : (
 						<PersonOutlineIcon
-							sx={{ color: "var(--md-sys-color-on-primary-container)" }}
+							sx={{ color: "var(--md-sys-color-on-primary-container)]" }}
 						/>
 					)}
 				</div>

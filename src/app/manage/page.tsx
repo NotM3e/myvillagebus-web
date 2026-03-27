@@ -56,7 +56,7 @@ export default function ManaDashboard() {
 	if (loading) {
 		return (
 			<div className="flex items-center justify-center h-64">
-				<div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
+				<div className="w-8 h-8 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
 			</div>
 		);
 	}
@@ -67,8 +67,8 @@ export default function ManaDashboard() {
 			value: stats?.pendingReports ?? 0,
 			icon: ReportProblemIcon,
 			color: stats?.pendingReports
-				? "var(--md-sys-color-error)"
-				: "var(--md-sys-color-primary)",
+				? "var(--md-sys-color-error)]"
+				: "var(--md-sys-color-primary)]",
 			href: "/manage/reports",
 		},
 		{
@@ -76,29 +76,29 @@ export default function ManaDashboard() {
 			value: stats?.pendingSchedules ?? 0,
 			icon: ScheduleIcon,
 			color: stats?.pendingSchedules
-				? "var(--md-sys-color-tertiary)"
-				: "var(--md-sys-color-primary)",
+				? "var(--md-sys-color-tertiary)]"
+				: "var(--md-sys-color-primary)]",
 			href: "/manage/schedules",
 		},
 		{
 			label: "Użytkownicy",
 			value: stats?.totalUsers ?? 0,
 			icon: PeopleIcon,
-			color: "var(--md-sys-color-secondary)",
+			color: "var(--md-sys-color-secondary)]",
 			href: "/manage/users",
 		},
 		{
 			label: "Rozkłady",
 			value: stats?.totalSchedules ?? 0,
 			icon: DirectionsBusIcon,
-			color: "var(--md-sys-color-tertiary)",
+			color: "var(--md-sys-color-tertiary)]",
 			href: null,
 		},
 		{
 			label: "Przystanki",
 			value: stats?.totalStops ?? 0,
 			icon: PlaceIcon,
-			color: "var(--md-sys-color-primary)",
+			color: "var(--md-sys-color-primary)]",
 			href: "/manage/data",
 		},
 	];
@@ -127,7 +127,7 @@ export default function ManaDashboard() {
 								<p className="md-headline-small" style={{ color: card.color }}>
 									{card.value}
 								</p>
-								<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+								<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 									{card.label}
 								</p>
 							</div>
@@ -139,7 +139,7 @@ export default function ManaDashboard() {
 			{/* Quick Actions */}
 			<h2 className="md-title-large mb-4">Szybkie akcje</h2>
 			<div className="md-card md-elevation-1 p-4">
-				<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+				<p className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 					Wybierz moduł z menu po lewej stronie.
 				</p>
 			</div>

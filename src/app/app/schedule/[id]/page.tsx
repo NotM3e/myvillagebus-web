@@ -94,9 +94,9 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 
 		if (schedule.status === "pending") {
 			return {
-				borderColor: "var(--md-sys-color-tertiary)",
-				badgeBg: "var(--md-sys-color-tertiary-container)",
-				badgeText: "var(--md-sys-color-on-tertiary-container)",
+				borderColor: "var(--md-sys-color-tertiary)]",
+				badgeBg: "var(--md-sys-color-tertiary-container)]",
+				badgeText: "var(--md-sys-color-on-tertiary-container)]",
 				label: "Oczekuje na weryfikację",
 				icon: <PendingIcon sx={{ fontSize: 16 }} />,
 			};
@@ -104,18 +104,18 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 
 		if (schedule.isVerified) {
 			return {
-				borderColor: "var(--md-sys-color-primary)",
-				badgeBg: "var(--md-sys-color-primary-container)",
-				badgeText: "var(--md-sys-color-on-primary-container)",
+				borderColor: "var(--md-sys-color-primary)]",
+				badgeBg: "var(--md-sys-color-primary-container)]",
+				badgeText: "var(--md-sys-color-on-primary-container)]",
 				label: "Zweryfikowany",
 				icon: <VerifiedIcon sx={{ fontSize: 16 }} />,
 			};
 		}
 
 		return {
-			borderColor: "var(--md-sys-color-secondary)",
-			badgeBg: "var(--md-sys-color-secondary-container)",
-			badgeText: "var(--md-sys-color-on-secondary-container)",
+			borderColor: "var(--md-sys-color-secondary)]",
+			badgeBg: "var(--md-sys-color-secondary-container)]",
+			badgeText: "var(--md-sys-color-on-secondary-container)]",
 			label: "Społecznościowy",
 			icon: <PersonOutlineIcon sx={{ fontSize: 16 }} />,
 		};
@@ -205,16 +205,16 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 				<div className="flex items-center gap-4 mb-6">
 					<Link
 						href="/app"
-						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 					>
-						<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+						<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)]" }} />
 					</Link>
 					<h1 className="md-title-large">Szczegóły kursu</h1>
 				</div>
 
 				<div className="text-center py-12">
-					<div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-					<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+					<div className="w-8 h-8 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+					<p className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 						Ładowanie...
 					</p>
 				</div>
@@ -229,15 +229,15 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 				<div className="flex items-center gap-4 mb-6">
 					<Link
 						href="/app"
-						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 					>
-						<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+						<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)]" }} />
 					</Link>
 					<h1 className="md-title-large">Szczegóły kursu</h1>
 				</div>
 
 				<div className="text-center py-12">
-					<p className="md-body-large text-[var(--md-sys-color-error)]">
+					<p className="md-body-large text-(--md-sys-color-error)">
 						{error || "Nie znaleziono rozkładu"}
 					</p>
 					<Link href="/app" className="md-text-button mt-4 inline-block">
@@ -254,9 +254,9 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 			<div className="flex items-center gap-4 mb-6">
 				<Link
 					href="/app"
-					className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+					className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 				>
-					<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+					<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)]" }} />
 				</Link>
 				<h1 className="md-title-large">Szczegóły kursu</h1>
 			</div>
@@ -268,9 +268,9 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 			>
 				{/* Carrier + Line */}
 				<div className="flex items-center gap-3 mb-3">
-					<div className="w-12 h-12 rounded-full bg-[var(--md-sys-color-primary-container)] flex items-center justify-center">
+					<div className="w-12 h-12 rounded-full bg-(--md-sys-color-primary-container) flex items-center justify-center">
 						<DirectionsBusIcon
-							sx={{ fontSize: 28, color: "var(--md-sys-color-on-primary-container)" }}
+							sx={{ fontSize: 28, color: "var(--md-sys-color-on-primary-container)]" }}
 						/>
 					</div>
 					<div className="flex-1">
@@ -278,7 +278,7 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 							<p className="md-title-medium">{line.carrierName}</p>
 							<CarrierBadge status={line.carrierStatus} />
 						</div>
-						<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+						<p className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 							Linia {line.number}
 						</p>
 					</div>
@@ -308,13 +308,13 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 					{schedule.days.map((day) => (
 						<span
 							key={day}
-							className="px-2.5 py-1 text-sm rounded-full bg-[var(--md-sys-color-secondary-container)] text-[var(--md-sys-color-on-secondary-container)]"
+							className="px-2.5 py-1 text-sm rounded-full bg-(--md-sys-color-secondary-container) text-(--md-sys-color-on-secondary-container)"
 						>
 							{day}
 						</span>
 					))}
 					{schedule.excludesHolidays && (
-						<span className="px-2.5 py-1 text-sm rounded-full bg-[var(--md-sys-color-error-container)] text-[var(--md-sys-color-on-error-container)]">
+						<span className="px-2.5 py-1 text-sm rounded-full bg-(--md-sys-color-error-container) text-(--md-sys-color-on-error-container)">
 							bez świąt
 						</span>
 					)}
@@ -322,11 +322,11 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 
 				{/* Holiday warning */}
 				{showHolidayWarning && (
-					<div className="flex items-center gap-2 p-3 rounded-xl bg-[var(--md-sys-color-error-container)]">
+					<div className="flex items-center gap-2 p-3 rounded-xl bg-(--md-sys-color-error-container)">
 						<WarningAmberIcon
-							sx={{ fontSize: 20, color: "var(--md-sys-color-on-error-container)" }}
+							sx={{ fontSize: 20, color: "var(--md-sys-color-on-error-container)]" }}
 						/>
-						<p className="md-body-medium text-[var(--md-sys-color-on-error-container)]">
+						<p className="md-body-medium text-(--md-sys-color-on-error-container)">
 							Prawdopodobnie nie kursuje dziś - {holidayInfo.name}
 						</p>
 					</div>
@@ -334,13 +334,13 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 
 				{/* Operation note */}
 				{line.operationNote && (
-					<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)] italic mt-2">
+					<p className="md-body-medium text-(--md-sys-color-on-surface-variant) italic mt-2">
 						{line.operationNote}
 					</p>
 				)}
 
 				{/* Carrier status description */}
-				<div className="mt-3 pt-3 border-t border-[var(--md-sys-color-outline-variant)]">
+				<div className="mt-3 pt-3 border-t border-(--md-sys-color-outline-variant)">
 					<CarrierBadge status={line.carrierStatus} showLabel size="medium" />
 				</div>
 			</div>
@@ -362,35 +362,35 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 							>
 								{/* Timeline line */}
 								{!isLast && (
-									<div className="absolute left-[11px] top-6 w-0.5 h-[calc(100%-12px)] bg-[var(--md-sys-color-primary)]" />
+									<div className="absolute left-[11px] top-6 w-0.5 h-[calc(100%-12px)] bg-(--md-sys-color-primary)" />
 								)}
 
 								{/* Timeline dot */}
 								<div className="relative z-10 flex-shrink-0">
 									{isHighlighted ? (
-										<div className="w-6 h-6 rounded-full bg-[var(--md-sys-color-primary)] flex items-center justify-center">
+										<div className="w-6 h-6 rounded-full bg-(--md-sys-color-primary) flex items-center justify-center">
 											<PlaceIcon
 												sx={{
 													fontSize: 16,
-													color: "var(--md-sys-color-on-primary)",
+													color: "var(--md-sys-color-on-primary)]",
 												}}
 											/>
 										</div>
 									) : isFirst || isLast ? (
-										<div className="w-6 h-6 rounded-full bg-[var(--md-sys-color-primary)] flex items-center justify-center">
+										<div className="w-6 h-6 rounded-full bg-(--md-sys-color-primary) flex items-center justify-center">
 											<FiberManualRecordIcon
 												sx={{
 													fontSize: 12,
-													color: "var(--md-sys-color-on-primary)",
+													color: "var(--md-sys-color-on-primary)]",
 												}}
 											/>
 										</div>
 									) : (
-										<div className="w-6 h-6 rounded-full flex items-center justify-center border-2 border-[var(--md-sys-color-primary)] bg-[var(--md-sys-color-surface)]">
+										<div className="w-6 h-6 rounded-full flex items-center justify-center border-2 border-(--md-sys-color-primary) bg-(--md-sys-color-surface)">
 											<RadioButtonUncheckedIcon
 												sx={{
 													fontSize: 8,
-													color: "var(--md-sys-color-primary)",
+													color: "var(--md-sys-color-primary)]",
 												}}
 											/>
 										</div>
@@ -404,14 +404,14 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 											<p
 												className={`md-body-large truncate ${
 													isHighlighted
-														? "font-medium text-[var(--md-sys-color-primary)]"
+														? "font-medium text-(--md-sys-color-primary)"
 														: ""
 												}`}
 											>
 												{stop.city}
 											</p>
 											{stop.name && (
-												<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] truncate">
+												<p className="md-body-small text-(--md-sys-color-on-surface-variant) truncate">
 													{stop.name}
 												</p>
 											)}
@@ -421,15 +421,15 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 										<div
 											className={`flex-shrink-0 px-3 py-1 rounded-lg ${
 												isHighlighted
-													? "bg-[var(--md-sys-color-primary-container)]"
-													: "bg-[var(--md-sys-color-surface-variant)]"
+													? "bg-(--md-sys-color-primary-container)"
+													: "bg-(--md-sys-color-surface-variant)"
 											}`}
 										>
 											<span
 												className={`md-title-medium ${
 													isHighlighted
-														? "text-[var(--md-sys-color-on-primary-container)]"
-														: "text-[var(--md-sys-color-on-surface-variant)]"
+														? "text-(--md-sys-color-on-primary-container)"
+														: "text-(--md-sys-color-on-surface-variant)"
 												}`}
 											>
 												{stop.arrivalTime || "--:--"}
@@ -443,7 +443,7 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 				</div>
 
 				{stops.length === 0 && (
-					<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)] text-center py-4">
+					<p className="md-body-medium text-(--md-sys-color-on-surface-variant) text-center py-4">
 						Brak danych o przystankach
 					</p>
 				)}
@@ -457,16 +457,16 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 						<span
 							className={`md-title-medium ${
 								localScore > 0
-									? "text-[var(--md-sys-color-primary)]"
+									? "text-(--md-sys-color-primary)"
 									: localScore < 0
-										? "text-[var(--md-sys-color-error)]"
-										: "text-[var(--md-sys-color-on-surface-variant)]"
+										? "text-(--md-sys-color-error)"
+										: "text-(--md-sys-color-on-surface-variant)"
 							}`}
 						>
 							{localScore > 0 ? "+" : ""}
 							{localScore}
 						</span>
-						<span className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+						<span className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 							punktów
 						</span>
 					</div>
@@ -477,18 +477,18 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 						<button
 							onClick={() => handleVote("up")}
 							disabled={voteLoading}
-							className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors disabled:opacity-50"
+							className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors disabled:opacity-50"
 							title="Aktualny"
 						>
 							{voteState === "up" ? (
 								<ThumbUpIcon
-									sx={{ fontSize: 22, color: "var(--md-sys-color-primary)" }}
+									sx={{ fontSize: 22, color: "var(--md-sys-color-primary)]" }}
 								/>
 							) : (
 								<ThumbUpOutlinedIcon
 									sx={{
 										fontSize: 22,
-										color: "var(--md-sys-color-on-surface-variant)",
+										color: "var(--md-sys-color-on-surface-variant)]",
 									}}
 								/>
 							)}
@@ -498,18 +498,18 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 						<button
 							onClick={() => handleVote("down")}
 							disabled={voteLoading}
-							className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors disabled:opacity-50"
+							className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors disabled:opacity-50"
 							title="Nieaktualny"
 						>
 							{voteState === "down" ? (
 								<ThumbDownIcon
-									sx={{ fontSize: 22, color: "var(--md-sys-color-error)" }}
+									sx={{ fontSize: 22, color: "var(--md-sys-color-error)]" }}
 								/>
 							) : (
 								<ThumbDownOutlinedIcon
 									sx={{
 										fontSize: 22,
-										color: "var(--md-sys-color-on-surface-variant)",
+										color: "var(--md-sys-color-on-surface-variant)]",
 									}}
 								/>
 							)}
@@ -518,13 +518,13 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 						{/* Report */}
 						<button
 							onClick={handleReport}
-							className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+							className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 							title="Zgłoś problem"
 						>
 							<FlagOutlinedIcon
 								sx={{
 									fontSize: 22,
-									color: "var(--md-sys-color-on-surface-variant)",
+									color: "var(--md-sys-color-on-surface-variant)]",
 								}}
 							/>
 						</button>
@@ -532,13 +532,13 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 						{/* Edit (placeholder) */}
 						<button
 							onClick={handleEdit}
-							className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+							className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 							title="Edytuj rozkład"
 						>
 							<EditOutlinedIcon
 								sx={{
 									fontSize: 22,
-									color: "var(--md-sys-color-on-surface-variant)",
+									color: "var(--md-sys-color-on-surface-variant)]",
 								}}
 							/>
 						</button>

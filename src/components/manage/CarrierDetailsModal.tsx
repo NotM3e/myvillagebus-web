@@ -36,9 +36,9 @@ interface CarrierDetailsModalProps {
 }
 
 const STATUS_OPTIONS: { value: CarrierStatus; label: string; color: string }[] = [
-	{ value: "unverified", label: "Społeczność", color: "var(--md-sys-color-outline)" },
-	{ value: "verified", label: "Zweryfikowany", color: "var(--md-sys-color-primary)" },
-	{ value: "partner", label: "Partner", color: "var(--md-sys-color-tertiary)" },
+	{ value: "unverified", label: "Społeczność", color: "var(--md-sys-color-outline)]" },
+	{ value: "verified", label: "Zweryfikowany", color: "var(--md-sys-color-primary)]" },
+	{ value: "partner", label: "Partner", color: "var(--md-sys-color-tertiary)]" },
 ];
 
 export default function CarrierDetailsModal({
@@ -286,15 +286,15 @@ export default function CarrierDetailsModal({
 
 			{/* Modal */}
 			<div className="fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-lg max-h-[90vh] overflow-hidden">
-				<div className="bg-[var(--md-sys-color-surface)] rounded-3xl shadow-xl flex flex-col max-h-[90vh]">
+				<div className="bg-(--md-sys-color-surface) rounded-3xl shadow-xl flex flex-col max-h-[90vh]">
 					{/* Header */}
-					<div className="flex items-center justify-between p-4 border-b border-[var(--md-sys-color-outline-variant)]">
+					<div className="flex items-center justify-between p-4 border-b border-(--md-sys-color-outline-variant)">
 						<div className="flex items-center gap-3">
-							<div className="w-10 h-10 rounded-full bg-[var(--md-sys-color-primary-container)] flex items-center justify-center">
+							<div className="w-10 h-10 rounded-full bg-(--md-sys-color-primary-container) flex items-center justify-center">
 								<DirectionsBusIcon
 									sx={{
 										fontSize: 20,
-										color: "var(--md-sys-color-on-primary-container)",
+										color: "var(--md-sys-color-on-primary-container)]",
 									}}
 								/>
 							</div>
@@ -302,9 +302,9 @@ export default function CarrierDetailsModal({
 						</div>
 						<button
 							onClick={onClose}
-							className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+							className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 						>
-							<CloseIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+							<CloseIcon sx={{ color: "var(--md-sys-color-on-surface)]" }} />
 						</button>
 					</div>
 
@@ -313,19 +313,19 @@ export default function CarrierDetailsModal({
 						{/* Form */}
 						<div className="space-y-4">
 							<div>
-								<label className="block md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-2">
+								<label className="block md-body-small text-(--md-sys-color-on-surface-variant) mb-2">
 									Nazwa *
 								</label>
 								<input
 									type="text"
 									value={name}
 									onChange={(e) => setName(e.target.value)}
-									className="w-full px-4 py-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+									className="w-full px-4 py-3 rounded-xl bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 								/>
 							</div>
 
 							<div>
-								<label className="block md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-2">
+								<label className="block md-body-small text-(--md-sys-color-on-surface-variant) mb-2">
 									Adres
 								</label>
 								<input
@@ -333,12 +333,12 @@ export default function CarrierDetailsModal({
 									value={address}
 									onChange={(e) => setAddress(e.target.value)}
 									placeholder="np. ul. Dworcowa 1, 86-300 Grudziądz"
-									className="w-full px-4 py-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+									className="w-full px-4 py-3 rounded-xl bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 								/>
 							</div>
 
 							<div>
-								<label className="block md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-2">
+								<label className="block md-body-small text-(--md-sys-color-on-surface-variant) mb-2">
 									Kontakt
 								</label>
 								<input
@@ -346,12 +346,12 @@ export default function CarrierDetailsModal({
 									value={contact}
 									onChange={(e) => setContact(e.target.value)}
 									placeholder="np. tel. 56 123-45-67"
-									className="w-full px-4 py-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+									className="w-full px-4 py-3 rounded-xl bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 								/>
 							</div>
 
 							<div>
-								<label className="block md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-2">
+								<label className="block md-body-small text-(--md-sys-color-on-surface-variant) mb-2">
 									URL logo
 								</label>
 								<input
@@ -359,13 +359,13 @@ export default function CarrierDetailsModal({
 									value={logoUrl}
 									onChange={(e) => setLogoUrl(e.target.value)}
 									placeholder="https://..."
-									className="w-full px-4 py-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+									className="w-full px-4 py-3 rounded-xl bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 								/>
 							</div>
 
 							{/* Status selector */}
 							<div>
-								<label className="block md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-2">
+								<label className="block md-body-small text-(--md-sys-color-on-surface-variant) mb-2">
 									Status
 								</label>
 								<div className="flex gap-2">
@@ -376,7 +376,7 @@ export default function CarrierDetailsModal({
 											className={`flex-1 py-3 px-2 rounded-xl text-sm font-medium transition-colors ${
 												status === option.value
 													? "text-white"
-													: "bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)]"
+													: "bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant)"
 											}`}
 											style={{
 												backgroundColor:
@@ -393,11 +393,11 @@ export default function CarrierDetailsModal({
 						</div>
 
 						{/* Sync Cities */}
-						<div className="p-3 rounded-xl bg-[var(--md-sys-color-surface-variant)]">
+						<div className="p-3 rounded-xl bg-(--md-sys-color-surface-variant)">
 							<div className="flex items-center justify-between">
 								<div>
 									<p className="md-body-medium">Obsługiwane miejscowości</p>
-									<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+									<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 										{carrier.cities_served?.length || 0} miast
 									</p>
 								</div>
@@ -407,7 +407,7 @@ export default function CarrierDetailsModal({
 									className="md-outlined-button flex items-center gap-2 text-sm disabled:opacity-50"
 								>
 									{syncing ? (
-										<div className="w-4 h-4 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
+										<div className="w-4 h-4 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
 									) : (
 										<SyncIcon sx={{ fontSize: 18 }} />
 									)}
@@ -415,7 +415,7 @@ export default function CarrierDetailsModal({
 								</button>
 							</div>
 							{syncSuccess && (
-								<p className="mt-2 md-body-small text-[var(--md-sys-color-primary)]">
+								<p className="mt-2 md-body-small text-(--md-sys-color-primary)">
 									✓ Lista miast zaktualizowana
 								</p>
 							)}
@@ -429,10 +429,10 @@ export default function CarrierDetailsModal({
 
 							{loadingLines ? (
 								<div className="flex items-center justify-center py-4">
-									<div className="w-6 h-6 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
+									<div className="w-6 h-6 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
 								</div>
 							) : lines.length === 0 ? (
-								<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)] text-center py-4">
+								<p className="md-body-medium text-(--md-sys-color-on-surface-variant) text-center py-4">
 									Brak linii
 								</p>
 							) : (
@@ -440,12 +440,12 @@ export default function CarrierDetailsModal({
 									{lines.map((line) => (
 										<div
 											key={line.id}
-											className="p-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] flex items-center gap-3"
+											className="p-3 rounded-xl bg-(--md-sys-color-surface-variant) flex items-center gap-3"
 										>
 											<RouteIcon
 												sx={{
 													fontSize: 20,
-													color: "var(--md-sys-color-primary)",
+													color: "var(--md-sys-color-primary)]",
 												}}
 											/>
 											<div className="flex-1 min-w-0">
@@ -453,12 +453,12 @@ export default function CarrierDetailsModal({
 													Linia {line.number}
 												</p>
 												{line.description && (
-													<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] truncate">
+													<p className="md-body-small text-(--md-sys-color-on-surface-variant) truncate">
 														{line.description}
 													</p>
 												)}
 											</div>
-											<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+											<span className="md-body-small text-(--md-sys-color-on-surface-variant)">
 												{line.scheduleCount} rozk.
 											</span>
 										</div>
@@ -469,8 +469,8 @@ export default function CarrierDetailsModal({
 
 						{/* Error */}
 						{error && (
-							<div className="p-3 rounded-xl bg-[var(--md-sys-color-error-container)]">
-								<p className="md-body-medium text-[var(--md-sys-color-on-error-container)]">
+							<div className="p-3 rounded-xl bg-(--md-sys-color-error-container)">
+								<p className="md-body-medium text-(--md-sys-color-on-error-container)">
 									{error}
 								</p>
 							</div>
@@ -478,7 +478,7 @@ export default function CarrierDetailsModal({
 					</div>
 
 					{/* Footer */}
-					<div className="flex items-center justify-end gap-2 p-4 border-t border-[var(--md-sys-color-outline-variant)]">
+					<div className="flex items-center justify-end gap-2 p-4 border-t border-(--md-sys-color-outline-variant)">
 						<button onClick={onClose} className="md-text-button">
 							Anuluj
 						</button>

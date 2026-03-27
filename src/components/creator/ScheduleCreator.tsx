@@ -123,10 +123,10 @@ export default function ScheduleCreator({ user }: ScheduleCreatorProps) {
 							<div
 								className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-colors shrink-0 ${
 									index < currentStep
-										? "bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)]"
+										? "bg-(--md-sys-color-primary) text-(--md-sys-color-on-primary)"
 										: index === currentStep
-											? "bg-[var(--md-sys-color-primary-container)] text-[var(--md-sys-color-on-primary-container)] ring-2 ring-[var(--md-sys-color-primary)]"
-											: "bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)]"
+											? "bg-(--md-sys-color-primary-container) text-(--md-sys-color-on-primary-container) ring-2 ring-(--md-sys-color-primary)"
+											: "bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant)"
 								}`}
 							>
 								{index < currentStep ? (
@@ -140,8 +140,8 @@ export default function ScheduleCreator({ user }: ScheduleCreatorProps) {
 							<span
 								className={`mt-2 text-xs sm:text-sm text-center max-w-[70px] sm:max-w-none ${
 									index === currentStep
-										? "text-[var(--md-sys-color-on-surface)] font-medium"
-										: "text-[var(--md-sys-color-on-surface-variant)]"
+										? "text-(--md-sys-color-on-surface) font-medium"
+										: "text-(--md-sys-color-on-surface-variant)"
 								}`}
 							>
 								{step.label}
@@ -153,8 +153,8 @@ export default function ScheduleCreator({ user }: ScheduleCreatorProps) {
 							<div
 								className={`h-0.5 flex-1 mx-2 sm:mx-4 mt-4 sm:mt-5 ${
 									index < currentStep
-										? "bg-[var(--md-sys-color-primary)]"
-										: "bg-[var(--md-sys-color-outline-variant)]"
+										? "bg-(--md-sys-color-primary)"
+										: "bg-(--md-sys-color-outline-variant)"
 								}`}
 							/>
 						)}
@@ -171,7 +171,7 @@ export default function ScheduleCreator({ user }: ScheduleCreatorProps) {
 
 			{/* Error message */}
 			{submitError && (
-				<div className="mb-4 p-4 rounded-xl bg-[var(--md-sys-color-error-container)] text-[var(--md-sys-color-on-error-container)]">
+				<div className="mb-4 p-4 rounded-xl bg-(--md-sys-color-error-container) text-(--md-sys-color-on-error-container)">
 					<p className="md-body-medium">{submitError}</p>
 				</div>
 			)}
@@ -202,7 +202,7 @@ export default function ScheduleCreator({ user }: ScheduleCreatorProps) {
 					>
 						{submitting ? (
 							<>
-								<div className="w-4 h-4 border-2 border-[var(--md-sys-color-on-primary)] border-t-transparent rounded-full animate-spin" />
+								<div className="w-4 h-4 border-2 border-(--md-sys-color-on-primary) border-t-transparent rounded-full animate-spin" />
 								Wysyłanie...
 							</>
 						) : (

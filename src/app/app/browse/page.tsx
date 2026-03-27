@@ -186,9 +186,9 @@ export default function BrowsePage() {
 			<div className="flex items-center gap-4 mb-6">
 				<Link
 					href="/app"
-					className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+					className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant)sition-colors"
 				>
-					<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+					<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)]" }} />
 				</Link>
 				<h1 className="md-title-large">Zarzadzaj liniami</h1>
 			</div>
@@ -199,8 +199,8 @@ export default function BrowsePage() {
 					onClick={() => setActiveTab("available")}
 					className={`flex-1 py-3 px-4 rounded-full md-label-large transition-colors ${
 						activeTab === "available"
-							? "bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)]"
-							: "bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)]"
+							? "bg-(--md-sys-color-primary) text-(--md-sys-color-on-primary)"
+							: "bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant)"
 					}`}
 				>
 					Do pobrania
@@ -209,8 +209,8 @@ export default function BrowsePage() {
 					onClick={() => setActiveTab("downloaded")}
 					className={`flex-1 py-3 px-4 rounded-full md-label-large transition-colors ${
 						activeTab === "downloaded"
-							? "bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)]"
-							: "bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)]"
+							? "bg-(--md-sys-color-primary) text-(--md-sys-color-on-primary)"
+							: "bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant)"
 					}`}
 				>
 					Pobrane ({downloadedLines.length})
@@ -225,7 +225,7 @@ export default function BrowsePage() {
 						left: 12,
 						top: "50%",
 						transform: "translateY(-50%)",
-						color: "var(--md-sys-color-on-surface-variant)",
+						color: "var(--md-sys-color-on-surface-variant)]",
 						fontSize: 20,
 					}}
 				/>
@@ -234,7 +234,7 @@ export default function BrowsePage() {
 					placeholder="Szukaj przewoznika lub linii..."
 					value={searchQuery}
 					onChange={(e) => setSearchQuery(e.target.value)}
-					className="w-full pl-10 pr-4 py-3 rounded-full bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] placeholder:text-[var(--md-sys-color-on-surface-variant)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
+					className="w-full pl-10 pr-4 py-3 rounded-full bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) placeholder:text-(--md-sys-color-on-surface-variant) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary)"
 				/>
 			</div>
 
@@ -243,14 +243,14 @@ export default function BrowsePage() {
 				<>
 					{loadingCloud ? (
 						<div className="text-center py-12">
-							<div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-							<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+							<div className="w-8 h-8 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+							<p className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 								Ladowanie linii...
 							</p>
 						</div>
 					) : Object.keys(groupedCloudLines).length === 0 ? (
 						<div className="text-center py-12">
-							<p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
+							<p className="md-body-large text-(--md-sys-color-on-surface-variant)">
 								{searchQuery
 									? `Brak wynikow dla "${searchQuery}"`
 									: "Brak dostepnych linii"}
@@ -283,14 +283,14 @@ export default function BrowsePage() {
 																Linia {line.number}
 															</p>
 															{line.description && (
-																<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+																<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 																	{line.description}
 																</p>
 															)}
 														</div>
 
 														{downloaded ? (
-															<div className="flex items-center gap-1 text-[var(--md-sys-color-primary)]">
+															<div className="flex items-center gap-1 text-(--md-sys-color-primary)">
 																<CheckCircleIcon
 																	sx={{ fontSize: 20 }}
 																/>
@@ -307,7 +307,7 @@ export default function BrowsePage() {
 																className="md-filled-button flex items-center gap-2 py-2 px-4"
 															>
 																{syncing ? (
-																	<div className="w-5 h-5 border-2 border-[var(--md-sys-color-on-primary)] border-t-transparent rounded-full animate-spin" />
+																	<div className="w-5 h-5 border-2 border-(--md-sys-color-on-primary) border-t-transparent rounded-full animate-spin" />
 																) : (
 																	<CloudDownloadIcon
 																		sx={{ fontSize: 20 }}
@@ -333,11 +333,11 @@ export default function BrowsePage() {
 				<>
 					{loadingDownloaded ? (
 						<div className="text-center py-12">
-							<div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+							<div className="w-8 h-8 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin mx-auto mb-4" />
 						</div>
 					) : Object.keys(groupedDownloadedLines).length === 0 ? (
 						<div className="text-center py-12">
-							<p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
+							<p className="md-body-large text-(--md-sys-color-on-surface-variant)">
 								{searchQuery
 									? `Brak wynikow dla "${searchQuery}"`
 									: "Brak pobranych linii"}
@@ -352,139 +352,175 @@ export default function BrowsePage() {
 							)}
 						</div>
 					) : (
-					<>
-						{/* Update status bar */}
-						{downloadedLines.length > 0 && (
-							<div className="flex items-center justify-between mb-4 p-3 rounded-xl bg-[var(--md-sys-color-surface-variant)]">
-								<div className="flex items-center gap-2">
-									<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
-										{lastCheckAt
-											? `Sprawdzono: ${formatRelativeTime(lastCheckAt)}`
-											: "Nie sprawdzono jeszcze"}
-									</span>
-									{updatesAvailable > 0 && (
-										<span className="px-2 py-0.5 rounded-full text-xs bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)]">
-											{updatesAvailable}{" "}
-											{updatesAvailable === 1 ? "aktualizacja" : "aktualizacji"}
+						<>
+							{/* Update status bar */}
+							{downloadedLines.length > 0 && (
+								<div className="flex items-center justify-between mb-4 p-3 rounded-xl bg-(--md-sys-color-surface-variant)">
+									<div className="flex items-center gap-2">
+										<span className="md-body-small text-(--md-sys-color-on-surface-variant)">
+											{lastCheckAt
+												? `Sprawdzono: ${formatRelativeTime(lastCheckAt)}`
+												: "Nie sprawdzono jeszcze"}
 										</span>
-									)}
+										{updatesAvailable > 0 && (
+											<span className="px-2 py-0.5 rounded-full text-xs bg-(--md-sys-color-primary) text-(--md-sys-color-on-primary)">
+												{updatesAvailable}{" "}
+												{updatesAvailable === 1
+													? "aktualizacja"
+													: "aktualizacji"}
+											</span>
+										)}
+									</div>
+									<button
+										onClick={checkUpdates}
+										disabled={checking}
+										className="md-text-button flex items-center gap-1 text-sm disabled:opacity-50"
+									>
+										{checking ? (
+											<div className="w-4 h-4 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
+										) : (
+											<RefreshIcon sx={{ fontSize: 18 }} />
+										)}
+										Sprawdż
+									</button>
 								</div>
-								<button
-									onClick={checkUpdates}
-									disabled={checking}
-									className="md-text-button flex items-center gap-1 text-sm disabled:opacity-50"
-								>
-									{checking ? (
-										<div className="w-4 h-4 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
-									) : (
-										<RefreshIcon sx={{ fontSize: 18 }} />
-									)}
-									Sprawdż
-								</button>
-							</div>
-						)}
-						<div className="space-y-6">
-							{Object.entries(groupedDownloadedLines).map(
-								([carrierName, { carrierStatus, lines }]) => (
-									<div key={carrierName}>
-										{/* Carrier header */}
-										<div className="flex items-center gap-2 mb-3">
-											<h2 className="md-title-medium">{carrierName}</h2>
-											<CarrierBadge status={carrierStatus} />
-										</div>
+							)}
+							<div className="space-y-6">
+								{Object.entries(groupedDownloadedLines).map(
+									([carrierName, { carrierStatus, lines }]) => (
+										<div key={carrierName}>
+											{/* Carrier header */}
+											<div className="flex items-center gap-2 mb-3">
+												<h2 className="md-title-medium">{carrierName}</h2>
+												<CarrierBadge status={carrierStatus} />
+											</div>
 
-										{/* Lines */}
-										<div className="space-y-2">
-											{lines.map((line) => {
-												const syncing = syncingLineIds.has(line.id);
-												const meta = getSyncMeta(line.id);
-												const hasUpdate = meta?.hasUpdate ?? false;
+											{/* Lines */}
+											<div className="space-y-2">
+												{lines.map((line) => {
+													const syncing = syncingLineIds.has(line.id);
+													const meta = getSyncMeta(line.id);
+													const hasUpdate = meta?.hasUpdate ?? false;
 
-												return (
-													<div
-														key={line.id}
-														className={`md-card md-elevation-1 p-4 ${
-															hasUpdate
-																? "border-l-4 border-l-[var(--md-sys-color-primary)]"
-																: ""
-														}`}
-													>
-														<div className="flex items-center justify-between mb-2">
-															<div className="flex items-center gap-2">
-																<p className="md-title-small">Linia {line.number}</p>
-																{hasUpdate && (
-																	<span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-[var(--md-sys-color-primary-container)] text-[var(--md-sys-color-on-primary-container)]">
-																		<SystemUpdateAltIcon sx={{ fontSize: 12 }} />
-																		Aktualizacja
-																	</span>
-																)}
-															</div>
-														</div>
-
-														{line.description && (
-															<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-2">
-																{line.description}
-															</p>
-														)}
-
-														{/* Sync info + actions */}
-														<div className="flex items-center justify-between pt-2 border-t border-[var(--md-sys-color-outline-variant)]">
-															{/* Last sync + stale warning */}
-															{meta ? (
-																<div className="flex flex-col gap-0.5">
-																	<div className="flex items-center gap-1 text-[var(--md-sys-color-on-surface-variant)]">
-																		<AccessTimeIcon sx={{ fontSize: 14 }} />
-																		<span className="md-body-small">{formatRelativeTime(meta.lastSyncAt)}</span>
-																	</div>
-																	{isStale(meta.lastSyncAt) && !hasUpdate && (
-																		<div className="flex items-center gap-1 text-[var(--md-sys-color-tertiary)]">
-																			<WarningAmberIcon sx={{ fontSize: 12 }} />
-																			<span className="md-body-small">Nie sprawdzano od dawna</span>
-																		</div>
+													return (
+														<div
+															key={line.id}
+															className={`md-card md-elevation-1 p-4 ${
+																hasUpdate
+																	? "border-l-4 border-l-(--md-sys-color-primary)"
+																	: ""
+															}`}
+														>
+															<div className="flex items-center justify-between mb-2">
+																<div className="flex items-center gap-2">
+																	<p className="md-title-small">
+																		Linia {line.number}
+																	</p>
+																	{hasUpdate && (
+																		<span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-(--md-sys-color-primary-container) text-(--md-sys-color-on-primary-container)">
+																			<SystemUpdateAltIcon
+																				sx={{
+																					fontSize: 12,
+																				}}
+																			/>
+																			Aktualizacja
+																		</span>
 																	)}
 																</div>
-															) : (
-																<div />
+															</div>
+
+															{line.description && (
+																<p className="md-body-small text-(--md-sys-color-on-surface-variant) mb-2">
+																	{line.description}
+																</p>
 															)}
 
-															{/* Actions */}
-															<div className="flex items-center gap-2">
-																<button
-																	onClick={() => handleRefresh(line.id)}
-																	disabled={syncing}
-																	className="md-text-button flex items-center gap-1 text-sm"
-																	title="Odswiez dane"
-																>
-																	{syncing ? (
-																		<div className="w-4 h-4 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
-																	) : (
-																		<RefreshIcon sx={{ fontSize: 18 }} />
-																	)}
-																	Odswież
-																</button>
+															{/* Sync info + actions */}
+															<div className="flex items-center justify-between pt-2 border-t border-(--md-sys-color-outline-variant)">
+																{/* Last sync + stale warning */}
+																{meta ? (
+																	<div className="flex flex-col gap-0.5">
+																		<div className="flex items-center gap-1 text-(--md-sys-color-on-surface-variant)">
+																			<AccessTimeIcon
+																				sx={{
+																					fontSize: 14,
+																				}}
+																			/>
+																			<span className="md-body-small">
+																				{formatRelativeTime(
+																					meta.lastSyncAt
+																				)}
+																			</span>
+																		</div>
+																		{isStale(meta.lastSyncAt) &&
+																			!hasUpdate && (
+																				<div className="flex items-center gap-1 text-(--md-sys-color-tertiary)">
+																					<WarningAmberIcon
+																						sx={{
+																							fontSize: 12,
+																						}}
+																					/>
+																					<span className="md-body-small">
+																						Nie
+																						sprawdzano
+																						od dawna
+																					</span>
+																				</div>
+																			)}
+																	</div>
+																) : (
+																	<div />
+																)}
 
-																<button
-																	onClick={() => handleDelete(line.id)}
-																	disabled={syncing}
-																	className="md-text-button flex items-center gap-1 text-sm text-[var(--md-sys-color-error)]"
-																>
-																	<DeleteOutlineIcon sx={{ fontSize: 18 }} />
-																	Usun
-																</button>
+																{/* Actions */}
+																<div className="flex items-center gap-2">
+																	<button
+																		onClick={() =>
+																			handleRefresh(line.id)
+																		}
+																		disabled={syncing}
+																		className="md-text-button flex items-center gap-1 text-sm"
+																		title="Odswiez dane"
+																	>
+																		{syncing ? (
+																			<div className="w-4 h-4 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
+																		) : (
+																			<RefreshIcon
+																				sx={{
+																					fontSize: 18,
+																				}}
+																			/>
+																		)}
+																		Odswież
+																	</button>
+
+																	<button
+																		onClick={() =>
+																			handleDelete(line.id)
+																		}
+																		disabled={syncing}
+																		className="md-text-button flex items-center gap-1 text-sm text-(--md-sys-color-error)"
+																	>
+																		<DeleteOutlineIcon
+																			sx={{ fontSize: 18 }}
+																		/>
+																		Usun
+																	</button>
+																</div>
 															</div>
 														</div>
-													</div>
-												);
-											})}
+													);
+												})}
+											</div>
 										</div>
-									</div>
-								)
-							)}
-						</div>
-					</>
-				)}
-			</>
-		)}
+									)
+								)}
+							</div>
+						</>
+					)}
+				</>
+			)}
 		</PageWrapper>
 	);
 }
+

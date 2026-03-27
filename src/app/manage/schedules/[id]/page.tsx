@@ -181,13 +181,13 @@ export default function ManaScheduleDetailPage({ params }: PageProps) {
 	const getStatusColor = (status: string) => {
 		switch (status) {
 			case "active":
-				return "var(--md-sys-color-primary)";
+				return "var(--md-sys-color-primary)]";
 			case "pending":
-				return "var(--md-sys-color-tertiary)";
+				return "var(--md-sys-color-tertiary)]";
 			case "flagged":
-				return "var(--md-sys-color-error)";
+				return "var(--md-sys-color-error)]";
 			default:
-				return "var(--md-sys-color-outline)";
+				return "var(--md-sys-color-outline)]";
 		}
 	};
 
@@ -197,14 +197,14 @@ export default function ManaScheduleDetailPage({ params }: PageProps) {
 				<div className="flex items-center gap-4 mb-6">
 					<Link
 						href="/manage/schedules"
-						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 					>
-						<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+						<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)]" }} />
 					</Link>
 					<h1 className="md-title-large">Szczegóły rozkładu</h1>
 				</div>
 				<div className="flex items-center justify-center h-64">
-					<div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
+					<div className="w-8 h-8 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
 				</div>
 			</div>
 		);
@@ -216,14 +216,14 @@ export default function ManaScheduleDetailPage({ params }: PageProps) {
 				<div className="flex items-center gap-4 mb-6">
 					<Link
 						href="/manage/schedules"
-						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 					>
-						<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+						<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)]" }} />
 					</Link>
 					<h1 className="md-title-large">Szczegóły rozkładu</h1>
 				</div>
 				<div className="md-card md-elevation-1 p-8 text-center">
-					<p className="md-body-large text-[var(--md-sys-color-error)]">{error}</p>
+					<p className="md-body-large text-(--md-sys-color-error)">{error}</p>
 				</div>
 			</div>
 		);
@@ -235,9 +235,9 @@ export default function ManaScheduleDetailPage({ params }: PageProps) {
 			<div className="flex items-center gap-4 mb-6">
 				<Link
 					href="/manage/schedules"
-					className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+					className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 				>
-					<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+					<ArrowBackIcon sx={{ color: "var(--md-sys-color-on-surface)]" }} />
 				</Link>
 				<h1 className="md-title-large">Szczegóły rozkładu</h1>
 			</div>
@@ -249,11 +249,11 @@ export default function ManaScheduleDetailPage({ params }: PageProps) {
 					style={{ borderLeftColor: getStatusColor(schedule.status) }}
 				>
 					<div className="flex items-center gap-3 mb-4">
-						<div className="w-12 h-12 rounded-full bg-[var(--md-sys-color-primary-container)] flex items-center justify-center">
+						<div className="w-12 h-12 rounded-full bg-(--md-sys-color-primary-container) flex items-center justify-center">
 							<DirectionsBusIcon
 								sx={{
 									fontSize: 28,
-									color: "var(--md-sys-color-on-primary-container)",
+									color: "var(--md-sys-color-on-primary-container)]",
 								}}
 							/>
 						</div>
@@ -262,11 +262,11 @@ export default function ManaScheduleDetailPage({ params }: PageProps) {
 								<p className="md-title-medium">{schedule.line.carrier.name}</p>
 								{schedule.line.carrier.status !== "unverified" && (
 									<VerifiedIcon
-										sx={{ fontSize: 16, color: "var(--md-sys-color-primary)" }}
+										sx={{ fontSize: 16, color: "var(--md-sys-color-primary)]" }}
 									/>
 								)}
 							</div>
-							<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+							<p className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 								Linia {schedule.line.number}
 							</p>
 						</div>
@@ -285,7 +285,7 @@ export default function ManaScheduleDetailPage({ params }: PageProps) {
 						>
 							{schedule.status}
 						</span>
-						<span className="px-3 py-1 rounded-full text-sm bg-[var(--md-sys-color-surface-variant)]">
+						<span className="px-3 py-1 rounded-full text-sm bg-(--md-sys-color-surface-variant)">
 							v{schedule.version}
 						</span>
 					</div>
@@ -295,23 +295,23 @@ export default function ManaScheduleDetailPage({ params }: PageProps) {
 						{schedule.days.map((day) => (
 							<span
 								key={day}
-								className="px-2 py-1 text-xs rounded-full bg-[var(--md-sys-color-secondary-container)] text-[var(--md-sys-color-on-secondary-container)]"
+								className="px-2 py-1 text-xs rounded-full bg-(--md-sys-color-secondary-container) text-(--md-sys-color-on-secondary-container)"
 							>
 								{day}
 							</span>
 						))}
 						{schedule.excludes_holidays && (
-							<span className="px-2 py-1 text-xs rounded-full bg-[var(--md-sys-color-error-container)] text-[var(--md-sys-color-on-error-container)]">
+							<span className="px-2 py-1 text-xs rounded-full bg-(--md-sys-color-error-container) text-(--md-sys-color-on-error-container)">
 								bez świąt
 							</span>
 						)}
 					</div>
 
 					{/* Creator */}
-					<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+					<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 						Autor: {schedule.creator?.display_name || "Nieznany"}
 					</p>
-					<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+					<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 						Utworzono: {new Date(schedule.created_at).toLocaleString("pl-PL")}
 					</p>
 				</div>
@@ -332,22 +332,22 @@ export default function ManaScheduleDetailPage({ params }: PageProps) {
 								>
 									{/* Timeline line */}
 									{!isLast && (
-										<div className="absolute left-[11px] top-6 w-0.5 h-[calc(100%-12px)] bg-[var(--md-sys-color-primary)]" />
+										<div className="absolute left-[11px] top-6 w-0.5 h-[calc(100%-12px)] bg-(--md-sys-color-primary)" />
 									)}
 
 									{/* Dot */}
 									<div className="relative z-10 flex-shrink-0">
 										{isFirst || isLast ? (
-											<div className="w-6 h-6 rounded-full bg-[var(--md-sys-color-primary)] flex items-center justify-center">
+											<div className="w-6 h-6 rounded-full bg-(--md-sys-color-primary) flex items-center justify-center">
 												<FiberManualRecordIcon
 													sx={{
 														fontSize: 12,
-														color: "var(--md-sys-color-on-primary)",
+														color: "var(--md-sys-color-on-primary)]",
 													}}
 												/>
 											</div>
 										) : (
-											<div className="w-6 h-6 rounded-full border-2 border-[var(--md-sys-color-primary)] bg-[var(--md-sys-color-surface)]" />
+											<div className="w-6 h-6 rounded-full border-2 border-(--md-sys-color-primary) bg-(--md-sys-color-surface)" />
 										)}
 									</div>
 
@@ -356,12 +356,12 @@ export default function ManaScheduleDetailPage({ params }: PageProps) {
 										<div>
 											<p className="md-body-medium">{stop.stop.city}</p>
 											{stop.stop.name && (
-												<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+												<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 													{stop.stop.name}
 												</p>
 											)}
 										</div>
-										<span className="px-3 py-1 rounded-lg bg-[var(--md-sys-color-surface-variant)] md-body-medium">
+										<span className="px-3 py-1 rounded-lg bg-(--md-sys-color-surface-variant) md-body-medium">
 											{stop.arrival_time || `+${stop.offset_minutes}min`}
 										</span>
 									</div>
@@ -371,7 +371,7 @@ export default function ManaScheduleDetailPage({ params }: PageProps) {
 					</div>
 
 					{stops.length === 0 && (
-						<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)] text-center py-4">
+						<p className="md-body-medium text-(--md-sys-color-on-surface-variant) text-center py-4">
 							Brak danych o przystankach
 						</p>
 					)}

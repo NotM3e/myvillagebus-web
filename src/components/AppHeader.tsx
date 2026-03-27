@@ -30,19 +30,19 @@ export default function AppHeader({ onMenuClick }: AppHeaderProps) {
 	}, []);
 
 	return (
-		<header className="fixed top-0 left-0 right-0 z-40 bg-[var(--md-sys-color-surface)] border-b border-[var(--md-sys-color-outline-variant)]">
+		<header className="fixed top-0 left-0 right-0 z-40 bg-(--md-sys-color-surface) border-b border-(--md-sys-color-outline-variant)">
 			<div className="flex items-center justify-between h-16 px-4">
 				{/* Left: Hamburger */}
 				<button
 					onClick={onMenuClick}
-					className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+					className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 					aria-label="Otwórz menu"
 				>
-					<MenuIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+					<MenuIcon sx={{ color: "var(--md-sys-color-on-surface)]" }} />
 				</button>
 
 				{/* Center: Logo */}
-				<h1 className="md-title-large text-[var(--md-sys-color-primary)]">WSIOBUS</h1>
+				<h1 className="md-title-large text-(--md-sys-color-primary)">WSIOBUS</h1>
 
 				{/* Right: Status + Settings */}
 				<div className="flex items-center gap-1">
@@ -53,11 +53,11 @@ export default function AppHeader({ onMenuClick }: AppHeaderProps) {
 					>
 						{isOnline ? (
 							<CloudDoneOutlinedIcon
-								sx={{ fontSize: 20, color: "var(--md-sys-color-primary)" }}
+								sx={{ fontSize: 20, color: "var(--md-sys-color-primary)]" }}
 							/>
 						) : (
 							<CloudOffOutlinedIcon
-								sx={{ fontSize: 20, color: "var(--md-sys-color-error)" }}
+								sx={{ fontSize: 20, color: "var(--md-sys-color-error)]" }}
 							/>
 						)}
 					</div>
@@ -65,11 +65,11 @@ export default function AppHeader({ onMenuClick }: AppHeaderProps) {
 					{/* Settings */}
 					<Link
 						href="/app/settings"
-						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+						className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 						aria-label="Ustawienia"
 					>
 						<SettingsOutlinedIcon
-							sx={{ color: "var(--md-sys-color-on-surface-variant)" }}
+							sx={{ color: "var(--md-sys-color-on-surface-variant)]" }}
 						/>
 					</Link>
 				</div>

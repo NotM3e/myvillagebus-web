@@ -22,8 +22,8 @@ export default function AuthCallbackPage() {
 	return (
 		<PageWrapper maxWidth="max-w-md" className="flex items-center justify-center">
 			<div className="text-center">
-				<div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-				<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+				<div className="w-8 h-8 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+				<p className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 					Logowanie...
 				</p>
 			</div>

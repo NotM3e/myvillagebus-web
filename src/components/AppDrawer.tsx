@@ -89,32 +89,32 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
 
 			{/* Drawer */}
 			<aside
-				className={`fixed top-0 left-0 z-50 h-full w-80 max-w-[85vw] bg-[var(--md-sys-color-surface)] shadow-xl transform transition-transform duration-300 ease-out ${
+				className={`fixed top-0 left-0 z-50 h-full w-80 max-w-[85vw] bg-(--md-sys-color-surface) shadow-xl transform transition-transform duration-300 ease-out ${
 					isOpen ? "translate-x-0" : "-translate-x-full"
 				}`}
 			>
 				<div className="flex flex-col h-full">
 					{/* Header */}
-					<div className="flex items-center justify-between p-4 border-b border-[var(--md-sys-color-outline-variant)]">
-						<span className="md-title-large text-[var(--md-sys-color-primary)]">
+					<div className="flex items-center justify-between p-4 border-b border-(--md-sys-color-outline-variant)">
+						<span className="md-title-large text-(--md-sys-color-primary)">
 							WSIOBUS
 						</span>
 						<button
 							onClick={onClose}
-							className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+							className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-(--md-sys-color-surface-variant) transition-colors"
 							aria-label="Zamknij menu"
 						>
-							<CloseIcon sx={{ color: "var(--md-sys-color-on-surface)" }} />
+							<CloseIcon sx={{ color: "var(--md-sys-color-on-surface)]" }} />
 						</button>
 					</div>
 
 					{/* Scrollable content */}
 					<div className="flex-1 overflow-y-auto">
 						{/* User section */}
-						<div className="p-4 border-b border-[var(--md-sys-color-outline-variant)]">
+						<div className="p-4 border-b border-(--md-sys-color-outline-variant)">
 							{user ? (
 								<div className="flex items-center gap-3">
-									<div className="w-12 h-12 rounded-full bg-[var(--md-sys-color-primary-container)] flex items-center justify-center overflow-hidden">
+									<div className="w-12 h-12 rounded-full bg-(--md-sys-color-primary-container) flex items-center justify-center overflow-hidden">
 										{user.user_metadata?.avatar_url ? (
 											<img
 												src={user.user_metadata.avatar_url}
@@ -125,7 +125,7 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
 											<PersonOutlineIcon
 												sx={{
 													fontSize: 28,
-													color: "var(--md-sys-color-on-primary-container)",
+													color: "var(--md-sys-color-on-primary-container)]",
 												}}
 											/>
 										)}
@@ -135,7 +135,7 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
 											{user.user_metadata?.full_name ??
 												user.email?.split("@")[0]}
 										</p>
-										<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+										<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 											Viewer • 0 pkt
 										</p>
 									</div>
@@ -152,12 +152,12 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
 						</div>
 
 						{/* Saved filters section */}
-						<div className="p-4 border-b border-[var(--md-sys-color-outline-variant)]">
-							<p className="md-label-large text-[var(--md-sys-color-on-surface-variant)] mb-3">
+						<div className="p-4 border-b border-(--md-sys-color-outline-variant)">
+							<p className="md-label-large text-(--md-sys-color-on-surface-variant) mb-3">
 								Twoje trasy
 							</p>
 							{filters.length === 0 ? (
-								<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+								<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 									Brak zapisanych tras. Użyj przycisku + aby zapisać filtr.
 								</p>
 							) : (
@@ -167,12 +167,12 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
 											key={filter.id}
 											href={`/app?filterId=${filter.id}`}
 											onClick={handleLinkClick}
-											className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[var(--md-sys-color-surface-variant)] transition-colors text-left"
+											className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-(--md-sys-color-surface-variant) transition-colors text-left"
 										>
 											<RouteIcon
 												sx={{
 													fontSize: 20,
-													color: "var(--md-sys-color-primary)",
+													color: "var(--md-sys-color-primary)]",
 												}}
 											/>
 											<div className="flex-1 min-w-0">
@@ -180,7 +180,7 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
 													{filter.name}
 												</span>
 												{(filter.fromStop || filter.toStop) && (
-													<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)] truncate block">
+													<span className="md-body-small text-(--md-sys-color-on-surface-variant) truncate block">
 														{filter.fromStop?.city ?? "?"} →{" "}
 														{filter.toStop?.city ?? "?"}
 													</span>
@@ -194,24 +194,24 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
 
 						{/* Tools section */}
 						<div className="p-4">
-							<p className="md-label-large text-[var(--md-sys-color-on-surface-variant)] mb-3">
+							<p className="md-label-large text-(--md-sys-color-on-surface-variant) mb-3">
 								Narzędzia
 							</p>
 							<nav className="space-y-1">
 								<Link
 									href="/app/browse"
 									onClick={handleLinkClick}
-									className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+									className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-(--md-sys-color-surface-variant) transition-colors"
 								>
 									<DirectionsBusIcon
 										sx={{
 											fontSize: 24,
-											color: "var(--md-sys-color-on-surface-variant)",
+											color: "var(--md-sys-color-on-surface-variant)]",
 										}}
 									/>
 									<div>
 										<p className="md-body-large">Zarządzaj liniami</p>
-										<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+										<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 											Pobrane: {lines.length}
 										</p>
 									</div>
@@ -220,17 +220,17 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
 								<Link
 									href="/app/create"
 									onClick={handleLinkClick}
-									className="w-full flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[var(--md-sys-color-surface-variant)] transition-colors text-left"
+									className="w-full flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-(--md-sys-color-surface-variant) transition-colors text-left"
 								>
 									<AddCircleOutlineIcon
 										sx={{
 											fontSize: 24,
-											color: "var(--md-sys-color-on-surface-variant)",
+											color: "var(--md-sys-color-on-surface-variant)]",
 										}}
 									/>
 									<div>
 										<p className="md-body-large">Dodaj rozkład</p>
-										<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+										<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 											Utwórz nowy rozkład
 										</p>
 									</div>
@@ -239,12 +239,12 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
 								<Link
 									href="/app/settings"
 									onClick={handleLinkClick}
-									className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[var(--md-sys-color-surface-variant)] transition-colors"
+									className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-(--md-sys-color-surface-variant) transition-colors"
 								>
 									<SettingsOutlinedIcon
 										sx={{
 											fontSize: 24,
-											color: "var(--md-sys-color-on-surface-variant)",
+											color: "var(--md-sys-color-on-surface-variant)]",
 										}}
 									/>
 									<p className="md-body-large">Ustawienia</p>
@@ -255,10 +255,10 @@ export default function AppDrawer({ isOpen, onClose }: AppDrawerProps) {
 
 					{/* Footer - logout */}
 					{user && (
-						<div className="p-4 border-t border-[var(--md-sys-color-outline-variant)]">
+						<div className="p-4 border-t border-(--md-sys-color-outline-variant)">
 							<button
 								onClick={handleLogout}
-								className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg hover:bg-[var(--md-sys-color-surface-variant)] transition-colors text-[var(--md-sys-color-error)]"
+								className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg hover:bg-(--md-sys-color-surface-variant) transition-colors text-(--md-sys-color-error)"
 							>
 								<LogoutIcon sx={{ fontSize: 20 }} />
 								<span className="md-body-medium">Wyloguj</span>

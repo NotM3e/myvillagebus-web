@@ -132,8 +132,8 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 								onClick={() => handlePreset(preset.days)}
 								className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
 									isActive
-										? "bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)]"
-										: "bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)]"
+										? "bg-(--md-sys-color-primary) text-(--md-sys-color-on-primary)"
+										: "bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant)"
 								}`}
 							>
 								{preset.label}
@@ -152,8 +152,8 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 								onClick={() => handleDayToggle(day.key)}
 								className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-colors ${
 									isSelected
-										? "bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)]"
-										: "bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)]"
+										? "bg-(--md-sys-color-primary) text-(--md-sys-color-on-primary)"
+										: "bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant)"
 								}`}
 							>
 								{isSelected ? (
@@ -172,24 +172,24 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 						onClick={() => updateData({ excludesHolidays: !data.excludesHolidays })}
 						className={`w-full p-3 rounded-xl flex items-center gap-3 transition-colors ${
 							data.excludesHolidays
-								? "bg-[var(--md-sys-color-error-container)]"
-								: "bg-[var(--md-sys-color-surface-variant)]"
+								? "bg-(--md-sys-color-error-container)"
+								: "bg-(--md-sys-color-surface-variant)"
 						}`}
 					>
 						<EventBusyIcon
 							sx={{
 								fontSize: 24,
 								color: data.excludesHolidays
-									? "var(--md-sys-color-on-error-container)"
-									: "var(--md-sys-color-on-surface-variant)",
+									? "var(--md-sys-color-on-error-container)]"
+									: "var(--md-sys-color-on-surface-variant)]",
 							}}
 						/>
 						<div className="flex-1 text-left">
 							<p
 								className={`md-body-large ${
 									data.excludesHolidays
-										? "text-[var(--md-sys-color-on-error-container)]"
-										: "text-[var(--md-sys-color-on-surface)]"
+										? "text-(--md-sys-color-on-error-container)"
+										: "text-(--md-sys-color-on-surface)"
 								}`}
 							>
 								Nie kursuje w święta
@@ -197,8 +197,8 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 							<p
 								className={`md-body-small ${
 									data.excludesHolidays
-										? "text-[var(--md-sys-color-on-error-container)]"
-										: "text-[var(--md-sys-color-on-surface-variant)]"
+										? "text-(--md-sys-color-on-error-container)"
+										: "text-(--md-sys-color-on-surface-variant)"
 								}`}
 							>
 								Autobus nie jeździ w dni ustawowo wolne
@@ -207,8 +207,8 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 						<div
 							className={`w-6 h-6 rounded-md flex items-center justify-center ${
 								data.excludesHolidays
-									? "bg-[var(--md-sys-color-error)] text-white"
-									: "border-2 border-[var(--md-sys-color-outline)]"
+									? "bg-(--md-sys-color-error) text-white"
+									: "border-2 border-(--md-sys-color-outline)"
 							}`}
 						>
 							{data.excludesHolidays && <CheckIcon sx={{ fontSize: 16 }} />}
@@ -238,7 +238,7 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 					</div>
 				</div>
 
-				<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-3">
+				<p className="md-body-small text-(--md-sys-color-on-surface-variant) mb-3">
 					Wpisz godziny odjazdu z pierwszego przystanku ({data.stops[0]?.city || "?"}).
 					Każda godzina w nowej linii.
 				</p>
@@ -249,22 +249,22 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 					onChange={(e) => handleBulkChange(e.target.value)}
 					placeholder={`np.\n06:30\n07:15\n08:00`}
 					rows={8}
-					className="w-full px-4 py-3 rounded-xl bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface)] placeholder:text-[var(--md-sys-color-on-surface-variant)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)] font-mono text-sm resize-none"
+					className="w-full px-4 py-3 rounded-xl bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface) placeholder:text-(--md-sys-color-on-surface-variant) focus:outline-none focus:ring-2 focus:ring-(--md-sys-color-primary) font-mono text-sm resize-none"
 				/>
 
 				{/* Parse results */}
 				{parsedCourses.length > 0 && (
 					<div className="mt-4 space-y-3">
 						{validCourses.length > 0 && (
-							<div className="p-3 rounded-xl bg-[var(--md-sys-color-primary-container)]">
+							<div className="p-3 rounded-xl bg-(--md-sys-color-primary-container)">
 								<div className="flex items-center gap-2 mb-2">
 									<AccessTimeIcon
 										sx={{
 											fontSize: 18,
-											color: "var(--md-sys-color-on-primary-container)",
+											color: "var(--md-sys-color-on-primary-container)]",
 										}}
 									/>
-									<span className="md-label-large text-[var(--md-sys-color-on-primary-container)]">
+									<span className="md-label-large text-(--md-sys-color-on-primary-container)">
 										Rozpoznano {validCourses.length}{" "}
 										{validCourses.length === 1
 											? "kurs"
@@ -277,7 +277,7 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 									{validCourses.map((course, index) => (
 										<span
 											key={index}
-											className="px-2 py-1 rounded-full bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)] text-sm font-mono"
+											className="px-2 py-1 rounded-full bg-(--md-sys-color-primary) text-(--md-sys-color-on-primary) text-sm font-mono"
 										>
 											{course.time}
 										</span>
@@ -287,15 +287,15 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 						)}
 
 						{invalidCourses.length > 0 && (
-							<div className="p-3 rounded-xl bg-[var(--md-sys-color-error-container)]">
+							<div className="p-3 rounded-xl bg-(--md-sys-color-error-container)">
 								<div className="flex items-center gap-2 mb-2">
 									<WarningAmberIcon
 										sx={{
 											fontSize: 18,
-											color: "var(--md-sys-color-on-error-container)",
+											color: "var(--md-sys-color-on-error-container)]",
 										}}
 									/>
-									<span className="md-label-large text-[var(--md-sys-color-on-error-container)]">
+									<span className="md-label-large text-(--md-sys-color-on-error-container)">
 										{invalidCourses.length}{" "}
 										{invalidCourses.length === 1 ? "błąd" : "błędów"}
 									</span>
@@ -304,7 +304,7 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 									{invalidCourses.map((course, index) => (
 										<p
 											key={index}
-											className="md-body-small text-[var(--md-sys-color-on-error-container)]"
+											className="md-body-small text-(--md-sys-color-on-error-container)"
 										>
 											"{course.time}" - {course.error}
 										</p>
@@ -316,7 +316,7 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 				)}
 
 				{parsedCourses.length === 0 && (
-					<p className="mt-3 md-body-small text-[var(--md-sys-color-on-surface-variant)] text-center">
+					<p className="mt-3 md-body-small text-(--md-sys-color-on-surface-variant) text-center">
 						Wpisz co najmniej jedną godzinę, aby kontynuować
 					</p>
 				)}
@@ -324,11 +324,11 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 
 			{/* Summary */}
 			{validCourses.length > 0 && data.days.length > 0 && (
-				<div className="p-4 rounded-xl bg-[var(--md-sys-color-secondary-container)]">
-					<h3 className="md-title-medium text-[var(--md-sys-color-on-secondary-container)] mb-2">
+				<div className="p-4 rounded-xl bg-(--md-sys-color-secondary-container)">
+					<h3 className="md-title-medium text-(--md-sys-color-on-secondary-container) mb-2">
 						Podsumowanie
 					</h3>
-					<ul className="space-y-1 md-body-medium text-[var(--md-sys-color-on-secondary-container)]">
+					<ul className="space-y-1 md-body-medium text-(--md-sys-color-on-secondary-container)">
 						<li>
 							• Kierunek: <strong>{data.direction}</strong>
 						</li>
@@ -342,7 +342,7 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 							• Przystanków: <strong>{data.stops.length}</strong>
 						</li>
 						{data.excludesHolidays && (
-							<li className="text-[var(--md-sys-color-error)]">
+							<li className="text-(--md-sys-color-error)">
 								• Nie kursuje w święta
 							</li>
 						)}

@@ -20,17 +20,17 @@ const STATUS_CONFIG: Record<
 > = {
 	unverified: {
 		icon: null,
-		color: "var(--md-sys-color-outline)",
+		color: "var(--md-sys-color-outline)]",
 		label: "Rozkład dodany przez społeczność",
 	},
 	verified: {
 		icon: VerifiedIcon,
-		color: "var(--md-sys-color-primary)",
+		color: "var(--md-sys-color-primary)]",
 		label: "Dane zweryfikowane przez moderatora",
 	},
 	partner: {
 		icon: WorkspacePremiumIcon,
-		color: "var(--md-sys-color-tertiary)",
+		color: "var(--md-sys-color-tertiary)]",
 		label: "Oficjalny Partner wsiobus.pl - gwarancja aktualności",
 	},
 };

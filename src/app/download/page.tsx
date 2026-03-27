@@ -34,24 +34,24 @@ export default function DownloadPage() {
 		<PageWrapper maxWidth="max-w-3xl">
 			{/* Header */}
 			<div className="text-center mb-12">
-				<div className="inline-flex items-center justify-center w-24 h-24 mb-6 rounded-full bg-[var(--md-sys-color-tertiary-container)]">
+				<div className="inline-flex items-center justify-center w-24 h-24 mb-6 rounded-full bg-(--md-sys-color-tertiary-container)">
 					<AndroidIcon
-						sx={{ fontSize: 48, color: "var(--md-sys-color-on-tertiary-container)" }}
+						sx={{ fontSize: 48, color: "var(--md-sys-color-on-tertiary-container)]" }}
 					/>
 				</div>
 
 				<h1 className="md-headline-large mb-4">Pobierz aplikację Android</h1>
 
-				<p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
+				<p className="md-body-large text-(--md-sys-color-on-surface-variant)">
 					Najnowsza wersja aplikacji Mój Wsiobus dla Androida
 				</p>
 			</div>
 
 			{/* Download Card */}
 			<div className="p-8 mb-8 text-center">
-				<div className="inline-flex items-center justify-center w-20 h-20 mb-6 rounded-full bg-[var(--md-sys-color-primary-container)]">
+				<div className="inline-flex items-center justify-center w-20 h-20 mb-6 rounded-full bg-(--md-sys-color-primary-container)">
 					<DownloadIcon
-						sx={{ fontSize: 40, color: "var(--md-sys-color-on-primary-container)" }}
+						sx={{ fontSize: 40, color: "var(--md-sys-color-on-primary-container)]" }}
 					/>
 				</div>
 
@@ -66,13 +66,13 @@ export default function DownloadPage() {
 					Pobierz APK ({APK_SIZE})
 				</a>
 
-				<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+				<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
 					Kompatybilne z Android 10.0+
 				</p>
 			</div>
 
 			{/* Why Web Version */}
-			<div className="mb-6 p-4 rounded-xl bg-[var(--md-sys-color-tertiary-container)] text-[var(--md-sys-color-on-tertiary-container)]">
+			<div className="mb-6 p-4 rounded-xl bg-(--md-sys-color-tertiary-container) text-(--md-sys-color-on-tertiary-container)">
 				<p className="md-body-medium">
 					⚠️ Aplikacja jest wersją demo usługi jaką jest ten projekt. Całość będzie
 					działało na aplikacji przeglądarkowej dostępnej na każdym urządzeniu, a
@@ -83,7 +83,7 @@ export default function DownloadPage() {
 			<div className="md-card md-elevation-1 p-6 mb-8">
 				<h3 className="md-title-large mb-4">Czemu przenosimy to do przeglądarki?</h3>
 
-				<ul className="space-y-3 md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+				<ul className="space-y-3 md-body-medium text-(--md-sys-color-on-surface-variant)">
 					<li className="flex gap-3">
 						<span>
 							<strong>Jedno miejsce, wszystkie urządzenia:</strong> Android, iOS,
@@ -108,14 +108,14 @@ export default function DownloadPage() {
 			{/* What works now */}
 			<div className="md-card md-elevation-1 p-6 mb-8">
 				<div className="flex items-start gap-3 mb-4">
-					<InfoOutlinedIcon sx={{ color: "var(--md-sys-color-primary)" }} />
+					<InfoOutlinedIcon sx={{ color: "var(--md-sys-color-primary)]" }} />
 					<h3 className="md-title-large">Co już działa?</h3>
 				</div>
 
 				<div className="space-y-4">
 					<div>
 						<p className="md-label-large mb-2">✅ Dostępne teraz:</p>
-						<ul className="md-list md-list-disc space-y-1 md-body-medium text-[var(--md-sys-color-on-surface-variant)] ml-3 pl-6">
+						<ul className="md-list md-list-disc space-y-1 md-body-medium text-(--md-sys-color-on-surface-variant) ml-3 pl-6">
 							<li>Przeglądanie rozkładów</li>
 							<li>Filtrowanie po dniach i godzinach</li>
 							<li>Profile filtrów (zapisywanie ulubionych tras)</li>
@@ -125,7 +125,7 @@ export default function DownloadPage() {
 
 					<div>
 						<p className="md-label-large mb-2">🚧 W wersji web:</p>
-						<ul className="md-list md-list-disc space-y-1 md-body-medium text-[var(--md-sys-color-on-surface-variant)] ml-3 pl-6">
+						<ul className="md-list md-list-disc space-y-1 md-body-medium text-(--md-sys-color-on-surface-variant) ml-3 pl-6">
 							<li>Tworzenie rozkładów przez użytkowników</li>
 							<li>System głosowania i reputacji</li>
 							<li>Wsparcie dla iOS (PWA)</li>

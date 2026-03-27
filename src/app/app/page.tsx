@@ -225,7 +225,7 @@ function AppContent() {
 			{/* Success message */}
 			{showSuccess && (
 				<div className="mb-4 p-4 rounded-xl bg-(--md-sys-color-primary-container) flex items-center gap-3">
-					<CheckCircleIcon sx={{ color: "var(--md-sys-color-on-primary-container)" }} />
+					<CheckCircleIcon sx={{ color: "var(--md-sys-color-on-primary-container)]" }} />
 					<div className="flex-1">
 						<p className="md-body-medium text-(--md-sys-color-on-primary-container)">
 							Rozkład został dodany! Oczekuje na weryfikację.
@@ -265,13 +265,13 @@ function AppContent() {
 			{/* Empty state - no downloaded lines */}
 			{!loading && isEmpty && (
 				<div className="text-center py-12">
-					<div className="w-20 h-20 rounded-full bg-[var(--md-sys-color-surface-variant)] flex items-center justify-center mx-auto mb-6">
+					<div className="w-20 h-20 rounded-full bg-(--md-sys-color-surface-variant) flex items-center justify-center mx-auto mb-6">
 						<CloudDownloadIcon
-							sx={{ fontSize: 40, color: "var(--md-sys-color-on-surface-variant)" }}
+							sx={{ fontSize: 40, color: "var(--md-sys-color-on-surface-variant)]" }}
 						/>
 					</div>
 					<h2 className="md-title-large mb-2">Brak pobranych linii</h2>
-					<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)] mb-6">
+					<p className="md-body-medium text-(--md-sys-color-on-surface-variant) mb-6">
 						Pobierz linie autobusowe, aby przeglądać rozkłady offline.
 					</p>
 					<Link
@@ -289,14 +289,14 @@ function AppContent() {
 				<>
 					{filteringByStops && (
 						<div className="flex items-center gap-2 mb-4">
-							<div className="w-4 h-4 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin" />
-							<span className="md-body-small text-[var(--md-sys-color-on-surface-variant)]">
+							<div className="w-4 h-4 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
+							<span className="md-body-small text-(--md-sys-color-on-surface-variant)">
 								Filtrowanie...
 							</span>
 						</div>
 					)}
 
-					<p className="md-body-small text-[var(--md-sys-color-on-surface-variant)] mb-4">
+					<p className="md-body-small text-(--md-sys-color-on-surface-variant) mb-4">
 						Znaleziono: {filteredSchedules.length} rozkładów
 					</p>
 
@@ -313,7 +313,7 @@ function AppContent() {
 
 						{filteredSchedules.length === 0 && (
 							<div className="text-center py-12">
-								<p className="md-body-large text-[var(--md-sys-color-on-surface-variant)]">
+								<p className="md-body-large text-(--md-sys-color-on-surface-variant)">
 									Brak rozkładów dla wybranych filtrów
 								</p>
 							</div>
@@ -326,7 +326,7 @@ function AppContent() {
 			<button
 				onClick={() => setShowSaveDialog(true)}
 				disabled={!canSaveFilter}
-				className="fixed bottom-6 right-6 w-14 h-14 rounded-2xl bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)] shadow-lg flex items-center justify-center hover:shadow-xl transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
+				className="fixed bottom-6 right-6 w-14 h-14 rounded-2xl bg-(--md-sys-color-primary) text-(--md-sys-color-on-primary) shadow-lg flex items-center justify-center hover:shadow-xl transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
 				title={canSaveFilter ? "Zapisz trasę" : "Ustaw filtry aby zapisać"}
 			>
 				<AddIcon sx={{ fontSize: 28 }} />
@@ -348,8 +348,8 @@ function AppLoading() {
 	return (
 		<PageWrapper maxWidth="max-w-2xl">
 			<div className="text-center py-12 mt-4">
-				<div className="w-8 h-8 border-2 border-[var(--md-sys-color-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-				<p className="md-body-medium text-[var(--md-sys-color-on-surface-variant)]">
+				<div className="w-8 h-8 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+				<p className="md-body-medium text-(--md-sys-color-on-surface-variant)">
 					Ładowanie...
 				</p>
 			</div>
