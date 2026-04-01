@@ -52,3 +52,6 @@ next-env.d.ts
 public/manifest.json
 public/swe-worker-5c72df51bb1f6ee0.js
 package-lock.json
+
+# AI plans
+/.ai-plans/*
