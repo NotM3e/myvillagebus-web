@@ -1,9 +1,7 @@
 ## 1. Tabele Core
 
 ### stops
-
 Slownik unikalnych przystankow.
-
 - id (uuid PK)
 - city (text): Miejscowosc
 - name (text): Nazwa przystanku/ulica
@@ -13,9 +11,7 @@ Slownik unikalnych przystankow.
 - Unique constraint: (city, name)
 
 ### carriers
-
 Przewoznicy autobusowi.
-
 - id (uuid PK)
 - name (text UNIQUE): Nazwa firmy
 - address (text): Adres siedziby
@@ -26,9 +22,7 @@ Przewoznicy autobusowi.
 - created_at (timestamp)
 
 ### lines
-
 Linie autobusowe przypisane do przewoznika.
-
 - id (uuid PK)
 - carrier_id (uuid FK -> carriers)
 - number (text): Numer linii (np. 101)
@@ -38,9 +32,7 @@ Linie autobusowe przypisane do przewoznika.
 - Unique constraint: (carrier_id, number)
 
 ### schedules
-
 Naglowki rozkladow (wersjonowane).
-
 - id (uuid PK)
 - line_id (uuid FK -> lines)
 - direction (text): Kierunek (np. Nowe do Grudziadz)
@@ -59,9 +51,7 @@ Naglowki rozkladow (wersjonowane).
 - last_verified_at (timestamp)
 
 ### route_stops
-
 Trasa rozkladu z offsetami (wspoldzielona dla kursow).
-
 - id (uuid PK)
 - schedule_id (uuid FK -> schedules)
 - stop_id (uuid FK -> stops)
@@ -70,9 +60,7 @@ Trasa rozkladu z offsetami (wspoldzielona dla kursow).
 - Unique constraint: (schedule_id, order_index)
 
 ### courses
-
 Konkretne kursy (godziny startu).
-
 - id (uuid PK)
 - schedule_id (uuid FK -> schedules)
 - departure_time (time): Godzina startu kursu
@@ -80,9 +68,7 @@ Konkretne kursy (godziny startu).
 - created_at (timestamp)
 
 ### course_times
-
 Reczne godziny przystankow (gdy use_offsets = false).
-
 - id (uuid PK)
 - course_id (uuid FK -> courses)
 - stop_id (uuid FK -> stops)
@@ -90,14 +76,10 @@ Reczne godziny przystankow (gdy use_offsets = false).
 - order_index (integer): Kolejnosc na trasie
 - Unique constraint: (course_id, order_index)
 
----
-
 ## 2. Tabele Seasons i Overrides
 
 ### seasons
-
 Okresy obowiazywania rozkladow.
-
 - id (uuid PK)
 - name (text): Nazwa (np. Wakacje 2026)
 - valid_from (date): Data rozpoczecia
@@ -106,9 +88,7 @@ Okresy obowiazywania rozkladow.
 - created_at (timestamp)
 
 ### overrides
-
 Reczne wymuszenia (swieta, awarie).
-
 - id (uuid PK)
 - name (text): Opis (np. Boze Narodzenie 2026)
 - date (date): Konkretny dzien
@@ -117,14 +97,10 @@ Reczne wymuszenia (swieta, awarie).
 - created_by (uuid FK -> profiles)
 - created_at (timestamp)
 
----
-
 ## 3. Tabele Users i Reputation
 
 ### profiles
-
 Rozszerzenie danych uzytkownika z Supabase Auth.
-
 - id (uuid PK FK -> auth.users)
 - display_name (text)
 - reputation (integer)
@@ -134,9 +110,7 @@ Rozszerzenie danych uzytkownika z Supabase Auth.
 - last_active_at (timestamp)
 
 ### user_activities
-
 Historia zmian reputacji (logika punktowa).
-
 - id (uuid PK)
 - user_id (uuid FK -> profiles)
 - activity_type (enum): schedule_created, upvote_received, itp.
@@ -144,14 +118,10 @@ Historia zmian reputacji (logika punktowa).
 - related_schedule_id (uuid FK -> schedules)
 - created_at (timestamp)
 
----
-
 ## 4. Tabele Verification i Moderation
 
 ### verifications
-
 Glosy spolecznosci na rozklady.
-
 - id (uuid PK)
 - schedule_id (uuid FK -> schedules)
 - user_id (uuid FK -> profiles)
@@ -162,9 +132,7 @@ Glosy spolecznosci na rozklady.
 - Unique constraint: (schedule_id, user_id)
 
 ### reports
-
 Zgloszenia bledow i naduzyc.
-
 - id (uuid PK)
 - reason (enum): OUTDATED, WRONG_TIME, WRONG_ROUTE, NOT_EXIST, VANDALISM, DUPLICATE, OTHER
 - schedule_id (uuid FK -> schedules)
@@ -176,14 +144,10 @@ Zgloszenia bledow i naduzyc.
 - resolved_at (timestamp)
 - created_at (timestamp)
 
----
-
 ## 5. System Logow (Audit)
 
 ### audit_logs
-
-Historia wszystkich akcji dla panelu moderatora.
-
+Historia wszystkich akcji dla panelu moderatora. Brak możliwości modyfikacji i usuwania logów (Immutability).
 - id (uuid PK)
 - user_id (uuid FK -> profiles)
 - action_type (text): np. LOGIN, SCHEDULE_CREATE, USER_BAN
@@ -193,8 +157,6 @@ Historia wszystkich akcji dla panelu moderatora.
 - ip_address (text)
 - user_agent (text)
 - created_at (timestamp)
-
----
 
 ## 6. Enumy
 
@@ -207,87 +169,111 @@ Historia wszystkich akcji dla panelu moderatora.
 - report_status: pending, resolved, dismissed
 - carrier_status: unverified, verified, partner
 
----
-
 ## 7. Funkcje i Widoki
 
-### Widok: active_schedules_view
+### Funkcje pomocnicze dla RLS (Security Definer, Stable)
+Zdefiniowane jako `STABLE`, co pozwala silnikowi PostgreSQL na cachowanie wyników w ramach pojedynczego zapytania (optymalizacja wydajności).
+- is_admin_or_super(): Zwraca `true`, jeśli obecny użytkownik to admin lub super_editor i nie jest zbanowany.
+- is_admin(): Zwraca `true`, jeśli obecny użytkownik to admin i nie jest zbanowany.
+- is_not_banned(): Zwraca `true`, jeśli użytkownik ma status inny niż 'banned' (lub jeśli profil jeszcze nie istnieje).
+- is_shadow_banned(check_user_id): Sprawdza, czy wskazany po ID użytkownik ma status 'shadow_banned'.
 
-Laczy schedules, lines i carriers. Zwraca aktywne rozklady, wylicza net_score (positive - negative) oraz pierwsza godzine odjazdu.
+### Widoki i funkcje biznesowe
+Widoki w Supabase działają domyślnie w trybie `SECURITY INVOKER`, co oznacza, że automatycznie dziedziczą polityki RLS z tabel bazowych (np. filtrowanie shadow_banned dla rozkładów).
+- Widok active_schedules_view: Łączy schedules, lines i carriers. Zwraca aktywne rozkłady, wylicza net_score (positive - negative) oraz pierwszą godzinę odjazdu.
+- Widok verification_stats_view: Agreguje głosy dla rozkładów (positive_count, negative_count, net_score).
+- Funkcja easter_date(year): Oblicza datę Wielkanocy dla podanego roku (algorytm Computus).
+- Funkcja get_polish_holidays(year): Zwraca listę świąt stałych i ruchomych w Polsce.
+- Funkcja is_polish_holiday(date): Sprawdza czy dany dzień jest świętem ustawowym w Polsce (zwraca Boolean).
 
-### Funkcja: easter_date(year)
+## 8. Kluczowe mechanizmy i Wyzwalacze (Triggers)
 
-Oblicza date Wielkanocy dla podanego roku (algorytm Computus).
+- Immutable Versions: Edycja rozkładu nie zmienia rekordu, lecz tworzy nowy z parent_id. Stary rekord staje się archiwalny.
+- Reset przy nowej wersji: Nowa wersja rozkładu startuje z zerową liczbą głosów (czysta karta).
+- Auto-rollback: Jeśli net_score spadnie poniżej progu, system automatycznie archiwizuje wersję i przywraca poprzednią (parent_id).
+- Smart Merge & Fuzzy matching: Pomoc w unikaniu duplikatów przystanków i ułatwione łączenie ich przez admina.
+- Automatyczne swieta: System (np. we frontendzie) ostrzega "Prawdopodobnie nie kursuje", jeśli rozkład ma flagę excludes_holidays w dzień świąteczny.
+- Automatyczne tworzenie profilu (Trigger): Funkcja `handle_new_user()` automatycznie wstawia rekord do tabeli profiles (jako `viewer`) po pomyślnym utworzeniu użytkownika przez Supabase Auth.
+- Śledzenie aktywności (Trigger): Funkcja `update_last_active()` aktualizuje `last_active_at` w tabeli profiles za każdym razem, gdy użytkownik utworzy rozkład, odda głos lub doda zgłoszenie.
 
-### Funkcja: get_polish_holidays(year)
+### Mechanizmy Ochronne
+- Ochrona pól profilu (Trigger `protect_profile_fields`): RLS działa na poziomie wiersza, co pozwalałoby zalogowanemu użytkownikowi zaktualizować własną rolę lub reputację. Aby tego uniknąć, trigger blokuje zmiany `role`, `status` i `reputation` dla użytkowników bez uprawnień administracyjnych. Posiada on obejście `IF auth.uid() IS NULL THEN RETURN NEW;` pozwalające na bezproblemowe wykonywanie bezpośrednich zapytań SQL przez Administrację w panelu Supabase (gdzie nie ma kontekstu logowania).
+- Shadow Banning: Użytkownik shadow_banned widzi aplikację normalnie i może dodawać treści. Dzięki zastosowaniu odpowiednich filtrów w politykach `SELECT`, treści te są całkowicie ukryte dla reszty publiczności.
 
-Zwraca tabele swiat:
+## 9. Scenariusze Dostępu (Model RLS)
 
-- Stale: Nowy Rok, Trzech Kroli, 1 Maja, 3 Maja, 15 Sierpnia, 1 Listopada, 11 Listopada, Boze Narodzenie (2 dni).
-- Ruchome: Wielkanoc, Poniedzialek Wielkanocny, Zielone Swiatki, Boze Cialo.
+- Anonimowy uzytkownik (brak logowania): Przeglądanie aktywnych/oczekujących rozkładów, przewoźników, linii, przystanków, tras i kursów. Brak możliwości głosowania, tworzenia i edycji. Treści od twórców shadow_banned są dla niego ukryte.
+- Zalogowany uzytkownik (viewer / contributor / trusted_editor): To co anonimowy, plus dodawanie rozkładów, głosów, przystanków i zgłoszeń. Widzi swoje własne rozkłady niezależnie od statusu. Nie może psuć i edytować cudzych danych.
+- Zbanowany uzytkownik: Czyta bazę wyłącznie jako anonimowy. Mechanizm weryfikacji w politykach i wyzwalaczach całkowicie blokuje mu operacje zapisu, edycji i usuwania czegokolwiek (w tym usuwania własnych, wcześniej oddanych głosów).
+- Shadow banned uzytkownik: Może normalnie tworzyć rozkłady i głosować (system nie zwraca błędów RLS), ale jego twórczość jest izolowana.
+- Super Editor: Pełny dostęp do zarządzania domeną (zatwierdzanie rozkładów, przegląd zgłoszeń i logów audytowych). Z poziomu bazy danych ma techniczne prawo modyfikacji profili, ale panel frontendowy blokuje mu możliwość zmieniania ról.
+- Admin: Nielimitowany dostęp. Dodatkowo jako jedyny ma uprawnienia bazodanowe do fizycznego usuwania kont (`profiles_delete_admin`).
 
-### Funkcja: is_polish_holiday(date)
+## 10. Polityki RLS (Row Level Security) per Tabela
 
-Zwraca Boolean. Sprawdza, czy dany dzien jest swietem ustawowym w Polsce.
+Zestawienie przypisanych zasad bezpieczeństwa i dostępności dla konkretnych tabel.
 
-### Widok: verification_stats_view
+### Tabele bazowe (stops, carriers, lines)
+- SELECT: Odczyt dostępny dla wszystkich.
+- INSERT: Dozwolony dla zalogowanych i niezbanowanych użytkowników.
+- UPDATE, DELETE: Dozwolone wyłącznie dla użytkowników z rangą admin lub super_editor.
 
-Agreguje głosy dla rozkładów. Kolumny:
+### Rozkłady (schedules)
+- SELECT: Publiczny dostęp filtruje rekordy o statusie active/pending/flagged i odrzuca te stworzone przez użytkowników z shadow banem. Zalogowany autor widzi swoje rozkłady zawsze. Administracja widzi wszystko.
+- INSERT: Zalogowany i niezbanowany użytkownik. Pole `created_by` musi zgadzać się z UID wykonującego zapytanie.
+- UPDATE, DELETE: Zastrzeżone dla admina i super_editora.
 
-- schedule_id
-- positive_count
-- negative_count
-- net_score (positive - negative)
+### Budowa trasy i kursy (route_stops, courses)
+- SELECT: Dostęp publiczny.
+- INSERT: Atomowość tworzenia rozkładu. Zalogowany, niezbanowany użytkownik może dodać trasę i kursy wyłącznie do rozkładu w tabeli `schedules`, którego jest prawnym autorem (`created_by`).
+- UPDATE, DELETE: Tylko admin lub super_editor.
 
-### Widok: active_schedules_view - szczegóły kolumn
+### Godziny (course_times)
+- SELECT: Dostęp publiczny.
+- INSERT: Użytkownik sprawdza łańcuch powiązań. Można wstawić godzinę tylko wtedy, gdy celowany kurs z tabeli `courses` należy do rozkładu z tabeli `schedules`, którego użytkownik jest twórcą.
+- UPDATE, DELETE: Tylko admin lub super_editor.
 
-- id, line_id, direction, version, parent_id, status, update_type
-- is_incomplete, is_verified, days, excludes_holidays
-- season_id, created_by, created_at, last_modified_at, last_verified_at
-- line_number, line_description, line_operation_note
-- carrier_name, carrier_logo, carrier_status (enum: unverified/verified/partner)
-- net_score (z verification_stats_view)
-- first_departure (MIN z courses.departure_time)
+### Okresy i Wyjątki (seasons, overrides)
+- SELECT: Dostęp publiczny.
+- INSERT, UPDATE, DELETE: Tylko admin i super_editor.
 
----
+### Użytkownicy (profiles)
+- SELECT: Podstawowe odczyty są publiczne.
+- UPDATE: Użytkownik może zaktualizować swój własny profil (trigger zablokuje zmianę rangi/reputacji, pozwalając np. na zmianę `display_name`). Admin może edytować wszystkie profile bez blokad.
+- DELETE: Operacja krytyczna - dostęp ma wyłącznie użytkownik z rangą admin (`is_admin()`).
 
-## 8. Kluczowe mechanizmy
+### Aktywności i logika punktowa (user_activities)
+- SELECT: Użytkownik widzi tylko swoją historię. Admin i super_editor widzą wszystko.
+- INSERT: Systemowe i po stronie zalogowanego użytkownika (tylko na własne konto).
+- UPDATE: Całkowicie zablokowane na poziomie polityk.
+- DELETE: Tylko admin.
 
-- Immutable Versions: Edycja rozkladu nie zmienia rekordu, lecz tworzy nowy z parent_id. Stary rekord staje sie archiwalny.
-- Reset przy nowej wersji: Nowa wersja rozkladu startuje z zerowa liczba glosow (czysta karta).
-- Auto-rollback: Jesli net_score spadnie ponizej progu, system automatycznie archiwizuje wersje i przywraca poprzednia (parent_id).
-- Nullable arrival_time: Pozwala na zapisywanie przystankow na trasie bez znanych godzin (is_incomplete = true).
-- Fuzzy matching: Przy dodawaniu przystankow system sugeruje istniejace w bazie, by uniknac duplikatow nazw (np. Mątawy vs Matawy).
-- Smart Merge: Admin moze scalic dwa przystanki, co automatycznie aktualizuje wszystkie powiazane trasy.
-- Automatyczne swieta: System automatycznie ostrzega "Prawdopodobnie nie kursuje", jesli dzis jest swieto, a rozklad ma flagu excludes_holidays.
+### Głosy i Oceny (verifications)
+- SELECT: Dostęp publiczny do zliczania głosów.
+- INSERT, UPDATE: Użytkownik zalogowany i niezbanowany operujący na własnym `user_id` (upsert głosu).
+- DELETE: Tylko zalogowany użytkownik na własnym rekordzie, pod warunkiem, że nie ma bana.
 
----
+### Raporty i Zgłoszenia (reports)
+- SELECT: Zgłaszający widzi własne raporty, administracja widzi całą tabelę.
+- INSERT: Zalogowany, niezbanowany pod własnym `reporter_id`.
+- UPDATE: Administracja do zarządzania statusem (np. resolving).
+- DELETE: Tylko admin.
 
-## 9. Przyklad uzycia SQL
+### Audyt (audit_logs)
+- SELECT: System tylko dla admina i super_editora.
+- INSERT: Weryfikacja tożsamości - zalogowany wpisuje pod własne UID.
+- UPDATE, DELETE: Zablokowane całkowicie dla zachowania integralności i niezmienności dziennika audytu.
 
-Sprawdzenie czy kurs dzis kursuje:
+## 11. Przykład użycia SQL
+
+Sprawdzenie czy kurs z danego rozkładu prawdopodobnie nie kursuje z uwagi na to, że dziś wypada w Polsce święto:
 
 ```sql
-SELECT s.\*,
-CASE WHEN s.excludes_holidays AND is_polish_holiday(CURRENT_DATE) THEN TRUE ELSE FALSE END AS probably_not_running,
+SELECT s.*,
+CASE 
+    WHEN s.excludes_holidays AND is_polish_holiday(CURRENT_DATE) THEN TRUE 
+    ELSE FALSE 
+END AS probably_not_running,
 get_holiday_name(CURRENT_DATE) AS holiday_name
 FROM active_schedules_view s;
 ```
-
----
-
-## 10. Row Level Security (RLS) Policies
-
-### stops
-
-- **stops_select_public**: SELECT dla wszystkich (publiczny odczyt)
-- **stops_insert_authenticated**: INSERT dla zalogowanych użytkowników
-- **stops_update_admin**: UPDATE tylko dla admin i super_editor
-- **stops_delete_admin**: DELETE tylko dla admin i super_editor
-
-### carriers
-
-- **carriers_select_public**: SELECT dla wszystkich (publiczny odczyt)
-- **carriers_insert_authenticated**: INSERT dla zalogowanych użytkowników
-- **carriers_update_admin**: UPDATE tylko dla admin i super_editor
-- **carriers_delete_admin**: DELETE tylko dla admin i super_editor
