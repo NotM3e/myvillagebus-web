@@ -37,7 +37,11 @@ interface UserProfile {
 
 const ROLE_CONFIG: Record<UserRole, { label: string; color: string; icon: typeof PersonIcon }> = {
 	viewer: { label: "Viewer", color: "var(--md-sys-color-outline)]", icon: PersonIcon },
-	contributor: { label: "Contributor", color: "var(--md-sys-color-secondary)]", icon: PersonIcon },
+	contributor: {
+		label: "Contributor",
+		color: "var(--md-sys-color-secondary)]",
+		icon: PersonIcon,
+	},
 	trusted_editor: {
 		label: "Trusted Editor",
 		color: "var(--md-sys-color-primary)]",

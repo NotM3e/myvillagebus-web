@@ -101,7 +101,10 @@ export default function CreateSchedulePage() {
 				<div className="text-center py-12">
 					<div className="w-20 h-20 rounded-full bg-(--md-sys-color-tertiary-container) flex items-center justify-center mx-auto mb-6">
 						<VisibilityOffIcon
-							sx={{ fontSize: 40, color: "var(--md-sys-color-on-tertiary-container)" }}
+							sx={{
+								fontSize: 40,
+								color: "var(--md-sys-color-on-tertiary-container)",
+							}}
 						/>
 					</div>
 

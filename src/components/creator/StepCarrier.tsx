@@ -78,7 +78,10 @@ export default function StepCarrier({ data, updateData }: StepCarrierProps) {
 				<div className="md-card md-elevation-1 p-4 flex items-center gap-4">
 					<div className="w-12 h-12 rounded-full bg-(--md-sys-color-primary-container) flex items-center justify-center">
 						<BusinessIcon
-							sx={{ fontSize: 24, color: "var(--md-sys-color-on-primary-container)]" }}
+							sx={{
+								fontSize: 24,
+								color: "var(--md-sys-color-on-primary-container)]",
+							}}
 						/>
 					</div>
 

@@ -51,7 +51,11 @@ const REASON_CONFIG: Record<ReportReason, { label: string; priority: number; col
 	NOT_EXIST: { label: "Przejazd nie istnieje", priority: 1, color: "var(--md-sys-color-error)]" },
 	WRONG_TIME: { label: "Błędna godzina", priority: 2, color: "var(--md-sys-color-tertiary)]" },
 	WRONG_ROUTE: { label: "Błędna trasa", priority: 2, color: "var(--md-sys-color-tertiary)]" },
-	OUTDATED: { label: "Nieaktualny rozkład", priority: 3, color: "var(--md-sys-color-secondary)]" },
+	OUTDATED: {
+		label: "Nieaktualny rozkład",
+		priority: 3,
+		color: "var(--md-sys-color-secondary)]",
+	},
 	DUPLICATE: { label: "Duplikat", priority: 3, color: "var(--md-sys-color-secondary)]" },
 	OTHER: { label: "Inny problem", priority: 3, color: "var(--md-sys-color-outline)]" },
 };

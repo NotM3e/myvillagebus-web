@@ -342,9 +342,7 @@ export default function StepSchedule({ data, updateData }: StepScheduleProps) {
 							• Przystanków: <strong>{data.stops.length}</strong>
 						</li>
 						{data.excludesHolidays && (
-							<li className="text-(--md-sys-color-error)">
-								• Nie kursuje w święta
-							</li>
+							<li className="text-(--md-sys-color-error)">• Nie kursuje w święta</li>
 						)}
 					</ul>
 				</div>

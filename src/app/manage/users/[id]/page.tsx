@@ -408,7 +408,8 @@ export default function ManageUserDetailPage({ params }: PageProps) {
 	};
 
 	const getActionColor = (action: string) => {
-		if (action.includes("BAN") && !action.includes("UNBAN")) return "var(--md-sys-color-error)]";
+		if (action.includes("BAN") && !action.includes("UNBAN"))
+			return "var(--md-sys-color-error)]";
 		if (action.includes("UNBAN")) return "var(--md-sys-color-primary)]";
 		return "var(--md-sys-color-secondary)]";
 	};
@@ -840,9 +841,7 @@ function StatCard({
 				{value}
 			</p>
 			{subValue && (
-				<p className="md-body-small text-(--md-sys-color-on-surface-variant)">
-					{subValue}
-				</p>
+				<p className="md-body-small text-(--md-sys-color-on-surface-variant)">{subValue}</p>
 			)}
 		</div>
 	);

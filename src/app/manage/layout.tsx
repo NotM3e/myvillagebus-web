@@ -94,14 +94,14 @@ export default function ManaLayout({ children }: { children: React.ReactNode }) 
 		<div className="h-[100dvh] bg-(--md-sys-color-background) flex overflow-hidden">
 			{/* Mobile Backdrop */}
 			{sidebarOpen && (
-				<div 
+				<div
 					className="fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity"
 					onClick={() => setSidebarOpen(false)}
 				/>
 			)}
 
 			{/* Sidebar */}
-			<aside 
+			<aside
 				className={`fixed md:relative inset-y-0 left-0 z-50 w-64 h-full bg-(--md-sys-color-surface) border-r border-(--md-sys-color-outline-variant) flex flex-col shrink-0 transition-transform duration-300 ease-in-out md:translate-x-0 ${
 					sidebarOpen ? "translate-x-0" : "-translate-x-full"
 				}`}
@@ -111,7 +111,7 @@ export default function ManaLayout({ children }: { children: React.ReactNode }) 
 					<h1 className="md-title-large text-(--md-sys-color-primary)">
 						Panel Zarządzania
 					</h1>
-					<button 
+					<button
 						className="md:hidden p-1 rounded-full hover:bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface-variant)"
 						onClick={() => setSidebarOpen(false)}
 					>
@@ -158,21 +158,20 @@ export default function ManaLayout({ children }: { children: React.ReactNode }) 
 			<div className="flex-1 flex flex-col min-w-0">
 				{/* Mobile Header (visible only on small screens) */}
 				<header className="md:hidden flex items-center p-4 border-b border-(--md-sys-color-outline-variant) bg-(--md-sys-color-surface) shrink-0">
-					<button 
+					<button
 						className="p-1 -ml-1 mr-3 rounded-full hover:bg-(--md-sys-color-surface-variant) text-(--md-sys-color-on-surface)"
 						onClick={() => setSidebarOpen(true)}
 					>
 						<MenuIcon sx={{ fontSize: 24 }} />
 					</button>
 					<h2 className="md-title-medium text-(--md-sys-color-on-surface) truncate">
-						{NAV_ITEMS.find(i => i.href === currentPath)?.label || "Panel Zarządzania"}
+						{NAV_ITEMS.find((i) => i.href === currentPath)?.label ||
+							"Panel Zarządzania"}
 					</h2>
 				</header>
 
 				{/* Page Content */}
-				<main className="flex-1 p-4 md:p-6 overflow-y-auto">
-					{children}
-				</main>
+				<main className="flex-1 p-4 md:p-6 overflow-y-auto">{children}</main>
 			</div>
 		</div>
 	);
