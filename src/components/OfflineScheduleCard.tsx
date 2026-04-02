@@ -107,6 +107,8 @@ export default function OfflineScheduleCard({
 					setLocalScore(newScore);
 					// Update IndexedDB for future loads
 					db.schedules.update(schedule.id, { netScore: newScore }).catch(console.error);
+				} else if (result.error) {
+					alert(result.error);
 				}
 			}
 		} catch (err) {

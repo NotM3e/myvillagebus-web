@@ -149,6 +149,8 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 					const scoreDiff = voteState === "none" ? 1 : 2;
 					setVoteState(vote);
 					setLocalScore((prev) => (vote === "up" ? prev + scoreDiff : prev - scoreDiff));
+				} else if (result.error) {
+					alert(result.error);
 				}
 			}
 		} catch (err) {
@@ -270,7 +272,10 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 				<div className="flex items-center gap-3 mb-3">
 					<div className="w-12 h-12 rounded-full bg-(--md-sys-color-primary-container) flex items-center justify-center">
 						<DirectionsBusIcon
-							sx={{ fontSize: 28, color: "var(--md-sys-color-on-primary-container)]" }}
+							sx={{
+								fontSize: 28,
+								color: "var(--md-sys-color-on-primary-container)]",
+							}}
 						/>
 					</div>
 					<div className="flex-1">
@@ -362,11 +367,11 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 							>
 								{/* Timeline line */}
 								{!isLast && (
-									<div className="absolute left-[11px] top-6 w-0.5 h-[calc(100%-12px)] bg-(--md-sys-color-primary)" />
+									<div className="absolute left-2.75 top-6 w-0.5 h-[calc(100%-12px)] bg-(--md-sys-color-primary)" />
 								)}
 
 								{/* Timeline dot */}
-								<div className="relative z-10 flex-shrink-0">
+								<div className="relative z-10 shrink-0">
 									{isHighlighted ? (
 										<div className="w-6 h-6 rounded-full bg-(--md-sys-color-primary) flex items-center justify-center">
 											<PlaceIcon
@@ -419,7 +424,7 @@ export default function ScheduleDetailsPage({ params }: PageProps) {
 
 										{/* Time */}
 										<div
-											className={`flex-shrink-0 px-3 py-1 rounded-lg ${
+											className={`shrink-0 px-3 py-1 rounded-lg ${
 												isHighlighted
 													? "bg-(--md-sys-color-primary-container)"
 													: "bg-(--md-sys-color-surface-variant)"
