@@ -48,3 +48,4 @@
 | 22 | Regulamin uzytkowania | Tresc / Prawne | Rozwija zgodnosc prawna - wymagany dla uslugi publicznej, zasady korzystania, odpowiedzialnosc za tresci uzytkownikow | Mala |
 | 23 | Polityka prywatnosci | Tresc / Prawne | Rozwija zgodnosc prawna - wymagana przy zbieraniu danych (Google OAuth, IndexedDB), informacja o cookies, RODO | Mala |
 | 24 | Cleanup deprecated plikow | Frontend | Porzadkowanie - usunac dummy-schedules.ts, types/schedule.ts, ScheduleCard.tsx, toggleFavorite z queries.ts, console.log z manage/schedules | Mala |
+| 25 | Admin nie może edytować admina | Frontend | Warunek `>=` w hierarchii blokuje admin→admin. Rozważyć: wyjątek dla "owner" albo pozwolić admin edytować admin | Mała |
