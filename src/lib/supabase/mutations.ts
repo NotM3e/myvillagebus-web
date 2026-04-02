@@ -194,10 +194,14 @@ export async function submitSchedule(
 
 		return { success: true, scheduleId: firstScheduleId ?? undefined };
 	} catch (error) {
+		const msg = error instanceof Error ? error.message : "";
+		if (msg.toLowerCase().includes("row-level security") || msg.includes("policy")) {
+			return { success: false, error: "Twoje konto nie ma uprawnień do tej operacji." };
+		}
 		console.error("Submit schedule error:", error);
 		return {
 			success: false,
-			error: error instanceof Error ? error.message : "Nieznany błąd",
+			error: msg || "Nieznany błąd",
 		};
 	}
 }
@@ -235,6 +239,12 @@ export async function submitReport(
 		});
 
 		if (error) {
+			if (
+				error.message?.toLowerCase().includes("row-level security") ||
+				error.message?.includes("policy")
+			) {
+				return { success: false, error: "Twoje konto nie ma uprawnień do zgłaszania." };
+			}
 			console.error("Error submitting report:", error.message);
 			return { success: false, error: error.message };
 		}

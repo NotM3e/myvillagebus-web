@@ -121,6 +121,12 @@ export async function voteOnSchedule(
 	);
 
 	if (error) {
+		if (
+			error.message?.toLowerCase().includes("row-level security") ||
+			error.message?.includes("policy")
+		) {
+			return { success: false, error: "Nie masz uprawnień do głosowania." };
+		}
 		console.error("Error voting:", error.message);
 		return { success: false, error: error.message };
 	}
@@ -190,6 +196,16 @@ export async function removeVote(scheduleId: string): Promise<{ success: boolean
 		.delete()
 		.eq("schedule_id", scheduleId)
 		.eq("user_id", userId);
+
+	if (error) {
+		if (
+			error.message?.toLowerCase().includes("row-level security") ||
+			error.message?.includes("policy")
+		) {
+			return { success: false };
+		}
+		console.error("Error removing vote:", error.message);
+	}
 
 	return { success: !error };
 }
