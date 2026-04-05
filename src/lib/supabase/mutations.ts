@@ -1,5 +1,14 @@
 import { createClient } from "./client";
 import type { CreatorData } from "@/components/creator/ScheduleCreator";
+import {
+	validateCarrierData,
+	validateLineData,
+	validateStopsArray,
+	validateDirection,
+	validateDays,
+	validateDepartureTimes,
+	validateReportData,
+} from "@/lib/validation/mutations";
 
 export interface SubmitScheduleResult {
 	success: boolean;
@@ -14,6 +23,25 @@ export async function submitSchedule(
 	const supabase = createClient();
 
 	try {
+		// Validate all inputs before hitting the database
+		const carrierValidation = validateCarrierData(data.carrier ?? { isNew: false });
+		if (!carrierValidation.valid) return { success: false, error: carrierValidation.error };
+
+		const lineValidation = validateLineData(data.line ?? { isNew: false });
+		if (!lineValidation.valid) return { success: false, error: lineValidation.error };
+
+		const stopsValidation = validateStopsArray(data.stops ?? []);
+		if (!stopsValidation.valid) return { success: false, error: stopsValidation.error };
+
+		const directionValidation = validateDirection(data.direction ?? "");
+		if (!directionValidation.valid) return { success: false, error: directionValidation.error };
+
+		const daysValidation = validateDays(data.days ?? []);
+		if (!daysValidation.valid) return { success: false, error: daysValidation.error };
+
+		const departuresValidation = validateDepartureTimes(data.departures ?? "");
+		if (!departuresValidation.valid) return { success: false, error: departuresValidation.error };
+
 		// 1. Utwórz lub znajdź przewoźnika
 		let carrierId = data.carrier?.id;
 
@@ -230,6 +258,9 @@ export async function submitReport(
 	const supabase = createClient();
 
 	try {
+		const reportValidation = validateReportData(data);
+		if (!reportValidation.valid) return { success: false, error: reportValidation.error };
+
 		const { error } = await supabase.from("reports").insert({
 			reason: data.reason,
 			schedule_id: data.scheduleId,
