@@ -198,14 +198,15 @@ Widoki w Supabase działają domyślnie w trybie `SECURITY INVOKER`, co oznacza,
 
 ### Mechanizmy Ochronne
 - Ochrona pól profilu (Trigger `protect_profile_fields`): RLS działa na poziomie wiersza, co pozwalałoby zalogowanemu użytkownikowi zaktualizować własną rolę lub reputację. Aby tego uniknąć, trigger blokuje zmiany `role`, `status` i `reputation` dla użytkowników bez uprawnień administracyjnych. Posiada on obejście `IF auth.uid() IS NULL THEN RETURN NEW;` pozwalające na bezproblemowe wykonywanie bezpośrednich zapytań SQL przez Administrację w panelu Supabase (gdzie nie ma kontekstu logowania).
-- Shadow Banning: Użytkownik shadow_banned widzi aplikację normalnie i może dodawać treści. Dzięki zastosowaniu odpowiednich filtrów w politykach `SELECT`, treści te są całkowicie ukryte dla reszty publiczności.
+- Shadow Banning: Użytkownik shadow_banned widzi aplikację normalnie i może dodawać treści. Dzięki zastosowaniu odpowiednich filtrów w politykach `SELECT`, treści te są całkowicie ukryte dla reszty publiczności. Frontend dodatkowo blokuje dostęp do kreatora rozkładów — zamiast formularza wyświetlany jest ekran „Konto ograniczone" z informacją o ograniczeniach i linkiem do kontaktu.
+- Egzekwowanie banu (Frontend): Hook `useBanCheck` odpytuje `profiles.status` przy montowaniu layoutu `/app`. Jeśli status to `banned`, cały content aplikacji zastępowany jest pełnoekranowym ekranem blokady (`BannedScreen`) z informacją o zablokowaniu konta i linkiem do formularza kontaktowego. Sesja nie jest niszczona — użytkownik może się zidentyfikować. Funkcje zapisu (`submitSchedule`, `submitReport`, `voteOnSchedule`, `removeVote`) rozpoznają błędy RLS i zwracają czytelne komunikaty zamiast surowych komunikatów PostgreSQL.
 
 ## 9. Scenariusze Dostępu (Model RLS)
 
 - Anonimowy uzytkownik (brak logowania): Przeglądanie aktywnych/oczekujących rozkładów, przewoźników, linii, przystanków, tras i kursów. Brak możliwości głosowania, tworzenia i edycji. Treści od twórców shadow_banned są dla niego ukryte.
 - Zalogowany uzytkownik (viewer / contributor / trusted_editor): To co anonimowy, plus dodawanie rozkładów, głosów, przystanków i zgłoszeń. Widzi swoje własne rozkłady niezależnie od statusu. Nie może psuć i edytować cudzych danych.
-- Zbanowany uzytkownik: Czyta bazę wyłącznie jako anonimowy. Mechanizm weryfikacji w politykach i wyzwalaczach całkowicie blokuje mu operacje zapisu, edycji i usuwania czegokolwiek (w tym usuwania własnych, wcześniej oddanych głosów).
-- Shadow banned uzytkownik: Może normalnie tworzyć rozkłady i głosować (system nie zwraca błędów RLS), ale jego twórczość jest izolowana.
+- Zbanowany uzytkownik: Czyta bazę wyłącznie jako anonimowy. Mechanizm weryfikacji w politykach i wyzwalaczach całkowicie blokuje mu operacje zapisu, edycji i usuwania czegokolwiek (w tym usuwania własnych, wcześniej oddanych głosów). Frontend proaktywnie wykrywa status `banned` i wyświetla ekran blokady zamiast interfejsu aplikacji. Próby zapisu przechwycone przez RLS skutkują komunikatem „Twoje konto nie ma uprawnień do tej operacji" zamiast surowego błędu bazy danych.
+- Shadow banned uzytkownik: Może normalnie przeglądać rozkłady i głosować (system nie zwraca błędów RLS), ale jego twórczość jest izolowana. Frontend blokuje dostęp do kreatora rozkładów — wyświetla ekran „Konto ograniczone" z możliwością kontaktu.
 - Super Editor: Pełny dostęp do zarządzania domeną (zatwierdzanie rozkładów, przegląd zgłoszeń i logów audytowych). Z poziomu bazy danych ma techniczne prawo modyfikacji profili, ale panel frontendowy blokuje mu możliwość zmieniania ról.
 - Admin: Nielimitowany dostęp. Dodatkowo jako jedyny ma uprawnienia bazodanowe do fizycznego usuwania kont (`profiles_delete_admin`).
 

@@ -121,3 +121,36 @@ Kluczowe opcje konfiguracyjne przechowywane lokalnie:
 - **Lokalność wyszukiwania**: Strona główna przeszukuje **wyłącznie** linie znajdujące się w zakładce „Pobrane”.
 - **Optymalizacja kciuka**: Wszystkie kluczowe akcje (Filtry, Szukaj, FAB) znajdują się w dolnej i środkowej strefie ekranu.
 - **Responsywność**: PWA skaluje się od małych smartfonów po tablety, zachowując czytelność dynamicznych godzin.
+---
+
+## 8. Ekrany Blokady i Ograniczeń
+
+System egzekwuje sankcje nałożone przez moderatorów na poziomie interfejsu użytkownika.
+
+### Ekran blokady konta (Permanentny ban)
+
+Wyświetlany zamiast całej treści aplikacji (`/app`) dla użytkowników ze statusem `banned`. Zastępuje layout z nagłówkiem i menu bocznym.
+
+- **Ikona**: `BlockIcon` w kółku z kolorem `error-container` (Material Design 3).
+- **Nagłówek**: „Konto zablokowane".
+- **Treść**: Informacja o zablokowaniu z powodu naruszenia regulaminu i możliwości kontaktu.
+- **Przycisk**: „Skontaktuj się" — link do strony `/contact` (poza scope PWA, normalny `<a>`).
+- **Sesja**: Nie jest niszczona — użytkownik pozostaje zalogowany, aby mógł się zidentyfikować na stronie kontaktowej.
+
+### Ekran ograniczonego konta (Shadow ban)
+
+Wyświetlany na stronie tworzenia rozkładu (`/app/create`) zamiast kreatora dla użytkowników ze statusem `shadow_banned`. Pozostałe widoki (przeglądanie, szczegóły, głosowanie) działają normalnie.
+
+- **Ikona**: `VisibilityOffIcon` w kółku z kolorem `tertiary-container`.
+- **Nagłówek**: „Konto ograniczone".
+- **Treść**: Informacja o ograniczeniu konta z możliwością kontaktu w przypadku pomyłki.
+- **Przyciski**: „Skontaktuj się" (link do `/contact`) oraz „Wróć do rozkładów" (link do `/app`).
+- **Styl**: Identyczny z istniejącym ekranem „Zaloguj się" (ten sam `PageWrapper`, centrowanie, typografia).
+
+### Komunikaty błędów przy operacjach zablokowanych przez RLS
+
+Gdy backend (polityki RLS) odrzuci operację zapisu, frontend przechwytuje błąd i wyświetla czytelny komunikat zamiast surowego błędu PostgreSQL.
+
+- **Głosowanie**: Alert „Nie masz uprawnień do głosowania." — stan głosu nie zmienia się lokalnie.
+- **Tworzenie rozkładu**: Komunikat „Twoje konto nie ma uprawnień do tej operacji."
+- **Zgłaszanie**: Komunikat „Twoje konto nie ma uprawnień do zgłaszania."
