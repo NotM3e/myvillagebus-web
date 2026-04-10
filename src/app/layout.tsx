@@ -5,6 +5,9 @@ export const metadata: Metadata = {
 	title: "Wsiobus - Rozkłady autobusów",
 	description:
 		"Rozkłady autobusowe tworzone przez użytkowników, dla użytkowników",
+	other: {
+		"msvalidate.01": "1CB40F47123644C1D69B36FEA6E234B4",
+	},
 };
 
 export default function RootLayout({
@@ -50,10 +53,6 @@ export default function RootLayout({
 				<script
 					type="application/ld+json"
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-				/>
-				<meta
-					name="msvalidate.01"
-					content="1CB40F47123644C1D69B36FEA6E234B4"
 				/>
 			</head>
 			<body>{children}</body>
