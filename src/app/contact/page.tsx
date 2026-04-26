@@ -16,17 +16,25 @@ export default function ContactPage() {
 		e.preventDefault();
 		setStatus("sending");
 
-		const formData = new FormData(e.currentTarget);
+		const form = e.currentTarget;
+		const formData = new FormData(form);
+
+		const name = formData.get("name") as string;
+		const email = formData.get("email") as string;
+		const message = formData.get("message") as string;
 
 		try {
-			const response = await fetch("https://api.web3forms.com/submit", {
+			const response = await fetch("/api/contact", {
 				method: "POST",
-				body: formData,
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ name, email, message }),
 			});
 
 			if (response.ok) {
 				setStatus("success");
-				(e.target as HTMLFormElement).reset();
+				form.reset();
 			} else {
 				setStatus("error");
 			}
@@ -55,12 +63,6 @@ export default function ContactPage() {
 			{/* Contact Form */}
 			<div className="md-card md-elevation-2 p-8 mb-8">
 				<form onSubmit={handleSubmit} className="space-y-6">
-					<input
-						type="hidden"
-						name="access_key"
-						value="b32c3e2c-1326-49c6-b6fe-a6f960867882"
-					/>
-
 					{/* Name Field */}
 					<div>
 						<label
