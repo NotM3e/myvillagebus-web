@@ -1,0 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Zarządzaj liniami - Wsiobus",
+	description: "Pobierz linie autobusowe do trybu offline",
+};
+
+export default function BrowseLayout({ children }: { children: React.ReactNode }) {
+	return <>{children}</>;
+}

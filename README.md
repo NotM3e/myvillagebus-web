@@ -1,4 +1,4 @@
-# myVillageBus - Website
+# Mój wsiobus
 
 Strona internetowa dla aplikacji Mój Wsiobus - rozkłady autobusów dla małych przewoźników.
 
@@ -10,7 +10,7 @@ Strona jest dostępna pod adresem: https://wsiobus.pl/
 
 ## Tech Stack
 
-- Next.js 15
+- Next.js 16
 - React 19
 - TypeScript
 - Tailwind CSS v4

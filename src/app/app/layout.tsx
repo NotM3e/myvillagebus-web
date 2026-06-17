@@ -1,22 +1,32 @@
-import type { Metadata } from "next";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Aplikacja Web - Wsiobus | Rozkłady autobusów online",
-  description: "Aplikacja webowa Wsiobus - przeglądaj rozkłady autobusów w przeglądarce. Wersja PWA dla iOS i Android. Już wkrótce pełna funkcjonalność!",
-  openGraph: {
-    title: "Aplikacja Web - Wsiobus",
-    description: "Rozkłady autobusów w przeglądarce. PWA dla wszystkich urządzeń.",
-    url: "https://wsiobus.pl/app",
-    siteName: "Wsiobus",
-    locale: "pl_PL",
-    type: "website",
-  },
-};
+import { useState } from "react";
+import AppHeader from "@/components/AppHeader";
+import AppDrawer from "@/components/AppDrawer";
+import BannedScreen from "@/components/BannedScreen";
+import { useBanCheck } from "@/hooks/useBanCheck";
 
-export default function AppLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return <>{children}</>;
+export default function AppLayout({ children }: { children: React.ReactNode }) {
+	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const { isBanned, loading } = useBanCheck();
+
+	if (loading) {
+		return (
+			<div className="flex items-center justify-center min-h-screen bg-(--md-sys-color-background)">
+				<div className="w-8 h-8 border-2 border-(--md-sys-color-primary) border-t-transparent rounded-full animate-spin" />
+			</div>
+		);
+	}
+
+	if (isBanned) {
+		return <BannedScreen />;
+	}
+
+	return (
+		<div className="min-h-screen bg-(--md-sys-color-background)">
+			<AppHeader onMenuClick={() => setIsDrawerOpen(true)} />
+			<AppDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
+			<main className="pt-16">{children}</main>
+		</div>
+	);
 }

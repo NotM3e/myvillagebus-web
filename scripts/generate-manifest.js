@@ -11,8 +11,17 @@ if (!fs.existsSync(templatePath)) {
   process.exit(1);
 }
 
-let template = fs.readFileSync(templatePath, 'utf-8');
-const manifest = template.replace(/\{\{BASE_PATH\}\}/g, '');
+const template = fs.readFileSync(templatePath, 'utf-8');
+const manifest = JSON.parse(template);
 
-fs.writeFileSync(outputPath, manifest, 'utf-8');
-console.log('✅ Wygenerowano manifest.json');
+// Usuń placeholder {{BASE_PATH}} jeśli pozostał
+manifest.start_url = manifest.start_url.replace('{{BASE_PATH}}', '');
+manifest.scope = manifest.scope.replace('{{BASE_PATH}}', '');
+
+// Upewnij się że start_url to /app
+if (manifest.start_url === '/' || manifest.start_url === '') {
+  manifest.start_url = '/app';
+}
+
+fs.writeFileSync(outputPath, JSON.stringify(manifest, null, 2), 'utf-8');
+console.log('✅ Wygenerowano manifest.json z start_url:', manifest.start_url);
